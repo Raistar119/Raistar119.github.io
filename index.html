@@ -6,38 +6,6 @@
     <title>🌪️ VORTEX</title>
     <style>
         /* ============================================================
-           БАЗОВАЯ ОПТИМИЗАЦИЯ
-           ============================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html,
-        body {
-            height: 100%;
-            overflow: hidden;
-            /* отключаем скролл всей страницы */
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            display: flex;
-            flex-direction: column;
-            transition: background 0.3s ease, color 0.3s ease;
-            /* ВКЛЮЧАЕМ АППАРАТНОЕ УСКОРЕНИЕ */
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-            perspective: 1000px;
-        }
-
-        /* ============================================================
            ПЕРЕМЕННЫЕ
            ============================================================ */
         :root {
@@ -72,7 +40,37 @@
         }
 
         /* ============================================================
-           ВОДОВОРОТ (ОПТИМИЗИРОВАННЫЙ)
+           БАЗА
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
+        /* ============================================================
+           ВОДОВОРОТ
            ============================================================ */
         .vortex-bg {
             position: fixed;
@@ -83,7 +81,6 @@
             z-index: 0;
             pointer-events: none;
             will-change: transform;
-            /* подсказка браузеру */
             background:
                 radial-gradient(ellipse at 30% 20%, rgba(108, 92, 231, 0.12) 0%, transparent 50%),
                 radial-gradient(ellipse at 70% 80%, rgba(0, 184, 148, 0.08) 0%, transparent 40%),
@@ -101,7 +98,7 @@
         }
 
         /* ============================================================
-           ШАПКА (ОПТИМИЗИРОВАННАЯ)
+           ШАПКА
            ============================================================ */
         .header {
             position: relative;
@@ -117,7 +114,6 @@
             border-bottom: 1px solid var(--card-border);
             transition: background var(--transition), border var(--transition);
             will-change: background, border;
-            /* аппаратное ускорение */
         }
 
         .header-left {
@@ -258,7 +254,7 @@
         }
 
         /* ============================================================
-           КАРТА (ОПТИМИЗИРОВАННАЯ)
+           КАРТА
            ============================================================ */
         .map-wrapper {
             position: relative;
@@ -272,7 +268,6 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--card-border);
             transition: background var(--transition), border var(--transition);
-            /* ВКЛЮЧАЕМ АППАРАТНОЕ УСКОРЕНИЕ ДЛЯ КАРТЫ */
             transform: translateZ(0);
             backface-visibility: hidden;
             -webkit-overflow-scrolling: touch;
@@ -286,14 +281,11 @@
             top: 0;
             left: 0;
             transition: opacity 0.6s ease;
-            /* отключаем анимацию если она тормозит */
             will-change: opacity;
-            /* подсказка для браузера */
             transform: translateZ(0);
             backface-visibility: hidden;
         }
 
-        /* Эффекты карты — оставляем, но делаем легче */
         .map-wrapper::before {
             content: '';
             position: absolute;
@@ -420,6 +412,144 @@
         }
 
         /* ============================================================
+           АВТОРИЗАЦИЯ (ЭКРАН ВХОДА)
+           ============================================================ */
+        .auth-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 100;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: opacity 0.5s ease;
+        }
+
+        .auth-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .auth-card {
+            background: var(--card);
+            backdrop-filter: blur(30px) saturate(1.5);
+            -webkit-backdrop-filter: blur(30px) saturate(1.5);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 40px 32px 32px;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .auth-card .logo {
+            font-size: 48px;
+            margin-bottom: 8px;
+        }
+
+        .auth-card h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .auth-card .sub {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .auth-card .input-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .auth-card .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .auth-card .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1.5px solid var(--card-border);
+            border-radius: var(--radius-sm);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 16px;
+            font-family: inherit;
+            transition: border 0.2s ease;
+            outline: none;
+        }
+
+        .auth-card .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        .auth-card .btn-auth {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--primary);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            margin-top: 8px;
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        .auth-card .btn-auth:active {
+            transform: scale(0.97);
+        }
+
+        .auth-card .btn-auth:disabled {
+            opacity: 0.5;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .auth-card .toggle-mode {
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .auth-card .toggle-mode button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .auth-card .toggle-mode button:active {
+            transform: scale(0.95);
+        }
+
+        .auth-card .error-msg {
+            color: var(--danger);
+            font-size: 13px;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+
+        /* ============================================================
            ССЫЛКА
            ============================================================ */
         .link-box {
@@ -457,7 +587,7 @@
         }
 
         /* ============================================================
-           КНОПКИ (ОПТИМИЗИРОВАННЫЕ)
+           КНОПКИ
            ============================================================ */
         .actions {
             position: relative;
@@ -529,6 +659,14 @@
             box-shadow: 0 4px 20px rgba(234, 67, 53, 0.2);
         }
 
+        .btn-logout {
+            background: rgba(255, 107, 107, 0.08);
+            color: var(--danger);
+            border: 1px solid rgba(255, 107, 107, 0.1);
+            flex: 0.4;
+            font-size: 13px;
+        }
+
         /* ============================================================
            TOAST
            ============================================================ */
@@ -571,7 +709,7 @@
         }
 
         /* ============================================================
-           АДАПТИВ (ОПТИМИЗИРОВАННЫЙ)
+           АДАПТИВ
            ============================================================ */
         @media (max-width: 500px) {
             .header {
@@ -628,6 +766,17 @@
                 font-size: 13px;
                 border-radius: 40px;
             }
+            .auth-card {
+                padding: 32px 20px 24px;
+            }
+            .auth-card h2 {
+                font-size: 20px;
+            }
+            .btn-logout {
+                flex: 0.3;
+                font-size: 11px;
+                padding: 12px 12px;
+            }
         }
 
         @media (min-height: 750px) {
@@ -638,13 +787,44 @@
     </style>
 </head>
 <body>
+
     <!-- ============================================================
     ФОН
     ============================================================ -->
     <div class="vortex-bg"></div>
 
     <!-- ============================================================
-    ШАПКА
+    ЭКРАН АВТОРИЗАЦИИ
+    ============================================================ -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-card">
+            <div class="logo">🌪️</div>
+            <h2>VORTEX</h2>
+            <div class="sub" id="authSub">Войдите, чтобы продолжить</div>
+
+            <div class="input-group">
+                <label for="authLogin">Логин</label>
+                <input type="text" id="authLogin" placeholder="Введите логин" autocomplete="username">
+            </div>
+
+            <div class="input-group">
+                <label for="authPassword">Пароль</label>
+                <input type="password" id="authPassword" placeholder="Введите пароль" autocomplete="current-password">
+            </div>
+
+            <button class="btn-auth" id="authBtn" onclick="handleAuth()">Войти</button>
+
+            <div class="toggle-mode">
+                <span id="toggleText">Нет аккаунта?</span>
+                <button id="toggleBtn" onclick="toggleAuthMode()">Зарегистрироваться</button>
+            </div>
+
+            <div class="error-msg" id="authError"></div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    ОСНОВНОЙ ИНТЕРФЕЙС
     ============================================================ -->
     <div class="header">
         <div class="header-left">
@@ -669,6 +849,7 @@
         </div>
         <div class="header-actions">
             <button class="header-btn" id="themeToggle" onclick="toggleTheme()" aria-label="Сменить тему">🌙</button>
+            <button class="header-btn" onclick="logout()" aria-label="Выйти" title="Выйти">🚪</button>
         </div>
     </div>
 
@@ -711,6 +892,7 @@
         <button class="btn btn-danger" id="stopBtn" onclick="stopTracking()" style="display:none;">⏹ Стоп</button>
         <button class="btn btn-outline" id="copyBtn" onclick="copyLink()" style="display:none;" aria-label="Скопировать ссылку">📋</button>
         <button class="btn btn-google" id="googleBtn" onclick="openGoogleMaps()" style="display:none;" aria-label="Открыть в Google Maps">🗺️</button>
+        <button class="btn btn-logout" onclick="logout()" aria-label="Выйти">🚪</button>
     </div>
 
     <!-- ============================================================
@@ -719,7 +901,7 @@
     <div class="toast" id="toast"></div>
 
     <!-- ============================================================
-    SCRIPT (ОПТИМИЗИРОВАННЫЙ)
+    SCRIPT
     ============================================================ -->
     <script>
         'use strict';
@@ -743,7 +925,143 @@
         themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 
         // ============================================================
-        // 2. DOM-элементы (кешируем для скорости)
+        // 2. АВТОРИЗАЦИЯ
+        // ============================================================
+
+        // Хранилище пользователей (в localStorage)
+        const USERS_KEY = 'vortex_users';
+        const SESSION_KEY = 'vortex_session';
+
+        let currentUser = null;
+        let isLoginMode = true;
+
+        const authScreen = document.getElementById('authScreen');
+        const authLogin = document.getElementById('authLogin');
+        const authPassword = document.getElementById('authPassword');
+        const authBtn = document.getElementById('authBtn');
+        const authError = document.getElementById('authError');
+        const authSub = document.getElementById('authSub');
+        const toggleText = document.getElementById('toggleText');
+        const toggleBtn = document.getElementById('toggleBtn');
+
+        function getUsers() {
+            try {
+                return JSON.parse(localStorage.getItem(USERS_KEY)) || {};
+            } catch {
+                return {};
+            }
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        }
+
+        function getSession() {
+            return localStorage.getItem(SESSION_KEY);
+        }
+
+        function setSession(username) {
+            localStorage.setItem(SESSION_KEY, username);
+        }
+
+        function clearSession() {
+            localStorage.removeItem(SESSION_KEY);
+        }
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            authBtn.textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться';
+            authSub.textContent = isLoginMode ? 'Войдите, чтобы продолжить' : 'Создайте аккаунт';
+            toggleText.textContent = isLoginMode ? 'Нет аккаунта?' : 'Уже есть аккаунт?';
+            toggleBtn.textContent = isLoginMode ? 'Зарегистрироваться' : 'Войти';
+            authError.textContent = '';
+            authLogin.value = '';
+            authPassword.value = '';
+            authLogin.focus();
+        }
+
+        function handleAuth() {
+            const login = authLogin.value.trim();
+            const password = authPassword.value.trim();
+
+            if (!login || !password) {
+                authError.textContent = 'Заполните все поля';
+                return;
+            }
+
+            const users = getUsers();
+
+            if (isLoginMode) {
+                // Вход
+                if (users[login] && users[login] === password) {
+                    authError.textContent = '';
+                    currentUser = login;
+                    setSession(login);
+                    showApp();
+                    showToast('✅ Добро пожаловать, ' + login + '!', 'success');
+                } else {
+                    authError.textContent = '❌ Неверный логин или пароль';
+                }
+            } else {
+                // Регистрация
+                if (users[login]) {
+                    authError.textContent = '❌ Пользователь уже существует';
+                    return;
+                }
+                if (password.length < 4) {
+                    authError.textContent = '❌ Пароль должен быть минимум 4 символа';
+                    return;
+                }
+                users[login] = password;
+                saveUsers(users);
+                authError.textContent = '';
+                currentUser = login;
+                setSession(login);
+                showApp();
+                showToast('✅ Аккаунт создан! Добро пожаловать, ' + login + '!', 'success');
+            }
+        }
+
+        function showApp() {
+            authScreen.classList.add('hidden');
+            document.querySelector('.header').style.display = 'flex';
+            document.querySelector('.map-wrapper').style.display = 'block';
+            document.querySelector('.floating-panel').style.display = 'flex';
+            document.querySelector('.actions').style.display = 'flex';
+            document.querySelector('.link-box').style.display = 'none';
+            // Если есть координаты в URL — загружаем
+            loadFromURL();
+        }
+
+        function logout() {
+            clearSession();
+            currentUser = null;
+            authScreen.classList.remove('hidden');
+            document.querySelector('.header').style.display = 'flex'; // всё равно показываем
+            // Останавливаем трекинг
+            if (watchId) {
+                navigator.geolocation.clearWatch(watchId);
+                watchId = null;
+            }
+            isTracking = false;
+            startBtn.style.display = 'flex';
+            startBtn.disabled = false;
+            startBtn.textContent = '🌪️ Начать';
+            stopBtn.style.display = 'none';
+            updateStatus('Ожидание', 'inactive');
+            // Сбрасываем карту
+            mapPlaceholder.style.display = 'flex';
+            mapFrame.style.display = 'none';
+            mapFrame.src = '';
+            coordsDisplay.textContent = '—';
+            linkBox.className = 'link-box';
+            copyBtn.style.display = 'none';
+            googleBtn.style.display = 'none';
+            showToast('👋 Вы вышли', 'info');
+        }
+
+        // ============================================================
+        // 3. DOM-элементы
         // ============================================================
         const $ = (id) => document.getElementById(id);
         const mapPlaceholder = $('mapPlaceholder');
@@ -760,7 +1078,7 @@
         const toast = $('toast');
 
         // ============================================================
-        // 3. ПЕРЕМЕННЫЕ СОСТОЯНИЯ
+        // 4. ПЕРЕМЕННЫЕ СОСТОЯНИЯ
         // ============================================================
         let watchId = null;
         let isTracking = false;
@@ -769,7 +1087,7 @@
         let toastTimer = null;
 
         // ============================================================
-        // 4. TOAST (оптимизированный)
+        // 5. TOAST
         // ============================================================
         function showToast(msg, type = 'info') {
             toast.textContent = msg;
@@ -781,7 +1099,7 @@
         }
 
         // ============================================================
-        // 5. СТАТУС
+        // 6. СТАТУС
         // ============================================================
         function updateStatus(text, state) {
             statusText.textContent = text;
@@ -789,7 +1107,7 @@
         }
 
         // ============================================================
-        // 6. КАРТА (оптимизированная)
+        // 7. КАРТА
         // ============================================================
         function showMap(lat, lon) {
             mapPlaceholder.style.display = 'none';
@@ -799,7 +1117,6 @@
             mapFrame.src =
                 `https://www.openstreetmap.org/export/embed.html?bbox=${lon - zoom},${lat - zoom},${lon + zoom},${lat + zoom}&layer=mapnik&marker=${lat},${lon}`;
 
-            // плавное появление с задержкой на рендеринг
             mapFrame.style.opacity = '0';
             requestAnimationFrame(() => {
                 setTimeout(() => {
@@ -810,7 +1127,7 @@
         }
 
         // ============================================================
-        // 7. КООРДИНАТЫ И ССЫЛКА
+        // 8. КООРДИНАТЫ И ССЫЛКА
         // ============================================================
         function updateCoords(lat, lon) {
             coordsDisplay.textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
@@ -826,7 +1143,7 @@
         }
 
         // ============================================================
-        // 8. КОПИРОВАНИЕ И GOOGLE MAPS
+        // 9. КОПИРОВАНИЕ И GOOGLE MAPS
         // ============================================================
         function copyLink() {
             const text = trackLink.textContent;
@@ -864,7 +1181,7 @@
         }
 
         // ============================================================
-        // 9. УВЕДОМЛЕНИЕ О ПЕРЕМЕЩЕНИИ (оптимизированное)
+        // 10. УВЕДОМЛЕНИЕ О ПЕРЕМЕЩЕНИИ
         // ============================================================
         function notifyIfMoved(lat, lon) {
             if (!lastNotifyCoords) {
@@ -880,7 +1197,7 @@
         }
 
         // ============================================================
-        // 10. СТАРТ / СТОП (оптимизированные)
+        // 11. СТАРТ / СТОП
         // ============================================================
         function startTracking() {
             if (!navigator.geolocation) {
@@ -957,9 +1274,9 @@
         }
 
         // ============================================================
-        // 11. ЗАГРУЗКА ИЗ URL
+        // 12. ЗАГРУЗКА ИЗ URL
         // ============================================================
-        window.addEventListener('load', function() {
+        function loadFromURL() {
             const params = new URLSearchParams(window.location.search);
             const lat = parseFloat(params.get('lat'));
             const lon = parseFloat(params.get('lon'));
@@ -974,6 +1291,34 @@
             } else {
                 updateStatus('Ожидание', 'inactive');
             }
+        }
+
+        // ============================================================
+        // 13. ЗАПУСК
+        // ============================================================
+        window.addEventListener('load', function() {
+            // Проверяем сессию
+            const session = getSession();
+            if (session && getUsers()[session]) {
+                currentUser = session;
+                showApp();
+            } else {
+                // показываем экран авторизации
+                authScreen.classList.remove('hidden');
+                authLogin.focus();
+            }
+
+            // Обработка Enter
+            authLogin.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    authPassword.focus();
+                }
+            });
+            authPassword.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    handleAuth();
+                }
+            });
         }, { passive: true });
     </script>
 </body>
