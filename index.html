@@ -48,13 +48,11 @@
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-
         html,
         body {
             height: 100%;
             overflow: hidden;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
             background: var(--bg);
@@ -70,7 +68,7 @@
         }
 
         /* ============================================================
-           ВОДОВОРОТ (ФОН)
+           ФОН
            ============================================================ */
         .vortex-bg {
             position: fixed;
@@ -87,14 +85,9 @@
                 radial-gradient(ellipse at 50% 50%, rgba(162, 155, 254, 0.04) 0%, transparent 60%);
             animation: vortexBg 20s linear infinite;
         }
-
         @keyframes vortexBg {
-            0% {
-                transform: rotate(0deg) scale(1);
-            }
-            100% {
-                transform: rotate(360deg) scale(1.1);
-            }
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(360deg) scale(1.1); }
         }
 
         /* ============================================================
@@ -115,13 +108,11 @@
             transition: background var(--transition), border var(--transition);
             will-change: background, border;
         }
-
         .header-left {
             display: flex;
             align-items: center;
             gap: 14px;
         }
-
         .vortex-logo {
             width: 44px;
             height: 44px;
@@ -129,7 +120,6 @@
             flex-shrink: 0;
             will-change: transform;
         }
-
         .vortex-logo svg {
             width: 100%;
             height: 100%;
@@ -137,23 +127,16 @@
             filter: drop-shadow(0 0 20px var(--primary-glow));
             will-change: transform;
         }
-
         @keyframes spinVortex {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-
         .vortex-logo .ring {
             stroke: var(--primary);
             stroke-width: 2;
             fill: none;
             opacity: 0.6;
         }
-
         .vortex-logo .ring-inner {
             stroke: var(--primary-light);
             stroke-width: 1.5;
@@ -162,32 +145,19 @@
             animation: spinReverse 3s linear infinite;
             will-change: transform;
         }
-
         @keyframes spinReverse {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(-360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
         }
-
         .vortex-logo .dot {
             fill: var(--primary);
             animation: pulseDot 1.5s ease-in-out infinite;
             will-change: transform, opacity;
         }
-
         @keyframes pulseDot {
             0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.4;
-                transform: scale(0.6);
-            }
+            100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.6); }
         }
 
         .brand-name {
@@ -203,17 +173,11 @@
             position: relative;
             will-change: background-position;
         }
-
         @keyframes shimmer {
             0%,
-            100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
+            100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
-
         .brand-tag {
             font-size: 11px;
             font-weight: 500;
@@ -229,7 +193,6 @@
             align-items: center;
             gap: 8px;
         }
-
         .header-btn {
             width: 38px;
             height: 38px;
@@ -248,7 +211,6 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
         }
-
         .header-btn:active {
             transform: scale(0.92);
         }
@@ -272,7 +234,6 @@
             backface-visibility: hidden;
             -webkit-overflow-scrolling: touch;
         }
-
         .map-wrapper iframe {
             width: 100%;
             height: 100%;
@@ -285,7 +246,6 @@
             transform: translateZ(0);
             backface-visibility: hidden;
         }
-
         .map-wrapper::before {
             content: '';
             position: absolute;
@@ -303,7 +263,6 @@
             border-radius: var(--radius);
             will-change: opacity;
         }
-
         .map-wrapper::after {
             content: '';
             position: absolute;
@@ -319,7 +278,6 @@
             transition: opacity var(--transition);
             will-change: opacity;
         }
-
         .map-placeholder {
             display: flex;
             flex-direction: column;
@@ -330,13 +288,11 @@
             padding: 30px;
             text-align: center;
         }
-
         .map-placeholder .icon {
             font-size: 56px;
             margin-bottom: 12px;
             opacity: 0.3;
         }
-
         .map-placeholder .title {
             font-size: 18px;
             font-weight: 600;
@@ -367,13 +323,11 @@
             transform: translateZ(0);
             backface-visibility: hidden;
         }
-
         .status-info {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
         .status-info .dot {
             width: 10px;
             height: 10px;
@@ -381,25 +335,19 @@
             flex-shrink: 0;
             will-change: transform, box-shadow;
         }
-
-        .dot.inactive {
-            background: var(--text-muted);
-        }
+        .dot.inactive { background: var(--text-muted); }
         .dot.active {
             background: var(--success);
             box-shadow: 0 0 20px var(--success-glow);
             animation: pulseDot 2s infinite;
         }
-        .dot.error {
-            background: var(--danger);
-        }
+        .dot.error { background: var(--danger); }
 
         .status-info .label {
             font-size: 14px;
             font-weight: 500;
             color: var(--text-secondary);
         }
-
         .coords-display {
             font-family: 'SF Mono', 'Menlo', monospace;
             font-size: 13px;
@@ -412,7 +360,7 @@
         }
 
         /* ============================================================
-           АВТОРИЗАЦИЯ (ЭКРАН ВХОДА)
+           АВТОРИЗАЦИЯ
            ============================================================ */
         .auth-screen {
             position: fixed;
@@ -428,7 +376,6 @@
             padding: 20px;
             transition: opacity 0.5s ease;
         }
-
         .auth-screen.hidden {
             opacity: 0;
             pointer-events: none;
@@ -441,21 +388,18 @@
             border: 1px solid var(--card-border);
             border-radius: var(--radius);
             padding: 40px 32px 32px;
-            max-width: 380px;
+            max-width: 420px;
             width: 100%;
             box-shadow: var(--shadow);
             text-align: center;
         }
 
-        /* ===== Логотип с водоворотом на экране входа ===== */
         .auth-logo {
             width: 72px;
             height: 72px;
             margin: 0 auto 12px;
-            position: relative;
             display: block;
         }
-
         .auth-logo svg {
             width: 100%;
             height: 100%;
@@ -463,14 +407,12 @@
             filter: drop-shadow(0 0 30px var(--primary-glow));
             will-change: transform;
         }
-
         .auth-logo .ring {
             stroke: var(--primary);
             stroke-width: 2.5;
             fill: none;
             opacity: 0.6;
         }
-
         .auth-logo .ring-inner {
             stroke: var(--primary-light);
             stroke-width: 2;
@@ -479,7 +421,6 @@
             animation: spinReverse 3s linear infinite;
             will-change: transform;
         }
-
         .auth-logo .dot {
             fill: var(--primary);
             animation: pulseDot 1.5s ease-in-out infinite;
@@ -494,19 +435,17 @@
             -webkit-text-fill-color: transparent;
             margin-bottom: 4px;
         }
-
         .auth-card .sub {
             font-size: 14px;
             color: var(--text-muted);
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             -webkit-text-fill-color: var(--text-muted);
         }
 
         .auth-card .input-group {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             text-align: left;
         }
-
         .auth-card .input-group label {
             display: block;
             font-size: 13px;
@@ -514,7 +453,6 @@
             color: var(--text-secondary);
             margin-bottom: 5px;
         }
-
         .auth-card .input-group input {
             width: 100%;
             padding: 14px 16px;
@@ -527,10 +465,44 @@
             transition: border 0.2s ease;
             outline: none;
         }
-
         .auth-card .input-group input:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+        .auth-card .input-group input.error {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.15);
+        }
+        .auth-card .input-group input.success {
+            border-color: var(--success);
+            box-shadow: 0 0 0 4px rgba(0, 184, 148, 0.15);
+        }
+
+        .auth-card .input-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+        .auth-card .input-hint.error {
+            color: var(--danger);
+        }
+        .auth-card .input-hint.success {
+            color: var(--success);
+        }
+
+        /* Индикатор сложности пароля */
+        .password-strength {
+            margin-top: 6px;
+            height: 4px;
+            background: var(--card-border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .password-strength .bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 2px;
+            transition: width 0.3s ease, background 0.3s ease;
         }
 
         .auth-card .btn-auth {
@@ -545,26 +517,28 @@
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
-            margin-top: 8px;
+            margin-top: 6px;
             box-shadow: 0 4px 20px var(--primary-glow);
         }
-
-        .auth-card .btn-auth:active {
-            transform: scale(0.97);
-        }
-
+        .auth-card .btn-auth:active { transform: scale(0.97); }
         .auth-card .btn-auth:disabled {
             opacity: 0.5;
             transform: none;
             box-shadow: none;
         }
+        .auth-card .btn-auth-small {
+            width: auto;
+            padding: 10px 20px;
+            font-size: 13px;
+            margin-top: 0;
+            display: inline-block;
+        }
 
         .auth-card .toggle-mode {
-            margin-top: 16px;
+            margin-top: 14px;
             font-size: 14px;
             color: var(--text-muted);
         }
-
         .auth-card .toggle-mode button {
             background: none;
             border: none;
@@ -575,13 +549,16 @@
             font-family: inherit;
             -webkit-text-fill-color: var(--primary);
         }
-
-        .auth-card .toggle-mode button:active {
-            transform: scale(0.95);
-        }
+        .auth-card .toggle-mode button:active { transform: scale(0.95); }
 
         .auth-card .error-msg {
             color: var(--danger);
+            font-size: 13px;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+        .auth-card .success-msg {
+            color: var(--success);
             font-size: 13px;
             margin-top: 10px;
             min-height: 20px;
@@ -603,11 +580,7 @@
             transition: background var(--transition), border var(--transition);
             will-change: background, border;
         }
-
-        .link-box.show {
-            display: block;
-        }
-
+        .link-box.show { display: block; }
         .link-box .label {
             font-size: 11px;
             font-weight: 600;
@@ -615,7 +588,6 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
         .link-box .url {
             color: var(--primary);
             margin-top: 4px;
@@ -637,7 +609,6 @@
             justify-content: center;
             will-change: transform;
         }
-
         .btn {
             padding: 14px 24px;
             border: none;
@@ -659,29 +630,23 @@
             touch-action: manipulation;
             user-select: none;
         }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
+        .btn:active { transform: scale(0.95); }
 
         .btn-primary {
             background: var(--primary);
             color: #fff;
             box-shadow: 0 4px 24px var(--primary-glow);
         }
-
         .btn-primary:disabled {
             opacity: 0.5;
             transform: none;
             box-shadow: none;
         }
-
         .btn-danger {
             background: rgba(255, 107, 107, 0.12);
             color: var(--danger);
             border: 1px solid rgba(255, 107, 107, 0.15);
         }
-
         .btn-outline {
             background: var(--card);
             backdrop-filter: blur(8px);
@@ -689,14 +654,12 @@
             color: var(--text-secondary);
             flex: 0.5;
         }
-
         .btn-google {
             background: #ea4335;
             color: #fff;
             flex: 0.5;
             box-shadow: 0 4px 20px rgba(234, 67, 53, 0.2);
         }
-
         .btn-logout {
             background: rgba(255, 107, 107, 0.08);
             color: var(--danger);
@@ -730,101 +693,37 @@
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             will-change: transform, opacity;
         }
-
         .toast.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
-
-        .toast.success {
-            border-color: var(--success);
-        }
-        .toast.error {
-            border-color: var(--danger);
-        }
-        .toast.info {
-            border-color: var(--primary);
-        }
+        .toast.success { border-color: var(--success); }
+        .toast.error { border-color: var(--danger); }
+        .toast.info { border-color: var(--primary); }
 
         /* ============================================================
            АДАПТИВ
            ============================================================ */
         @media (max-width: 500px) {
-            .header {
-                padding: 12px 16px 10px;
-            }
-            .brand-name {
-                font-size: 20px;
-                letter-spacing: 1px;
-            }
-            .brand-tag {
-                font-size: 9px;
-                letter-spacing: 2px;
-            }
-            .vortex-logo {
-                width: 36px;
-                height: 36px;
-            }
-            .map-wrapper {
-                margin: 8px 12px 0;
-                min-height: 40vh;
-                border-radius: 20px;
-            }
-            .floating-panel {
-                margin: -14px 12px 0;
-                padding: 12px 16px;
-                border-radius: 20px;
-                flex-direction: column;
-                align-items: stretch;
-                gap: 6px;
-            }
-            .status-info .label {
-                font-size: 13px;
-            }
-            .coords-display {
-                font-size: 12px;
-                padding: 3px 10px;
-            }
-            .actions {
-                padding: 8px 12px 16px;
-                gap: 8px;
-            }
-            .btn {
-                font-size: 13px;
-                padding: 12px 16px;
-                border-radius: 40px;
-            }
-            .link-box {
-                margin: 8px 12px 0;
-                padding: 10px 14px;
-            }
-            .toast {
-                bottom: 80px;
-                padding: 12px 20px;
-                font-size: 13px;
-                border-radius: 40px;
-            }
-            .auth-card {
-                padding: 32px 20px 24px;
-            }
-            .auth-card h2 {
-                font-size: 24px;
-            }
-            .auth-logo {
-                width: 60px;
-                height: 60px;
-            }
-            .btn-logout {
-                flex: 0.3;
-                font-size: 11px;
-                padding: 12px 12px;
-            }
+            .header { padding: 12px 16px 10px; }
+            .brand-name { font-size: 20px; letter-spacing: 1px; }
+            .brand-tag { font-size: 9px; letter-spacing: 2px; }
+            .vortex-logo { width: 36px; height: 36px; }
+            .map-wrapper { margin: 8px 12px 0; min-height: 40vh; border-radius: 20px; }
+            .floating-panel { margin: -14px 12px 0; padding: 12px 16px; border-radius: 20px; flex-direction: column; align-items: stretch; gap: 6px; }
+            .status-info .label { font-size: 13px; }
+            .coords-display { font-size: 12px; padding: 3px 10px; }
+            .actions { padding: 8px 12px 16px; gap: 8px; }
+            .btn { font-size: 13px; padding: 12px 16px; border-radius: 40px; }
+            .link-box { margin: 8px 12px 0; padding: 10px 14px; }
+            .toast { bottom: 80px; padding: 12px 20px; font-size: 13px; border-radius: 40px; }
+            .auth-card { padding: 32px 20px 24px; }
+            .auth-card h2 { font-size: 24px; }
+            .auth-logo { width: 60px; height: 60px; }
+            .btn-logout { flex: 0.3; font-size: 11px; padding: 12px 12px; }
         }
-
         @media (min-height: 750px) {
-            .map-wrapper {
-                min-height: 55vh;
-            }
+            .map-wrapper { min-height: 55vh; }
         }
     </style>
 </head>
@@ -839,20 +738,16 @@
     ЭКРАН АВТОРИЗАЦИИ
     ============================================================ -->
     <div class="auth-screen" id="authScreen">
-        <div class="auth-card">
-            <!-- ===== ВОДОВОРОТ НАД VORTEX ===== -->
+        <div class="auth-card" id="authCard">
+
             <div class="auth-logo">
                 <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Внешние кольца -->
                     <circle class="ring" cx="36" cy="36" r="30"/>
                     <circle class="ring" cx="36" cy="36" r="24" stroke-dasharray="30 40"/>
                     <circle class="ring" cx="36" cy="36" r="18" stroke-dasharray="18 50"/>
-                    <!-- Внутренние вращающиеся кольца -->
                     <circle class="ring-inner" cx="36" cy="36" r="12"/>
                     <circle class="ring-inner" cx="36" cy="36" r="6"/>
-                    <!-- Пульсирующий центр -->
                     <circle class="dot" cx="36" cy="36" r="4"/>
-                    <!-- Точки-спутники -->
                     <circle class="dot" cx="36" cy="10" r="2" style="animation-delay: 0.2s;"/>
                     <circle class="dot" cx="36" cy="62" r="2" style="animation-delay: 0.6s;"/>
                     <circle class="dot" cx="10" cy="36" r="2" style="animation-delay: 0.4s;"/>
@@ -860,27 +755,91 @@
                 </svg>
             </div>
 
-            <h2>VORTEX</h2>
+            <h2 id="authTitle">VORTEX</h2>
             <div class="sub" id="authSub">Войдите, чтобы продолжить</div>
 
-            <div class="input-group">
-                <label for="authLogin">Логин</label>
-                <input type="text" id="authLogin" placeholder="Введите логин" autocomplete="username">
+            <!-- ===== ЭТАП 1: Логин + Пароль + Email ===== -->
+            <div id="authStep1">
+                <div class="input-group">
+                    <label for="authLogin">Логин</label>
+                    <input type="text" id="authLogin" placeholder="Только буквы, цифры и _">
+                    <div class="input-hint" id="loginHint">3-20 символов, латиница</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="authPassword">Пароль</label>
+                    <input type="password" id="authPassword" placeholder="Минимум 8 символов">
+                    <div class="password-strength"><div class="bar" id="strengthBar"></div></div>
+                    <div class="input-hint" id="passwordHint">Заглавные, строчные, цифры, спецсимволы</div>
+                </div>
+
+                <div class="input-group">
+                    <label for="authEmail">Email</label>
+                    <input type="email" id="authEmail" placeholder="example@mail.ru">
+                </div>
+
+                <button class="btn-auth" id="authBtn" onclick="handleAuth()">Войти</button>
+
+                <div class="toggle-mode">
+                    <span id="toggleText">Нет аккаунта?</span>
+                    <button id="toggleBtn" onclick="toggleAuthMode()">Зарегистрироваться</button>
+                </div>
+                <div class="toggle-mode" style="margin-top:6px;">
+                    <button onclick="showRecovery()" style="font-size:13px;color:var(--text-muted);-webkit-text-fill-color:var(--text-muted);">Забыли пароль?</button>
+                </div>
             </div>
 
-            <div class="input-group">
-                <label for="authPassword">Пароль</label>
-                <input type="password" id="authPassword" placeholder="Введите пароль" autocomplete="current-password">
+            <!-- ===== ЭТАП 2: Ввод кода ===== -->
+            <div id="authStep2" style="display:none;">
+                <div class="sub" style="margin-bottom:12px;">
+                    Код отправлен на <strong id="emailDisplay"></strong>
+                </div>
+                <div class="input-group">
+                    <label for="authCode">Код подтверждения</label>
+                    <input type="text" id="authCode" placeholder="Введите 6-значный код" maxlength="6" inputmode="numeric">
+                </div>
+                <button class="btn-auth" onclick="verifyCode()">Подтвердить</button>
+                <div style="margin-top:12px;font-size:13px;">
+                    <button style="background:none;border:none;color:var(--primary);cursor:pointer;" onclick="resendCode()">Отправить код повторно</button>
+                </div>
+                <div style="margin-top:10px;font-size:13px;">
+                    <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="backToLogin()">← Назад</button>
+                </div>
             </div>
 
-            <button class="btn-auth" id="authBtn" onclick="handleAuth()">Войти</button>
+            <!-- ===== ЭТАП 3: Восстановление пароля ===== -->
+            <div id="authStep3" style="display:none;">
+                <div class="sub" style="margin-bottom:12px;">Введите email для восстановления</div>
+                <div class="input-group">
+                    <label for="recoveryEmail">Email</label>
+                    <input type="email" id="recoveryEmail" placeholder="example@mail.ru">
+                </div>
+                <button class="btn-auth" onclick="sendRecoveryCode()">Отправить код</button>
+                <div style="margin-top:10px;font-size:13px;">
+                    <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="backToLogin()">← Назад к входу</button>
+                </div>
+            </div>
 
-            <div class="toggle-mode">
-                <span id="toggleText">Нет аккаунта?</span>
-                <button id="toggleBtn" onclick="toggleAuthMode()">Зарегистрироваться</button>
+            <!-- ===== ЭТАП 4: Смена пароля ===== -->
+            <div id="authStep4" style="display:none;">
+                <div class="sub" style="margin-bottom:12px;">Введите новый пароль</div>
+                <div class="input-group">
+                    <label for="newPassword">Новый пароль</label>
+                    <input type="password" id="newPassword" placeholder="Минимум 8 символов">
+                    <div class="password-strength"><div class="bar" id="strengthBar2"></div></div>
+                </div>
+                <div class="input-group">
+                    <label for="newPasswordConfirm">Подтвердите пароль</label>
+                    <input type="password" id="newPasswordConfirm" placeholder="Повторите пароль">
+                </div>
+                <button class="btn-auth" onclick="resetPassword()">Сменить пароль</button>
+                <div style="margin-top:10px;font-size:13px;">
+                    <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="backToLogin()">← Назад к входу</button>
+                </div>
             </div>
 
             <div class="error-msg" id="authError"></div>
+            <div class="success-msg" id="authSuccess"></div>
         </div>
     </div>
 
@@ -964,8 +923,21 @@
     <!-- ============================================================
     SCRIPT
     ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+    </script>
     <script>
         'use strict';
+
+        // ============================================================
+        // ⚠️ НАСТРОЙКИ EMAILJS — ЗАМЕНИ НА СВОИ!
+        // ============================================================
+        const EMAILJS_PUBLIC_KEY = 'user_ваш_ключ'; // из Account → API Keys
+        const EMAILJS_SERVICE_ID = 'service_ваш_сервис'; // из Email Services
+        const EMAILJS_TEMPLATE_ID = 'template_ваш_шаблон'; // из Email Templates
+        // ============================================================
+
+        // Инициализация EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
 
         // ============================================================
         // 1. ТЁМНАЯ ТЕМА
@@ -994,22 +966,116 @@
 
         let currentUser = null;
         let isLoginMode = true;
+        let pendingLogin = null; // { login, password, email }
+        let pendingRecovery = null; // { login, email }
+        let generatedCode = '';
+        let codeTimer = null;
 
+        // DOM
         const authScreen = document.getElementById('authScreen');
         const authLogin = document.getElementById('authLogin');
         const authPassword = document.getElementById('authPassword');
+        const authEmail = document.getElementById('authEmail');
+        const authCode = document.getElementById('authCode');
         const authBtn = document.getElementById('authBtn');
         const authError = document.getElementById('authError');
+        const authSuccess = document.getElementById('authSuccess');
         const authSub = document.getElementById('authSub');
+        const authTitle = document.getElementById('authTitle');
         const toggleText = document.getElementById('toggleText');
         const toggleBtn = document.getElementById('toggleBtn');
+        const emailDisplay = document.getElementById('emailDisplay');
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthBar2 = document.getElementById('strengthBar2');
+        const loginHint = document.getElementById('loginHint');
+        const passwordHint = document.getElementById('passwordHint');
 
-        function getUsers() {
-            try {
-                return JSON.parse(localStorage.getItem(USERS_KEY)) || {};
-            } catch {
-                return {};
+        const step1 = document.getElementById('authStep1');
+        const step2 = document.getElementById('authStep2');
+        const step3 = document.getElementById('authStep3');
+        const step4 = document.getElementById('authStep4');
+
+        // ============================================================
+        // ЗАПРЕЩЁННЫЕ СЛОВА ДЛЯ ЛОГИНА
+        // ============================================================
+        const BANNED_WORDS = [
+            'admin', 'root', 'system', 'moderator', 'support',
+            'fuck', 'shit', 'ass', 'bitch', 'dick', 'cock',
+            'porn', 'xxx', 'sex', 'nude', 'cock', 'pussy',
+            'putin', 'zelensky', 'nazi', 'hitler', 'stalin',
+            'война', 'нацист', 'рашист', 'укроп', 'москаль',
+            'бля', 'хуй', 'пизда', 'залупа', 'хер'
+        ];
+
+        function isBannedWord(word) {
+            const lower = word.toLowerCase();
+            return BANNED_WORDS.some(banned => lower.includes(banned));
+        }
+
+        // ============================================================
+        // ВАЛИДАЦИЯ ЛОГИНА
+        // ============================================================
+        function validateLogin(login) {
+            if (login.length < 3 || login.length > 20) {
+                return { valid: false, msg: '3-20 символов' };
             }
+            if (!/^[a-zA-Z0-9_]+$/.test(login)) {
+                return { valid: false, msg: 'Только буквы, цифры и _' };
+            }
+            if (isBannedWord(login)) {
+                return { valid: false, msg: 'Некорректный логин' };
+            }
+            return { valid: true, msg: '' };
+        }
+
+        // ============================================================
+        // ВАЛИДАЦИЯ ПАРОЛЯ
+        // ============================================================
+        function validatePassword(password) {
+            if (password.length < 8) {
+                return { valid: false, msg: 'Минимум 8 символов', strength: 0 };
+            }
+            let score = 0;
+            if (/[a-z]/.test(password)) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/\d/.test(password)) score++;
+            if (/[^a-zA-Z0-9]/.test(password)) score++;
+
+            if (score <= 1) return { valid: false, msg: 'Слишком простой', strength: score };
+            if (score === 2) return { valid: true, msg: 'Средний', strength: score };
+            if (score === 3) return { valid: true, msg: 'Хороший', strength: score };
+            return { valid: true, msg: 'Отличный!', strength: score };
+        }
+
+        // ============================================================
+        // ИНДИКАТОР СЛОЖНОСТИ ПАРОЛЯ
+        // ============================================================
+        function updateStrength(input, bar, hint) {
+            const password = input.value;
+            const result = validatePassword(password);
+            const colors = ['#ff6b6b', '#ff6b6b', '#feca57', '#48dbfb', '#00b894'];
+            const labels = ['', 'Слабый', 'Средний', 'Хороший', 'Отличный'];
+
+            if (password.length === 0) {
+                bar.style.width = '0%';
+                if (hint) hint.textContent = 'Заглавные, строчные, цифры, спецсимволы';
+                return;
+            }
+
+            const strength = result.strength;
+            bar.style.width = (strength / 4 * 100) + '%';
+            bar.style.background = colors[strength] || '#ff6b6b';
+            if (hint) {
+                hint.textContent = labels[strength] || '';
+                hint.style.color = colors[strength] || '';
+            }
+        }
+
+        // ============================================================
+        // ПОЛЬЗОВАТЕЛИ
+        // ============================================================
+        function getUsers() {
+            try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; } catch { return {}; }
         }
 
         function saveUsers(users) {
@@ -1028,6 +1094,39 @@
             localStorage.removeItem(SESSION_KEY);
         }
 
+        // ============================================================
+        // EMAILJS — ОТПРАВКА КОДА
+        // ============================================================
+        function generateCode() {
+            return String(Math.floor(100000 + Math.random() * 900000));
+        }
+
+        async function sendCode(email, code) {
+            try {
+                const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    to_email: email,
+                    code: code,
+                });
+                return response.status === 200;
+            } catch (error) {
+                console.error('EmailJS error:', error);
+                return false;
+            }
+        }
+
+        // ============================================================
+        // ЭТАПЫ АВТОРИЗАЦИИ
+        // ============================================================
+        function showStep(step) {
+            step1.style.display = 'none';
+            step2.style.display = 'none';
+            step3.style.display = 'none';
+            step4.style.display = 'none';
+            if (step) step.style.display = 'block';
+            authError.textContent = '';
+            authSuccess.textContent = '';
+        }
+
         function toggleAuthMode() {
             isLoginMode = !isLoginMode;
             authBtn.textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться';
@@ -1035,51 +1134,310 @@
             toggleText.textContent = isLoginMode ? 'Нет аккаунта?' : 'Уже есть аккаунт?';
             toggleBtn.textContent = isLoginMode ? 'Зарегистрироваться' : 'Войти';
             authError.textContent = '';
-            authLogin.value = '';
-            authPassword.value = '';
-            authLogin.focus();
+            authSuccess.textContent = '';
+            showStep(step1);
         }
 
-        function handleAuth() {
-            const login = authLogin.value.trim();
-            const password = authPassword.value.trim();
+        function backToLogin() {
+            showStep(step1);
+            authError.textContent = '';
+            authSuccess.textContent = '';
+            if (codeTimer) { clearTimeout(codeTimer);
+                codeTimer = null; }
+        }
 
-            if (!login || !password) {
-                authError.textContent = 'Заполните все поля';
+        // ============================================================
+        // ОСНОВНАЯ АВТОРИЗАЦИЯ
+        // ============================================================
+        async function handleAuth() {
+            const login = authLogin.value.trim();
+            const password = authPassword.value;
+            const email = authEmail.value.trim();
+
+            authError.textContent = '';
+            authSuccess.textContent = '';
+
+            // === Проверка логина ===
+            const loginCheck = validateLogin(login);
+            if (!loginCheck.valid) {
+                authError.textContent = '❌ Логин: ' + loginCheck.msg;
+                authLogin.classList.add('error');
                 return;
             }
+            authLogin.classList.remove('error');
+
+            // === Проверка пароля ===
+            const passCheck = validatePassword(password);
+            if (!passCheck.valid) {
+                authError.textContent = '❌ Пароль: ' + passCheck.msg;
+                authPassword.classList.add('error');
+                return;
+            }
+            authPassword.classList.remove('error');
+
+            // === Проверка email ===
+            if (!email || !email.includes('@') || !email.includes('.')) {
+                authError.textContent = '❌ Введите корректный email';
+                authEmail.classList.add('error');
+                return;
+            }
+            authEmail.classList.remove('error');
 
             const users = getUsers();
 
             if (isLoginMode) {
-                if (users[login] && users[login] === password) {
-                    authError.textContent = '';
-                    currentUser = login;
-                    setSession(login);
-                    showApp();
-                    showToast('✅ Добро пожаловать, ' + login + '!', 'success');
-                } else {
-                    authError.textContent = '❌ Неверный логин или пароль';
+                // === ВХОД ===
+                if (!users[login]) {
+                    authError.textContent = '❌ Пользователь не найден';
+                    return;
                 }
+                if (users[login].password !== password) {
+                    authError.textContent = '❌ Неверный пароль';
+                    return;
+                }
+                if (users[login].email !== email) {
+                    authError.textContent = '❌ Email не совпадает с зарегистрированным';
+                    return;
+                }
+
+                // Отправляем код
+                const code = generateCode();
+                generatedCode = code;
+                pendingLogin = { login, password, email };
+
+                const sent = await sendCode(email, code);
+                if (!sent) {
+                    authError.textContent = '❌ Не удалось отправить код. Проверь настройки EmailJS.';
+                    return;
+                }
+
+                emailDisplay.textContent = email;
+                showStep(step2);
+                authSuccess.textContent = '✅ Код отправлен на ' + email;
+                authCode.value = '';
+                authCode.focus();
+
             } else {
+                // === РЕГИСТРАЦИЯ ===
                 if (users[login]) {
                     authError.textContent = '❌ Пользователь уже существует';
                     return;
                 }
-                if (password.length < 4) {
-                    authError.textContent = '❌ Пароль должен быть минимум 4 символа';
+
+                // Сохраняем
+                users[login] = { password, email };
+                saveUsers(users);
+
+                // Отправляем код
+                const code = generateCode();
+                generatedCode = code;
+                pendingLogin = { login, password, email };
+
+                const sent = await sendCode(email, code);
+                if (!sent) {
+                    // Откатываем регистрацию
+                    delete users[login];
+                    saveUsers(users);
+                    authError.textContent = '❌ Не удалось отправить код. Проверь настройки EmailJS.';
                     return;
                 }
-                users[login] = password;
-                saveUsers(users);
-                authError.textContent = '';
-                currentUser = login;
-                setSession(login);
-                showApp();
-                showToast('✅ Аккаунт создан! Добро пожаловать, ' + login + '!', 'success');
+
+                emailDisplay.textContent = email;
+                showStep(step2);
+                authSuccess.textContent = '✅ Аккаунт создан! Код отправлен на ' + email;
+                authCode.value = '';
+                authCode.focus();
             }
         }
 
+        // ============================================================
+        // ПОДТВЕРЖДЕНИЕ КОДА
+        // ============================================================
+        function verifyCode() {
+            const code = authCode.value.trim();
+
+            if (!code || code.length !== 6) {
+                authError.textContent = '❌ Введите 6-значный код';
+                return;
+            }
+
+            if (code !== generatedCode) {
+                authError.textContent = '❌ Неверный код';
+                return;
+            }
+
+            // Код верный!
+            authError.textContent = '';
+            authSuccess.textContent = '✅ Вход выполнен!';
+
+            if (pendingLogin) {
+                currentUser = pendingLogin.login;
+                setSession(pendingLogin.login);
+                pendingLogin = null;
+                showApp();
+                showToast('✅ Добро пожаловать, ' + currentUser + '!', 'success');
+            }
+        }
+
+        // ============================================================
+        // ПОВТОРНАЯ ОТПРАВКА КОДА
+        // ============================================================
+        async function resendCode() {
+            if (!pendingLogin) {
+                authError.textContent = '❌ Ошибка: нет активной сессии';
+                return;
+            }
+
+            const code = generateCode();
+            generatedCode = code;
+
+            const sent = await sendCode(pendingLogin.email, code);
+            if (!sent) {
+                authError.textContent = '❌ Не удалось отправить код';
+                return;
+            }
+
+            authSuccess.textContent = '✅ Код отправлен повторно на ' + pendingLogin.email;
+            authError.textContent = '';
+        }
+
+        // ============================================================
+        // ВОССТАНОВЛЕНИЕ ПАРОЛЯ
+        // ============================================================
+        function showRecovery() {
+            showStep(step3);
+            authSub.textContent = 'Восстановление пароля';
+            authTitle.textContent = '🔐 Восстановление';
+            document.getElementById('recoveryEmail').value = '';
+            authError.textContent = '';
+            authSuccess.textContent = '';
+        }
+
+        async function sendRecoveryCode() {
+            const email = document.getElementById('recoveryEmail').value.trim();
+
+            if (!email || !email.includes('@') || !email.includes('.')) {
+                authError.textContent = '❌ Введите корректный email';
+                return;
+            }
+
+            const users = getUsers();
+            let foundLogin = null;
+            for (const [login, data] of Object.entries(users)) {
+                if (data.email === email) {
+                    foundLogin = login;
+                    break;
+                }
+            }
+
+            if (!foundLogin) {
+                authError.textContent = '❌ Пользователь с таким email не найден';
+                return;
+            }
+
+            const code = generateCode();
+            generatedCode = code;
+            pendingRecovery = { login: foundLogin, email };
+
+            const sent = await sendCode(email, code);
+            if (!sent) {
+                authError.textContent = '❌ Не удалось отправить код';
+                return;
+            }
+
+            // Переходим к смене пароля
+            showStep(step4);
+            authSub.textContent = 'Введите новый пароль';
+            authTitle.textContent = '🔐 Смена пароля';
+            authSuccess.textContent = '✅ Код отправлен на ' + email;
+            authError.textContent = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('newPasswordConfirm').value = '';
+            strengthBar2.style.width = '0%';
+
+            // Сохраняем код для проверки (используем тот же generatedCode)
+            // Но нам нужно проверить код при смене пароля
+            // Добавляем поле для кода в step4
+            const step4Container = document.getElementById('authStep4');
+            const codeInput = document.createElement('div');
+            codeInput.className = 'input-group';
+            codeInput.innerHTML = `
+                    <label for="recoveryCode">Код подтверждения</label>
+                    <input type="text" id="recoveryCode" placeholder="Введите 6-значный код" maxlength="6" inputmode="numeric">
+                `;
+            // Вставляем перед полем нового пароля
+            const firstInput = step4Container.querySelector('.input-group');
+            if (firstInput) {
+                step4Container.insertBefore(codeInput, firstInput);
+            }
+
+            // Обновляем функцию resetPassword
+            window._recoveryCode = code;
+            window._recoveryLogin = foundLogin;
+        }
+
+        // ============================================================
+        // СМЕНА ПАРОЛЯ
+        // ============================================================
+        function resetPassword() {
+            const code = document.getElementById('recoveryCode')?.value.trim() || '';
+            const newPassword = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('newPasswordConfirm').value;
+
+            authError.textContent = '';
+            authSuccess.textContent = '';
+
+            if (!code || code.length !== 6) {
+                authError.textContent = '❌ Введите 6-значный код';
+                return;
+            }
+
+            if (code !== generatedCode) {
+                authError.textContent = '❌ Неверный код';
+                return;
+            }
+
+            const passCheck = validatePassword(newPassword);
+            if (!passCheck.valid) {
+                authError.textContent = '❌ Пароль: ' + passCheck.msg;
+                return;
+            }
+
+            if (newPassword !== confirm) {
+                authError.textContent = '❌ Пароли не совпадают';
+                return;
+            }
+
+            const users = getUsers();
+            if (!pendingRecovery || !users[pendingRecovery.login]) {
+                authError.textContent = '❌ Ошибка: пользователь не найден';
+                return;
+            }
+
+            // Меняем пароль
+            users[pendingRecovery.login].password = newPassword;
+            saveUsers(users);
+
+            authSuccess.textContent = '✅ Пароль успешно изменён!';
+            authError.textContent = '';
+
+            // Возвращаемся к входу
+            setTimeout(() => {
+                pendingRecovery = null;
+                generatedCode = '';
+                showStep(step1);
+                authSub.textContent = 'Войдите, чтобы продолжить';
+                authTitle.textContent = 'VORTEX';
+                authSuccess.textContent = 'Пароль изменён! Войдите с новым паролем.';
+                // Удаляем добавленное поле с кодом
+                const codeField = document.getElementById('recoveryCode')?.closest('.input-group');
+                if (codeField) codeField.remove();
+            }, 1500);
+        }
+
+        // ============================================================
+        // ПОКАЗ ПРИЛОЖЕНИЯ
+        // ============================================================
         function showApp() {
             authScreen.classList.add('hidden');
             document.querySelector('.header').style.display = 'flex';
@@ -1113,10 +1471,20 @@
             copyBtn.style.display = 'none';
             googleBtn.style.display = 'none';
             showToast('👋 Вы вышли', 'info');
+            // Сбрасываем авторизацию
+            showStep(step1);
+            authSub.textContent = 'Войдите, чтобы продолжить';
+            authTitle.textContent = 'VORTEX';
+            authLogin.value = '';
+            authPassword.value = '';
+            authEmail.value = '';
+            authError.textContent = '';
+            authSuccess.textContent = '';
+            strengthBar.style.width = '0%';
         }
 
         // ============================================================
-        // 3. DOM-элементы
+        // DOM
         // ============================================================
         const $ = (id) => document.getElementById(id);
         const mapPlaceholder = $('mapPlaceholder');
@@ -1133,7 +1501,7 @@
         const toast = $('toast');
 
         // ============================================================
-        // 4. ПЕРЕМЕННЫЕ СОСТОЯНИЯ
+        // СОСТОЯНИЯ
         // ============================================================
         let watchId = null;
         let isTracking = false;
@@ -1142,7 +1510,7 @@
         let toastTimer = null;
 
         // ============================================================
-        // 5. TOAST
+        // TOAST
         // ============================================================
         function showToast(msg, type = 'info') {
             toast.textContent = msg;
@@ -1154,7 +1522,7 @@
         }
 
         // ============================================================
-        // 6. СТАТУС
+        // СТАТУС
         // ============================================================
         function updateStatus(text, state) {
             statusText.textContent = text;
@@ -1162,16 +1530,14 @@
         }
 
         // ============================================================
-        // 7. КАРТА
+        // КАРТА
         // ============================================================
         function showMap(lat, lon) {
             mapPlaceholder.style.display = 'none';
             mapFrame.style.display = 'block';
-
             const zoom = 0.015;
             mapFrame.src =
                 `https://www.openstreetmap.org/export/embed.html?bbox=${lon - zoom},${lat - zoom},${lon + zoom},${lat + zoom}&layer=mapnik&marker=${lat},${lon}`;
-
             mapFrame.style.opacity = '0';
             requestAnimationFrame(() => {
                 setTimeout(() => {
@@ -1182,7 +1548,7 @@
         }
 
         // ============================================================
-        // 8. КООРДИНАТЫ И ССЫЛКА
+        // КООРДИНАТЫ
         // ============================================================
         function updateCoords(lat, lon) {
             coordsDisplay.textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
@@ -1198,7 +1564,7 @@
         }
 
         // ============================================================
-        // 9. КОПИРОВАНИЕ И GOOGLE MAPS
+        // КОПИРОВАНИЕ
         // ============================================================
         function copyLink() {
             const text = trackLink.textContent;
@@ -1227,6 +1593,9 @@
             document.body.removeChild(ta);
         }
 
+        // ============================================================
+        // GOOGLE MAPS
+        // ============================================================
         function openGoogleMaps() {
             if (lastCoords) {
                 window.open(`https://www.google.com/maps?q=${lastCoords.lat},${lastCoords.lon}`, '_blank');
@@ -1236,7 +1605,7 @@
         }
 
         // ============================================================
-        // 10. УВЕДОМЛЕНИЕ О ПЕРЕМЕЩЕНИИ
+        // УВЕДОМЛЕНИЕ О ПЕРЕМЕЩЕНИИ
         // ============================================================
         function notifyIfMoved(lat, lon) {
             if (!lastNotifyCoords) {
@@ -1252,22 +1621,19 @@
         }
 
         // ============================================================
-        // 11. СТАРТ / СТОП
+        // СТАРТ / СТОП
         // ============================================================
         function startTracking() {
             if (!navigator.geolocation) {
                 showToast('❌ Браузер не поддерживает геолокацию', 'error');
                 return;
             }
-
             if (isTracking) {
                 showToast('🌀 Вихрь уже активен', 'info');
                 return;
             }
-
             showToast('🌪️ Запуск вихря...', 'info');
             updateStatus('Запуск...', 'info');
-
             startBtn.disabled = true;
             startBtn.textContent = '🌪️ ...';
 
@@ -1276,19 +1642,16 @@
                     const lat = pos.coords.latitude;
                     const lon = pos.coords.longitude;
                     lastCoords = { lat, lon };
-
                     if (!isTracking) {
                         isTracking = true;
                         startBtn.style.display = 'none';
                         stopBtn.style.display = 'flex';
                     }
-
                     showMap(lat, lon);
                     updateCoords(lat, lon);
                     generateLink(lat, lon);
                     updateStatus('Вихрь активен', 'active');
                     notifyIfMoved(lat, lon);
-
                     const url = window.location.origin + window.location.pathname + `?lat=${lat}&lon=${lon}`;
                     window.history.replaceState({}, '', url);
                 },
@@ -1329,13 +1692,12 @@
         }
 
         // ============================================================
-        // 12. ЗАГРУЗКА ИЗ URL
+        // ЗАГРУЗКА ИЗ URL
         // ============================================================
         function loadFromURL() {
             const params = new URLSearchParams(window.location.search);
             const lat = parseFloat(params.get('lat'));
             const lon = parseFloat(params.get('lon'));
-
             if (!isNaN(lat) && !isNaN(lon)) {
                 lastCoords = { lat, lon };
                 showMap(lat, lon);
@@ -1349,9 +1711,10 @@
         }
 
         // ============================================================
-        // 13. ЗАПУСК
+        // ЗАПУСК
         // ============================================================
         window.addEventListener('load', function() {
+            // Проверяем сессию
             const session = getSession();
             if (session && getUsers()[session]) {
                 currentUser = session;
@@ -1361,12 +1724,60 @@
                 authLogin.focus();
             }
 
-            authLogin.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') authPassword.focus();
+            // Логин hint
+            authLogin.addEventListener('input', function() {
+                const result = validateLogin(this.value);
+                if (this.value.length === 0) {
+                    loginHint.textContent = '3-20 символов, латиница';
+                    loginHint.className = 'input-hint';
+                    this.classList.remove('error');
+                    return;
+                }
+                if (result.valid) {
+                    loginHint.textContent = '✅ Отличный логин!';
+                    loginHint.className = 'input-hint success';
+                    this.classList.remove('error');
+                    this.classList.add('success');
+                } else {
+                    loginHint.textContent = '❌ ' + result.msg;
+                    loginHint.className = 'input-hint error';
+                    this.classList.remove('success');
+                    this.classList.add('error');
+                }
             });
-            authPassword.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') handleAuth();
+
+            // Пароль strength
+            authPassword.addEventListener('input', function() {
+                updateStrength(this, strengthBar, passwordHint);
+                if (this.value.length > 0) {
+                    const result = validatePassword(this.value);
+                    if (result.valid) {
+                        this.classList.remove('error');
+                        this.classList.add('success');
+                    } else {
+                        this.classList.remove('success');
+                        this.classList.add('error');
+                    }
+                } else {
+                    this.classList.remove('error', 'success');
+                }
             });
+
+            // Пароль для восстановления
+            document.addEventListener('input', function(e) {
+                if (e.target.id === 'newPassword') {
+                    const bar = document.getElementById('strengthBar2');
+                    updateStrength(e.target, bar);
+                }
+            });
+
+            // Обработка Enter
+            authLogin.addEventListener('keydown', (e) => { if (e.key === 'Enter') authPassword
+                    .focus(); });
+            authPassword.addEventListener('keydown', (e) => { if (e.key === 'Enter') authEmail
+                    .focus(); });
+            authEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
+            authCode.addEventListener('keydown', (e) => { if (e.key === 'Enter') verifyCode(); });
         }, { passive: true });
     </script>
 </body>
