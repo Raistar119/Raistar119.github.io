@@ -70,7 +70,7 @@
         }
 
         /* ============================================================
-           ВОДОВОРОТ
+           ВОДОВОРОТ (ФОН)
            ============================================================ */
         .vortex-bg {
             position: fixed;
@@ -447,15 +447,51 @@
             text-align: center;
         }
 
-        .auth-card .logo {
-            font-size: 48px;
-            margin-bottom: 8px;
+        /* ===== Логотип с водоворотом на экране входа ===== */
+        .auth-logo {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 12px;
+            position: relative;
+            display: block;
+        }
+
+        .auth-logo svg {
+            width: 100%;
+            height: 100%;
+            animation: spinVortex 4s linear infinite;
+            filter: drop-shadow(0 0 30px var(--primary-glow));
+            will-change: transform;
+        }
+
+        .auth-logo .ring {
+            stroke: var(--primary);
+            stroke-width: 2.5;
+            fill: none;
+            opacity: 0.6;
+        }
+
+        .auth-logo .ring-inner {
+            stroke: var(--primary-light);
+            stroke-width: 2;
+            fill: none;
+            opacity: 0.3;
+            animation: spinReverse 3s linear infinite;
+            will-change: transform;
+        }
+
+        .auth-logo .dot {
+            fill: var(--primary);
+            animation: pulseDot 1.5s ease-in-out infinite;
+            will-change: transform, opacity;
         }
 
         .auth-card h2 {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
-            color: var(--text);
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 4px;
         }
 
@@ -463,6 +499,7 @@
             font-size: 14px;
             color: var(--text-muted);
             margin-bottom: 24px;
+            -webkit-text-fill-color: var(--text-muted);
         }
 
         .auth-card .input-group {
@@ -536,6 +573,7 @@
             cursor: pointer;
             font-size: 14px;
             font-family: inherit;
+            -webkit-text-fill-color: var(--primary);
         }
 
         .auth-card .toggle-mode button:active {
@@ -770,7 +808,11 @@
                 padding: 32px 20px 24px;
             }
             .auth-card h2 {
-                font-size: 20px;
+                font-size: 24px;
+            }
+            .auth-logo {
+                width: 60px;
+                height: 60px;
             }
             .btn-logout {
                 flex: 0.3;
@@ -798,7 +840,26 @@
     ============================================================ -->
     <div class="auth-screen" id="authScreen">
         <div class="auth-card">
-            <div class="logo">🌪️</div>
+            <!-- ===== ВОДОВОРОТ НАД VORTEX ===== -->
+            <div class="auth-logo">
+                <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Внешние кольца -->
+                    <circle class="ring" cx="36" cy="36" r="30"/>
+                    <circle class="ring" cx="36" cy="36" r="24" stroke-dasharray="30 40"/>
+                    <circle class="ring" cx="36" cy="36" r="18" stroke-dasharray="18 50"/>
+                    <!-- Внутренние вращающиеся кольца -->
+                    <circle class="ring-inner" cx="36" cy="36" r="12"/>
+                    <circle class="ring-inner" cx="36" cy="36" r="6"/>
+                    <!-- Пульсирующий центр -->
+                    <circle class="dot" cx="36" cy="36" r="4"/>
+                    <!-- Точки-спутники -->
+                    <circle class="dot" cx="36" cy="10" r="2" style="animation-delay: 0.2s;"/>
+                    <circle class="dot" cx="36" cy="62" r="2" style="animation-delay: 0.6s;"/>
+                    <circle class="dot" cx="10" cy="36" r="2" style="animation-delay: 0.4s;"/>
+                    <circle class="dot" cx="62" cy="36" r="2" style="animation-delay: 0.8s;"/>
+                </svg>
+            </div>
+
             <h2>VORTEX</h2>
             <div class="sub" id="authSub">Войдите, чтобы продолжить</div>
 
@@ -928,7 +989,6 @@
         // 2. АВТОРИЗАЦИЯ
         // ============================================================
 
-        // Хранилище пользователей (в localStorage)
         const USERS_KEY = 'vortex_users';
         const SESSION_KEY = 'vortex_session';
 
@@ -971,355 +1031,4 @@
         function toggleAuthMode() {
             isLoginMode = !isLoginMode;
             authBtn.textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться';
-            authSub.textContent = isLoginMode ? 'Войдите, чтобы продолжить' : 'Создайте аккаунт';
-            toggleText.textContent = isLoginMode ? 'Нет аккаунта?' : 'Уже есть аккаунт?';
-            toggleBtn.textContent = isLoginMode ? 'Зарегистрироваться' : 'Войти';
-            authError.textContent = '';
-            authLogin.value = '';
-            authPassword.value = '';
-            authLogin.focus();
-        }
-
-        function handleAuth() {
-            const login = authLogin.value.trim();
-            const password = authPassword.value.trim();
-
-            if (!login || !password) {
-                authError.textContent = 'Заполните все поля';
-                return;
-            }
-
-            const users = getUsers();
-
-            if (isLoginMode) {
-                // Вход
-                if (users[login] && users[login] === password) {
-                    authError.textContent = '';
-                    currentUser = login;
-                    setSession(login);
-                    showApp();
-                    showToast('✅ Добро пожаловать, ' + login + '!', 'success');
-                } else {
-                    authError.textContent = '❌ Неверный логин или пароль';
-                }
-            } else {
-                // Регистрация
-                if (users[login]) {
-                    authError.textContent = '❌ Пользователь уже существует';
-                    return;
-                }
-                if (password.length < 4) {
-                    authError.textContent = '❌ Пароль должен быть минимум 4 символа';
-                    return;
-                }
-                users[login] = password;
-                saveUsers(users);
-                authError.textContent = '';
-                currentUser = login;
-                setSession(login);
-                showApp();
-                showToast('✅ Аккаунт создан! Добро пожаловать, ' + login + '!', 'success');
-            }
-        }
-
-        function showApp() {
-            authScreen.classList.add('hidden');
-            document.querySelector('.header').style.display = 'flex';
-            document.querySelector('.map-wrapper').style.display = 'block';
-            document.querySelector('.floating-panel').style.display = 'flex';
-            document.querySelector('.actions').style.display = 'flex';
-            document.querySelector('.link-box').style.display = 'none';
-            // Если есть координаты в URL — загружаем
-            loadFromURL();
-        }
-
-        function logout() {
-            clearSession();
-            currentUser = null;
-            authScreen.classList.remove('hidden');
-            document.querySelector('.header').style.display = 'flex'; // всё равно показываем
-            // Останавливаем трекинг
-            if (watchId) {
-                navigator.geolocation.clearWatch(watchId);
-                watchId = null;
-            }
-            isTracking = false;
-            startBtn.style.display = 'flex';
-            startBtn.disabled = false;
-            startBtn.textContent = '🌪️ Начать';
-            stopBtn.style.display = 'none';
-            updateStatus('Ожидание', 'inactive');
-            // Сбрасываем карту
-            mapPlaceholder.style.display = 'flex';
-            mapFrame.style.display = 'none';
-            mapFrame.src = '';
-            coordsDisplay.textContent = '—';
-            linkBox.className = 'link-box';
-            copyBtn.style.display = 'none';
-            googleBtn.style.display = 'none';
-            showToast('👋 Вы вышли', 'info');
-        }
-
-        // ============================================================
-        // 3. DOM-элементы
-        // ============================================================
-        const $ = (id) => document.getElementById(id);
-        const mapPlaceholder = $('mapPlaceholder');
-        const mapFrame = $('mapFrame');
-        const coordsDisplay = $('coordsDisplay');
-        const statusText = $('statusText');
-        const statusDot = $('statusDot');
-        const startBtn = $('startBtn');
-        const stopBtn = $('stopBtn');
-        const copyBtn = $('copyBtn');
-        const googleBtn = $('googleBtn');
-        const linkBox = $('linkBox');
-        const trackLink = $('trackLink');
-        const toast = $('toast');
-
-        // ============================================================
-        // 4. ПЕРЕМЕННЫЕ СОСТОЯНИЯ
-        // ============================================================
-        let watchId = null;
-        let isTracking = false;
-        let lastCoords = null;
-        let lastNotifyCoords = null;
-        let toastTimer = null;
-
-        // ============================================================
-        // 5. TOAST
-        // ============================================================
-        function showToast(msg, type = 'info') {
-            toast.textContent = msg;
-            toast.className = 'toast ' + type + ' show';
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // ============================================================
-        // 6. СТАТУС
-        // ============================================================
-        function updateStatus(text, state) {
-            statusText.textContent = text;
-            statusDot.className = 'dot ' + state;
-        }
-
-        // ============================================================
-        // 7. КАРТА
-        // ============================================================
-        function showMap(lat, lon) {
-            mapPlaceholder.style.display = 'none';
-            mapFrame.style.display = 'block';
-
-            const zoom = 0.015;
-            mapFrame.src =
-                `https://www.openstreetmap.org/export/embed.html?bbox=${lon - zoom},${lat - zoom},${lon + zoom},${lat + zoom}&layer=mapnik&marker=${lat},${lon}`;
-
-            mapFrame.style.opacity = '0';
-            requestAnimationFrame(() => {
-                setTimeout(() => {
-                    mapFrame.style.transition = 'opacity 0.6s ease';
-                    mapFrame.style.opacity = '1';
-                }, 50);
-            });
-        }
-
-        // ============================================================
-        // 8. КООРДИНАТЫ И ССЫЛКА
-        // ============================================================
-        function updateCoords(lat, lon) {
-            coordsDisplay.textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
-        }
-
-        function generateLink(lat, lon) {
-            const url = window.location.origin + window.location.pathname + `?lat=${lat}&lon=${lon}`;
-            trackLink.textContent = url;
-            linkBox.className = 'link-box show';
-            copyBtn.style.display = 'flex';
-            googleBtn.style.display = 'flex';
-            return url;
-        }
-
-        // ============================================================
-        // 9. КОПИРОВАНИЕ И GOOGLE MAPS
-        // ============================================================
-        function copyLink() {
-            const text = trackLink.textContent;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(text).then(() => {
-                    showToast('✅ Ссылка скопирована!', 'success');
-                }).catch(() => fallbackCopy(text));
-            } else {
-                fallbackCopy(text);
-            }
-        }
-
-        function fallbackCopy(text) {
-            const ta = document.createElement('textarea');
-            ta.value = text;
-            ta.style.position = 'fixed';
-            ta.style.opacity = '0';
-            document.body.appendChild(ta);
-            ta.select();
-            try {
-                document.execCommand('copy');
-                showToast('✅ Ссылка скопирована!', 'success');
-            } catch (e) {
-                showToast('❌ Не удалось скопировать', 'error');
-            }
-            document.body.removeChild(ta);
-        }
-
-        function openGoogleMaps() {
-            if (lastCoords) {
-                window.open(`https://www.google.com/maps?q=${lastCoords.lat},${lastCoords.lon}`, '_blank');
-            } else {
-                showToast('Нет координат', 'error');
-            }
-        }
-
-        // ============================================================
-        // 10. УВЕДОМЛЕНИЕ О ПЕРЕМЕЩЕНИИ
-        // ============================================================
-        function notifyIfMoved(lat, lon) {
-            if (!lastNotifyCoords) {
-                lastNotifyCoords = { lat, lon };
-                return;
-            }
-            const dist = Math.hypot(lat - lastNotifyCoords.lat, lon - lastNotifyCoords.lon);
-            if (dist > 0.0003) {
-                showToast('🌀 Вихрь переместился!', 'info');
-                if (navigator.vibrate) navigator.vibrate(20);
-                lastNotifyCoords = { lat, lon };
-            }
-        }
-
-        // ============================================================
-        // 11. СТАРТ / СТОП
-        // ============================================================
-        function startTracking() {
-            if (!navigator.geolocation) {
-                showToast('❌ Браузер не поддерживает геолокацию', 'error');
-                return;
-            }
-
-            if (isTracking) {
-                showToast('🌀 Вихрь уже активен', 'info');
-                return;
-            }
-
-            showToast('🌪️ Запуск вихря...', 'info');
-            updateStatus('Запуск...', 'info');
-
-            startBtn.disabled = true;
-            startBtn.textContent = '🌪️ ...';
-
-            watchId = navigator.geolocation.watchPosition(
-                (pos) => {
-                    const lat = pos.coords.latitude;
-                    const lon = pos.coords.longitude;
-                    lastCoords = { lat, lon };
-
-                    if (!isTracking) {
-                        isTracking = true;
-                        startBtn.style.display = 'none';
-                        stopBtn.style.display = 'flex';
-                    }
-
-                    showMap(lat, lon);
-                    updateCoords(lat, lon);
-                    generateLink(lat, lon);
-                    updateStatus('Вихрь активен', 'active');
-                    notifyIfMoved(lat, lon);
-
-                    const url = window.location.origin + window.location.pathname + `?lat=${lat}&lon=${lon}`;
-                    window.history.replaceState({}, '', url);
-                },
-                (err) => {
-                    let msg = 'Ошибка GPS';
-                    if (err.code === 1) msg = '❌ Доступ запрещён! Разреши в браузере.';
-                    else if (err.code === 2) msg = '❌ Сигнал GPS не найден';
-                    else if (err.code === 3) msg = '❌ Таймаут';
-                    showToast(msg, 'error');
-                    updateStatus('Ошибка', 'error');
-                    isTracking = false;
-                    startBtn.disabled = false;
-                    startBtn.textContent = '🌪️ Начать';
-                    startBtn.style.display = 'flex';
-                    stopBtn.style.display = 'none';
-                    if (watchId) navigator.geolocation.clearWatch(watchId);
-                }, {
-                    enableHighAccuracy: true,
-                    maximumAge: 3000,
-                    timeout: 15000
-                }
-            );
-        }
-
-        function stopTracking() {
-            if (watchId) {
-                navigator.geolocation.clearWatch(watchId);
-                watchId = null;
-            }
-            isTracking = false;
-            lastNotifyCoords = null;
-            startBtn.style.display = 'flex';
-            startBtn.disabled = false;
-            startBtn.textContent = '🌪️ Начать';
-            stopBtn.style.display = 'none';
-            updateStatus('Вихрь остановлен', 'inactive');
-            showToast('⏹ Вихрь остановлен', 'info');
-        }
-
-        // ============================================================
-        // 12. ЗАГРУЗКА ИЗ URL
-        // ============================================================
-        function loadFromURL() {
-            const params = new URLSearchParams(window.location.search);
-            const lat = parseFloat(params.get('lat'));
-            const lon = parseFloat(params.get('lon'));
-
-            if (!isNaN(lat) && !isNaN(lon)) {
-                lastCoords = { lat, lon };
-                showMap(lat, lon);
-                updateCoords(lat, lon);
-                generateLink(lat, lon);
-                updateStatus('Вихрь активен', 'active');
-                showToast('🌀 Вихрь загружен', 'success');
-            } else {
-                updateStatus('Ожидание', 'inactive');
-            }
-        }
-
-        // ============================================================
-        // 13. ЗАПУСК
-        // ============================================================
-        window.addEventListener('load', function() {
-            // Проверяем сессию
-            const session = getSession();
-            if (session && getUsers()[session]) {
-                currentUser = session;
-                showApp();
-            } else {
-                // показываем экран авторизации
-                authScreen.classList.remove('hidden');
-                authLogin.focus();
-            }
-
-            // Обработка Enter
-            authLogin.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    authPassword.focus();
-                }
-            });
-            authPassword.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    handleAuth();
-                }
-            });
-        }, { passive: true });
-    </script>
-</body>
-</html>
+            authSub.textContent = isLoginMode ? 'Войдите, чтобы продолжить' :
