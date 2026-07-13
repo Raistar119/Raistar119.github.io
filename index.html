@@ -6,18 +6,18 @@
     <title>🌪️ VORTEX</title>
     <style>
         /* ============================================================
-           ПЕРЕМЕННЫЕ
+           ПЕРЕМЕННЫЕ (светлая и тёмная тема)
            ============================================================ */
         :root {
-            --bg: #0a0e1a;
-            --card: rgba(16, 22, 40, 0.85);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
-            --text: #e8edf5;
-            --text-secondary: #8899b0;
-            --text-muted: #5a6480;
+            --bg: #f0f2f8;
+            --card: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(255, 255, 255, 0.25);
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+            --text: #0f1419;
+            --text-secondary: #536471;
+            --text-muted: #8899a6;
             --primary: #6c5ce7;
-            --primary-glow: rgba(108, 92, 231, 0.4);
+            --primary-glow: rgba(108, 92, 231, 0.3);
             --primary-light: #a29bfe;
             --success: #00b894;
             --success-glow: rgba(0, 184, 148, 0.3);
@@ -25,6 +25,18 @@
             --radius: 28px;
             --radius-sm: 16px;
             --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        [data-theme="dark"] {
+            --bg: #0a0e1a;
+            --card: rgba(16, 22, 40, 0.85);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+            --text: #e8edf5;
+            --text-secondary: #8899b0;
+            --text-muted: #5a6480;
+            --primary: #a29bfe;
+            --primary-glow: rgba(162, 155, 254, 0.25);
         }
 
         /* ============================================================
@@ -72,7 +84,7 @@
         }
 
         /* ============================================================
-           ВЕРХНЯЯ ПАНЕЛЬ — ЛОГОТИП С ВОДОВОРОТОМ
+           ВЕРХНЯЯ ПАНЕЛЬ
            ============================================================ */
         .header {
             position: relative;
@@ -95,9 +107,6 @@
             gap: 14px;
         }
 
-        /* ============================================================
-           ВОДОВОРОТ (анимированный)
-           ============================================================ */
         .vortex-logo {
             width: 44px;
             height: 44px;
@@ -147,9 +156,6 @@
             50% { opacity: 0.4; transform: scale(0.6); }
         }
 
-        /* ============================================================
-           НАЗВАНИЕ — СВЕЧЕНИЕ
-           ============================================================ */
         .brand-name {
             font-size: 24px;
             font-weight: 800;
@@ -200,7 +206,7 @@
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            border: none;
+            border: 1px solid var(--card-border);
             background: var(--card);
             backdrop-filter: blur(10px);
             font-size: 16px;
@@ -210,7 +216,6 @@
             justify-content: center;
             transition: all 0.3s;
             color: var(--text);
-            border: 1px solid var(--card-border);
         }
 
         .header-btn:active {
@@ -573,45 +578,35 @@
 </head>
 <body>
 
-    <!-- ============================================================
-    ФОН С ЭФФЕКТОМ ВОДОВОРОТА
-    ============================================================ -->
+    <!-- ФОН -->
     <div class="vortex-bg"></div>
 
     <!-- ============================================================
-    ВЕРХНЯЯ ПАНЕЛЬ
+    ШАПКА
     ============================================================ -->
     <div class="header">
         <div class="header-left">
-            <!-- Анимированный водоворот (SVG) -->
             <div class="vortex-logo">
                 <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Внешнее кольцо -->
                     <circle class="ring" cx="22" cy="22" r="18"/>
                     <circle class="ring" cx="22" cy="22" r="14" stroke-dasharray="20 30"/>
                     <circle class="ring" cx="22" cy="22" r="10" stroke-dasharray="10 40"/>
-                    <!-- Внутреннее вращающееся кольцо -->
                     <circle class="ring-inner" cx="22" cy="22" r="6"/>
                     <circle class="ring-inner" cx="22" cy="22" r="3"/>
-                    <!-- Пульсирующая точка в центре -->
                     <circle class="dot" cx="22" cy="22" r="2.5"/>
-                    <!-- Маленькие точки-спутники -->
                     <circle class="dot" cx="22" cy="6" r="1.2" style="animation-delay: 0.2s;"/>
                     <circle class="dot" cx="22" cy="38" r="1.2" style="animation-delay: 0.6s;"/>
                     <circle class="dot" cx="6" cy="22" r="1.2" style="animation-delay: 0.4s;"/>
                     <circle class="dot" cx="38" cy="22" r="1.2" style="animation-delay: 0.8s;"/>
                 </svg>
             </div>
-
-            <!-- Название с неоновым свечением -->
             <div>
                 <span class="brand-name">VORTEX</span>
                 <span class="brand-tag">• трекер</span>
             </div>
         </div>
-
         <div class="header-actions">
-            <button class="header-btn" id="themeToggle" onclick="toggleTheme()" title="Сменить тему">
+            <button class="header-btn" id="themeToggle" onclick="toggleTheme()">
                 🌙
             </button>
         </div>
@@ -630,7 +625,7 @@
     </div>
 
     <!-- ============================================================
-    ПЛАВАЮЩАЯ ПАНЕЛЬ
+    ПАНЕЛЬ СТАТУСА
     ============================================================ -->
     <div class="floating-panel">
         <div class="status-info">
@@ -652,18 +647,10 @@
     КНОПКИ
     ============================================================ -->
     <div class="actions">
-        <button class="btn btn-primary" id="startBtn" onclick="startTracking()">
-            🌪️ Начать
-        </button>
-        <button class="btn btn-danger" id="stopBtn" onclick="stopTracking()" style="display:none;">
-            ⏹ Стоп
-        </button>
-        <button class="btn btn-outline" id="copyBtn" onclick="copyLink()" style="display:none;" title="Скопировать ссылку">
-            📋
-        </button>
-        <button class="btn btn-google" id="googleBtn" onclick="openGoogleMaps()" style="display:none;" title="Открыть в Google Maps">
-            🗺️
-        </button>
+        <button class="btn btn-primary" id="startBtn" onclick="startTracking()">🌪️ Начать</button>
+        <button class="btn btn-danger" id="stopBtn" onclick="stopTracking()" style="display:none;">⏹ Стоп</button>
+        <button class="btn btn-outline" id="copyBtn" onclick="copyLink()" style="display:none;">📋</button>
+        <button class="btn btn-google" id="googleBtn" onclick="openGoogleMaps()" style="display:none;">🗺️</button>
     </div>
 
     <!-- ============================================================
@@ -676,25 +663,28 @@
     ============================================================ -->
     <script>
         // ============================================================
-        // 1. ТЁМНАЯ ТЕМА
+        // 1. ТЁМНАЯ ТЕМА (РАБОТАЕТ!)
         // ============================================================
-        const themeToggle = document.getElementById('themeToggle');
 
         function toggleTheme() {
             const html = document.documentElement;
             const current = html.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', next);
-            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
             localStorage.setItem('theme', next);
+
+            // Меняем иконку
+            const btn = document.getElementById('themeToggle');
+            btn.textContent = next === 'dark' ? '☀️' : '🌙';
         }
 
+        // Загружаем сохранённую тему
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
-        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 
         // ============================================================
-        // 2. ОСНОВНАЯ ЛОГИКА
+        // 2. ВСЯ ОСТАЛЬНАЯ ЛОГИКА (без изменений)
         // ============================================================
 
         let watchId = null;
@@ -794,7 +784,7 @@
         }
 
         // ============================================================
-        // 3. СТАРТ / СТОП
+        // СТАРТ / СТОП
         // ============================================================
 
         function startTracking() {
@@ -872,7 +862,7 @@
         }
 
         // ============================================================
-        // 4. ЗАГРУЗКА ИЗ URL
+        // ЗАГРУЗКА ИЗ URL
         // ============================================================
 
         window.onload = function() {
