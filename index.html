@@ -1031,4 +1031,343 @@
         function toggleAuthMode() {
             isLoginMode = !isLoginMode;
             authBtn.textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться';
-            authSub.textContent = isLoginMode ? 'Войдите, чтобы продолжить' :
+            authSub.textContent = isLoginMode ? 'Войдите, чтобы продолжить' : 'Создайте аккаунт';
+            toggleText.textContent = isLoginMode ? 'Нет аккаунта?' : 'Уже есть аккаунт?';
+            toggleBtn.textContent = isLoginMode ? 'Зарегистрироваться' : 'Войти';
+            authError.textContent = '';
+            authLogin.value = '';
+            authPassword.value = '';
+            authLogin.focus();
+        }
+
+        function handleAuth() {
+            const login = authLogin.value.trim();
+            const password = authPassword.value.trim();
+
+            if (!login || !password) {
+                authError.textContent = 'Заполните все поля';
+                return;
+            }
+
+            const users = getUsers();
+
+            if (isLoginMode) {
+                if (users[login] && users[login] === password) {
+                    authError.textContent = '';
+                    currentUser = login;
+                    setSession(login);
+                    showApp();
+                    showToast('✅ Добро пожаловать, ' + login + '!', 'success');
+                } else {
+                    authError.textContent = '❌ Неверный логин или пароль';
+                }
+            } else {
+                if (users[login]) {
+                    authError.textContent = '❌ Пользователь уже существует';
+                    return;
+                }
+                if (password.length < 4) {
+                    authError.textContent = '❌ Пароль должен быть минимум 4 символа';
+                    return;
+                }
+                users[login] = password;
+                saveUsers(users);
+                authError.textContent = '';
+                currentUser = login;
+                setSession(login);
+                showApp();
+                showToast('✅ Аккаунт создан! Добро пожаловать, ' + login + '!', 'success');
+            }
+        }
+
+        function showApp() {
+            authScreen.classList.add('hidden');
+            document.querySelector('.header').style.display = 'flex';
+            document.querySelector('.map-wrapper').style.display = 'block';
+            document.querySelector('.floating-panel').style.display = 'flex';
+            document.querySelector('.actions').style.display = 'flex';
+            document.querySelector('.link-box').style.display = 'none';
+            loadFromURL();
+        }
+
+        function logout() {
+            clearSession();
+            currentUser = null;
+            authScreen.classList.remove('hidden');
+            document.querySelector('.header').style.display = 'flex';
+            if (watchId) {
+                navigator.geolocation.clearWatch(watchId);
+                watchId = null;
+            }
+            isTracking = false;
+            startBtn.style.display = 'flex';
+            startBtn.disabled = false;
+            startBtn.textContent = '🌪️ Начать';
+            stopBtn.style.display = 'none';
+            updateStatus('Ожидание', 'inactive');
+            mapPlaceholder.style.display = 'flex';
+            mapFrame.style.display = 'none';
+            mapFrame.src = '';
+            coordsDisplay.textContent = '—';
+            linkBox.className = 'link-box';
+            copyBtn.style.display = 'none';
+            googleBtn.style.display = 'none';
+            showToast('👋 Вы вышли', 'info');
+        }
+
+        // ============================================================
+        // 3. DOM-элементы
+        // ============================================================
+        const $ = (id) => document.getElementById(id);
+        const mapPlaceholder = $('mapPlaceholder');
+        const mapFrame = $('mapFrame');
+        const coordsDisplay = $('coordsDisplay');
+        const statusText = $('statusText');
+        const statusDot = $('statusDot');
+        const startBtn = $('startBtn');
+        const stopBtn = $('stopBtn');
+        const copyBtn = $('copyBtn');
+        const googleBtn = $('googleBtn');
+        const linkBox = $('linkBox');
+        const trackLink = $('trackLink');
+        const toast = $('toast');
+
+        // ============================================================
+        // 4. ПЕРЕМЕННЫЕ СОСТОЯНИЯ
+        // ============================================================
+        let watchId = null;
+        let isTracking = false;
+        let lastCoords = null;
+        let lastNotifyCoords = null;
+        let toastTimer = null;
+
+        // ============================================================
+        // 5. TOAST
+        // ============================================================
+        function showToast(msg, type = 'info') {
+            toast.textContent = msg;
+            toast.className = 'toast ' + type + ' show';
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // ============================================================
+        // 6. СТАТУС
+        // ============================================================
+        function updateStatus(text, state) {
+            statusText.textContent = text;
+            statusDot.className = 'dot ' + state;
+        }
+
+        // ============================================================
+        // 7. КАРТА
+        // ============================================================
+        function showMap(lat, lon) {
+            mapPlaceholder.style.display = 'none';
+            mapFrame.style.display = 'block';
+
+            const zoom = 0.015;
+            mapFrame.src =
+                `https://www.openstreetmap.org/export/embed.html?bbox=${lon - zoom},${lat - zoom},${lon + zoom},${lat + zoom}&layer=mapnik&marker=${lat},${lon}`;
+
+            mapFrame.style.opacity = '0';
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    mapFrame.style.transition = 'opacity 0.6s ease';
+                    mapFrame.style.opacity = '1';
+                }, 50);
+            });
+        }
+
+        // ============================================================
+        // 8. КООРДИНАТЫ И ССЫЛКА
+        // ============================================================
+        function updateCoords(lat, lon) {
+            coordsDisplay.textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+        }
+
+        function generateLink(lat, lon) {
+            const url = window.location.origin + window.location.pathname + `?lat=${lat}&lon=${lon}`;
+            trackLink.textContent = url;
+            linkBox.className = 'link-box show';
+            copyBtn.style.display = 'flex';
+            googleBtn.style.display = 'flex';
+            return url;
+        }
+
+        // ============================================================
+        // 9. КОПИРОВАНИЕ И GOOGLE MAPS
+        // ============================================================
+        function copyLink() {
+            const text = trackLink.textContent;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('✅ Ссылка скопирована!', 'success');
+                }).catch(() => fallbackCopy(text));
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast('✅ Ссылка скопирована!', 'success');
+            } catch (e) {
+                showToast('❌ Не удалось скопировать', 'error');
+            }
+            document.body.removeChild(ta);
+        }
+
+        function openGoogleMaps() {
+            if (lastCoords) {
+                window.open(`https://www.google.com/maps?q=${lastCoords.lat},${lastCoords.lon}`, '_blank');
+            } else {
+                showToast('Нет координат', 'error');
+            }
+        }
+
+        // ============================================================
+        // 10. УВЕДОМЛЕНИЕ О ПЕРЕМЕЩЕНИИ
+        // ============================================================
+        function notifyIfMoved(lat, lon) {
+            if (!lastNotifyCoords) {
+                lastNotifyCoords = { lat, lon };
+                return;
+            }
+            const dist = Math.hypot(lat - lastNotifyCoords.lat, lon - lastNotifyCoords.lon);
+            if (dist > 0.0003) {
+                showToast('🌀 Вихрь переместился!', 'info');
+                if (navigator.vibrate) navigator.vibrate(20);
+                lastNotifyCoords = { lat, lon };
+            }
+        }
+
+        // ============================================================
+        // 11. СТАРТ / СТОП
+        // ============================================================
+        function startTracking() {
+            if (!navigator.geolocation) {
+                showToast('❌ Браузер не поддерживает геолокацию', 'error');
+                return;
+            }
+
+            if (isTracking) {
+                showToast('🌀 Вихрь уже активен', 'info');
+                return;
+            }
+
+            showToast('🌪️ Запуск вихря...', 'info');
+            updateStatus('Запуск...', 'info');
+
+            startBtn.disabled = true;
+            startBtn.textContent = '🌪️ ...';
+
+            watchId = navigator.geolocation.watchPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    lastCoords = { lat, lon };
+
+                    if (!isTracking) {
+                        isTracking = true;
+                        startBtn.style.display = 'none';
+                        stopBtn.style.display = 'flex';
+                    }
+
+                    showMap(lat, lon);
+                    updateCoords(lat, lon);
+                    generateLink(lat, lon);
+                    updateStatus('Вихрь активен', 'active');
+                    notifyIfMoved(lat, lon);
+
+                    const url = window.location.origin + window.location.pathname + `?lat=${lat}&lon=${lon}`;
+                    window.history.replaceState({}, '', url);
+                },
+                (err) => {
+                    let msg = 'Ошибка GPS';
+                    if (err.code === 1) msg = '❌ Доступ запрещён! Разреши в браузере.';
+                    else if (err.code === 2) msg = '❌ Сигнал GPS не найден';
+                    else if (err.code === 3) msg = '❌ Таймаут';
+                    showToast(msg, 'error');
+                    updateStatus('Ошибка', 'error');
+                    isTracking = false;
+                    startBtn.disabled = false;
+                    startBtn.textContent = '🌪️ Начать';
+                    startBtn.style.display = 'flex';
+                    stopBtn.style.display = 'none';
+                    if (watchId) navigator.geolocation.clearWatch(watchId);
+                }, {
+                    enableHighAccuracy: true,
+                    maximumAge: 3000,
+                    timeout: 15000
+                }
+            );
+        }
+
+        function stopTracking() {
+            if (watchId) {
+                navigator.geolocation.clearWatch(watchId);
+                watchId = null;
+            }
+            isTracking = false;
+            lastNotifyCoords = null;
+            startBtn.style.display = 'flex';
+            startBtn.disabled = false;
+            startBtn.textContent = '🌪️ Начать';
+            stopBtn.style.display = 'none';
+            updateStatus('Вихрь остановлен', 'inactive');
+            showToast('⏹ Вихрь остановлен', 'info');
+        }
+
+        // ============================================================
+        // 12. ЗАГРУЗКА ИЗ URL
+        // ============================================================
+        function loadFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            const lat = parseFloat(params.get('lat'));
+            const lon = parseFloat(params.get('lon'));
+
+            if (!isNaN(lat) && !isNaN(lon)) {
+                lastCoords = { lat, lon };
+                showMap(lat, lon);
+                updateCoords(lat, lon);
+                generateLink(lat, lon);
+                updateStatus('Вихрь активен', 'active');
+                showToast('🌀 Вихрь загружен', 'success');
+            } else {
+                updateStatus('Ожидание', 'inactive');
+            }
+        }
+
+        // ============================================================
+        // 13. ЗАПУСК
+        // ============================================================
+        window.addEventListener('load', function() {
+            const session = getSession();
+            if (session && getUsers()[session]) {
+                currentUser = session;
+                showApp();
+            } else {
+                authScreen.classList.remove('hidden');
+                authLogin.focus();
+            }
+
+            authLogin.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') authPassword.focus();
+            });
+            authPassword.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') handleAuth();
+            });
+        }, { passive: true });
+    </script>
+</body>
+</html>
