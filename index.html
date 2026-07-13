@@ -3,39 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>📍 Blink 2.0</title>
+    <title>🌪️ VORTEX</title>
     <style>
         /* ============================================================
            ПЕРЕМЕННЫЕ
            ============================================================ */
         :root {
-            --bg: #f2f4f8;
-            --card: rgba(255, 255, 255, 0.75);
-            --card-border: rgba(255, 255, 255, 0.3);
-            --shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
-            --text: #0f1419;
-            --text-secondary: #536471;
-            --text-muted: #8899a6;
-            --primary: #1da1f2;
-            --primary-glow: rgba(29, 161, 242, 0.25);
-            --success: #00ba7c;
-            --success-glow: rgba(0, 186, 124, 0.3);
-            --danger: #f4245e;
+            --bg: #0a0e1a;
+            --card: rgba(16, 22, 40, 0.85);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+            --text: #e8edf5;
+            --text-secondary: #8899b0;
+            --text-muted: #5a6480;
+            --primary: #6c5ce7;
+            --primary-glow: rgba(108, 92, 231, 0.4);
+            --primary-light: #a29bfe;
+            --success: #00b894;
+            --success-glow: rgba(0, 184, 148, 0.3);
+            --danger: #ff6b6b;
             --radius: 28px;
             --radius-sm: 16px;
             --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        [data-theme="dark"] {
-            --bg: #0a0e14;
-            --card: rgba(20, 28, 40, 0.8);
-            --card-border: rgba(255, 255, 255, 0.06);
-            --shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
-            --text: #e7ecf3;
-            --text-secondary: #8899a6;
-            --text-muted: #536471;
-            --primary: #1da1f2;
-            --primary-glow: rgba(29, 161, 242, 0.2);
         }
 
         /* ============================================================
@@ -60,27 +49,35 @@
         }
 
         /* ============================================================
-           ФОН С ГРАДИЕНТОМ (как в Blink)
+           ФОН С ЭФФЕКТОМ ВОДОВОРОТА
            ============================================================ */
-        .bg-gradient {
+        .vortex-bg {
             position: fixed;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(29, 161, 242, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 80%, rgba(0, 186, 124, 0.06) 0%, transparent 50%);
             z-index: 0;
             pointer-events: none;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(108, 92, 231, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(0, 184, 148, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 50%, rgba(162, 155, 254, 0.04) 0%, transparent 60%);
+            animation: vortexBg 20s linear infinite;
+        }
+
+        @keyframes vortexBg {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(360deg) scale(1.1); }
         }
 
         /* ============================================================
-           ВЕРХНЯЯ ПАНЕЛЬ — как в Blink
+           ВЕРХНЯЯ ПАНЕЛЬ — ЛОГОТИП С ВОДОВОРОТОМ
            ============================================================ */
         .header {
             position: relative;
             z-index: 10;
-            padding: 16px 20px 12px;
+            padding: 16px 20px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -95,60 +92,102 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
 
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #1da1f2, #0d8bd9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: #fff;
-            font-weight: 600;
-            box-shadow: 0 2px 12px var(--primary-glow);
+        /* ============================================================
+           ВОДОВОРОТ (анимированный)
+           ============================================================ */
+        .vortex-logo {
+            width: 44px;
+            height: 44px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .vortex-logo svg {
+            width: 100%;
+            height: 100%;
+            animation: spinVortex 4s linear infinite;
+            filter: drop-shadow(0 0 20px var(--primary-glow));
+        }
+
+        @keyframes spinVortex {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .vortex-logo .ring {
+            stroke: var(--primary);
+            stroke-width: 2;
+            fill: none;
+            opacity: 0.6;
+        }
+
+        .vortex-logo .ring-inner {
+            stroke: var(--primary-light);
+            stroke-width: 1.5;
+            fill: none;
+            opacity: 0.3;
+            animation: spinReverse 3s linear infinite;
+        }
+
+        @keyframes spinReverse {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+
+        .vortex-logo .dot {
+            fill: var(--primary);
+            animation: pulseDot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.6); }
+        }
+
+        /* ============================================================
+           НАЗВАНИЕ — СВЕЧЕНИЕ
+           ============================================================ */
+        .brand-name {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe, #6c5ce7);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 3s ease-in-out infinite;
+            text-shadow: 0 0 40px var(--primary-glow), 0 0 80px rgba(108, 92, 231, 0.15);
             position: relative;
         }
 
-        .avatar .online-dot {
+        .brand-name::after {
+            content: '';
             position: absolute;
-            bottom: 0;
+            top: 0;
+            left: 0;
             right: 0;
-            width: 12px;
-            height: 12px;
-            background: var(--success);
-            border-radius: 50%;
-            border: 2px solid var(--card);
-            box-shadow: 0 0 16px var(--success-glow);
-            animation: pulse-dot 2s infinite;
+            bottom: 0;
+            background: radial-gradient(ellipse at center, rgba(108, 92, 231, 0.15) 0%, transparent 70%);
+            filter: blur(20px);
+            z-index: -1;
         }
 
-        @keyframes pulse-dot {
-            0%,
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(0.8);
-                opacity: 0.6;
-            }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
-        .header h1 {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.4px;
-            color: var(--text);
-        }
-
-        .header h1 span {
-            font-weight: 400;
-            font-size: 14px;
+        .brand-tag {
+            font-size: 11px;
+            font-weight: 500;
             color: var(--text-muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            -webkit-text-fill-color: var(--text-muted);
+            margin-left: 2px;
         }
 
         .header-actions {
@@ -185,13 +224,13 @@
         }
 
         /* ============================================================
-           КАРТА — как в Blink (на весь экран)
+           КАРТА
            ============================================================ */
         .map-wrapper {
             position: relative;
             z-index: 1;
             flex: 1;
-            min-height: 50vh;
+            min-height: 48vh;
             margin: 12px 16px 0;
             border-radius: var(--radius);
             overflow: hidden;
@@ -234,7 +273,7 @@
         }
 
         /* ============================================================
-           ПЛАВАЮЩАЯ ПАНЕЛЬ СТАТУСА (как в Blink)
+           ПЛАВАЮЩАЯ ПАНЕЛЬ
            ============================================================ */
         .floating-panel {
             position: relative;
@@ -274,7 +313,7 @@
         .dot.active {
             background: var(--success);
             box-shadow: 0 0 20px var(--success-glow);
-            animation: pulse-dot 2s infinite;
+            animation: pulseDot 2s infinite;
         }
         .dot.error {
             background: var(--danger);
@@ -338,7 +377,7 @@
         }
 
         /* ============================================================
-           КНОПКИ — как в Blink (круглые, плавающие)
+           КНОПКИ
            ============================================================ */
         .actions {
             position: relative;
@@ -390,13 +429,13 @@
         }
 
         .btn-danger {
-            background: rgba(244, 36, 94, 0.12);
+            background: rgba(255, 107, 107, 0.12);
             color: var(--danger);
-            border: 1px solid rgba(244, 36, 94, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.15);
         }
 
         .btn-danger:active {
-            background: rgba(244, 36, 94, 0.2);
+            background: rgba(255, 107, 107, 0.2);
         }
 
         .btn-outline {
@@ -426,7 +465,7 @@
         }
 
         /* ============================================================
-           TOAST — как в Blink
+           TOAST
            ============================================================ */
         .toast {
             position: fixed;
@@ -472,20 +511,17 @@
             .header {
                 padding: 12px 16px 10px;
             }
-            .header h1 {
-                font-size: 17px;
+            .brand-name {
+                font-size: 20px;
+                letter-spacing: 1px;
             }
-            .header h1 span {
-                display: none;
+            .brand-tag {
+                font-size: 9px;
+                letter-spacing: 2px;
             }
-            .avatar {
-                width: 34px;
-                height: 34px;
-                font-size: 14px;
-            }
-            .avatar .online-dot {
-                width: 10px;
-                height: 10px;
+            .vortex-logo {
+                width: 36px;
+                height: 36px;
             }
             .map-wrapper {
                 margin: 8px 12px 0;
@@ -538,21 +574,42 @@
 <body>
 
     <!-- ============================================================
-    ФОН С ГРАДИЕНТОМ
+    ФОН С ЭФФЕКТОМ ВОДОВОРОТА
     ============================================================ -->
-    <div class="bg-gradient"></div>
+    <div class="vortex-bg"></div>
 
     <!-- ============================================================
     ВЕРХНЯЯ ПАНЕЛЬ
     ============================================================ -->
     <div class="header">
         <div class="header-left">
-            <div class="avatar" id="avatar">
-                👤
-                <span class="online-dot" id="onlineDot"></span>
+            <!-- Анимированный водоворот (SVG) -->
+            <div class="vortex-logo">
+                <svg viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Внешнее кольцо -->
+                    <circle class="ring" cx="22" cy="22" r="18"/>
+                    <circle class="ring" cx="22" cy="22" r="14" stroke-dasharray="20 30"/>
+                    <circle class="ring" cx="22" cy="22" r="10" stroke-dasharray="10 40"/>
+                    <!-- Внутреннее вращающееся кольцо -->
+                    <circle class="ring-inner" cx="22" cy="22" r="6"/>
+                    <circle class="ring-inner" cx="22" cy="22" r="3"/>
+                    <!-- Пульсирующая точка в центре -->
+                    <circle class="dot" cx="22" cy="22" r="2.5"/>
+                    <!-- Маленькие точки-спутники -->
+                    <circle class="dot" cx="22" cy="6" r="1.2" style="animation-delay: 0.2s;"/>
+                    <circle class="dot" cx="22" cy="38" r="1.2" style="animation-delay: 0.6s;"/>
+                    <circle class="dot" cx="6" cy="22" r="1.2" style="animation-delay: 0.4s;"/>
+                    <circle class="dot" cx="38" cy="22" r="1.2" style="animation-delay: 0.8s;"/>
+                </svg>
             </div>
-            <h1>Blink <span>• 2.0</span></h1>
+
+            <!-- Название с неоновым свечением -->
+            <div>
+                <span class="brand-name">VORTEX</span>
+                <span class="brand-tag">• трекер</span>
+            </div>
         </div>
+
         <div class="header-actions">
             <button class="header-btn" id="themeToggle" onclick="toggleTheme()" title="Сменить тему">
                 🌙
@@ -565,17 +622,17 @@
     ============================================================ -->
     <div class="map-wrapper" id="mapWrapper">
         <div class="map-placeholder" id="mapPlaceholder">
-            <div class="icon">🗺️</div>
-            <div class="title">Начните отслеживание</div>
-            <div style="font-size:13px;opacity:0.4;margin-top:4px;">Нажмите «Начать» чтобы показать местоположение</div>
+            <div class="icon">🌪️</div>
+            <div class="title">Запустите вихрь</div>
+            <div style="font-size:13px;opacity:0.4;margin-top:4px;">Нажмите «Начать» чтобы войти в водоворот событий</div>
         </div>
         <iframe id="mapFrame" style="display:none;"></iframe>
     </div>
 
     <!-- ============================================================
-    ПЛАВАЮЩАЯ ПАНЕЛЬ СТАТУСА
+    ПЛАВАЮЩАЯ ПАНЕЛЬ
     ============================================================ -->
-    <div class="floating-panel" id="floatingPanel">
+    <div class="floating-panel">
         <div class="status-info">
             <span class="dot inactive" id="statusDot"></span>
             <span class="label" id="statusText">Ожидание запуска</span>
@@ -587,7 +644,7 @@
     ССЫЛКА
     ============================================================ -->
     <div class="link-box" id="linkBox">
-        <div class="label">🔗 Ссылка для передачи</div>
+        <div class="label">🌀 Вихревая ссылка</div>
         <div class="url" id="trackLink"></div>
     </div>
 
@@ -596,7 +653,7 @@
     ============================================================ -->
     <div class="actions">
         <button class="btn btn-primary" id="startBtn" onclick="startTracking()">
-            ▶ Начать
+            🌪️ Начать
         </button>
         <button class="btn btn-danger" id="stopBtn" onclick="stopTracking()" style="display:none;">
             ⏹ Стоп
@@ -632,7 +689,7 @@
             localStorage.setItem('theme', next);
         }
 
-        const savedTheme = localStorage.getItem('theme') || 'light';
+        const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
         themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 
@@ -657,7 +714,6 @@
         const linkBox = document.getElementById('linkBox');
         const trackLink = document.getElementById('trackLink');
         const toast = document.getElementById('toast');
-        const onlineDot = document.getElementById('onlineDot');
 
         let toastTimer = null;
 
@@ -673,12 +729,6 @@
         function updateStatus(text, state) {
             statusText.textContent = text;
             statusDot.className = 'dot ' + state;
-
-            if (state === 'active') {
-                onlineDot.style.display = 'block';
-            } else {
-                onlineDot.style.display = 'none';
-            }
         }
 
         function showMap(lat, lon) {
@@ -737,7 +787,7 @@
                 Math.pow(lon - lastNotifyCoords.lon, 2)
             );
             if (dist > 0.0003) {
-                showToast('📍 Местоположение изменилось!', 'info');
+                showToast('🌀 Вихрь переместился!', 'info');
                 if (navigator.vibrate) navigator.vibrate(30);
                 lastNotifyCoords = { lat, lon };
             }
@@ -754,15 +804,15 @@
             }
 
             if (isTracking) {
-                showToast('⏳ Уже отслеживается', 'info');
+                showToast('🌀 Вихрь уже активен', 'info');
                 return;
             }
 
-            showToast('⏳ Запрос доступа...', 'info');
-            updateStatus('Запрос разрешения...', 'info');
+            showToast('🌪️ Запуск вихря...', 'info');
+            updateStatus('Запуск...', 'info');
 
             startBtn.disabled = true;
-            startBtn.textContent = '⏳ ...';
+            startBtn.textContent = '🌪️ ...';
 
             watchId = navigator.geolocation.watchPosition(
                 (pos) => {
@@ -779,7 +829,7 @@
                     showMap(lat, lon);
                     updateCoords(lat, lon);
                     generateLink(lat, lon);
-                    updateStatus('Активно', 'active');
+                    updateStatus('Вихрь активен', 'active');
                     notifyIfMoved(lat, lon);
 
                     const url = window.location.origin + window.location.pathname + `?lat=${lat}&lon=${lon}`;
@@ -794,7 +844,7 @@
                     updateStatus('Ошибка', 'error');
                     isTracking = false;
                     startBtn.disabled = false;
-                    startBtn.textContent = '▶ Начать';
+                    startBtn.textContent = '🌪️ Начать';
                     startBtn.style.display = 'flex';
                     stopBtn.style.display = 'none';
                     if (watchId) navigator.geolocation.clearWatch(watchId);
@@ -815,10 +865,10 @@
             lastNotifyCoords = null;
             startBtn.style.display = 'flex';
             startBtn.disabled = false;
-            startBtn.textContent = '▶ Начать';
+            startBtn.textContent = '🌪️ Начать';
             stopBtn.style.display = 'none';
-            updateStatus('Остановлено', 'inactive');
-            showToast('⏹ Отслеживание остановлено', 'info');
+            updateStatus('Вихрь остановлен', 'inactive');
+            showToast('⏹ Вихрь остановлен', 'info');
         }
 
         // ============================================================
@@ -835,8 +885,8 @@
                 showMap(lat, lon);
                 updateCoords(lat, lon);
                 generateLink(lat, lon);
-                updateStatus('Просмотр', 'active');
-                showToast('📍 Местоположение загружено', 'success');
+                updateStatus('Вихрь активен', 'active');
+                showToast('🌀 Вихрь загружен', 'success');
             } else {
                 updateStatus('Ожидание', 'inactive');
             }
