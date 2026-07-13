@@ -3,48 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>📍 Локация</title>
+    <title>📍 Blink 2.0</title>
     <style>
         /* ============================================================
            ПЕРЕМЕННЫЕ
            ============================================================ */
         :root {
-            --bg: #f0f2f8;
-            --glass: rgba(255, 255, 255, 0.55);
-            --glass-border: rgba(255, 255, 255, 0.25);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-            --text: #0b0e1a;
-            --text-secondary: #4a5272;
-            --text-muted: #8a94b0;
-            --primary: #6c5ce7;
-            --primary-glow: rgba(108, 92, 231, 0.35);
-            --primary-light: #a29bfe;
-            --success: #00b894;
-            --success-glow: rgba(0, 184, 148, 0.35);
-            --danger: #ff6b6b;
-            --card-bg: rgba(255, 255, 255, 0.65);
-            --map-bg: #d5dbe8;
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
-            --radius: 24px;
-            --radius-sm: 14px;
+            --bg: #f2f4f8;
+            --card: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.3);
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
+            --text: #0f1419;
+            --text-secondary: #536471;
+            --text-muted: #8899a6;
+            --primary: #1da1f2;
+            --primary-glow: rgba(29, 161, 242, 0.25);
+            --success: #00ba7c;
+            --success-glow: rgba(0, 186, 124, 0.3);
+            --danger: #f4245e;
+            --radius: 28px;
+            --radius-sm: 16px;
+            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         [data-theme="dark"] {
-            --bg: #0b0e1a;
-            --glass: rgba(20, 25, 50, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.06);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            --text: #e8edf5;
-            --text-secondary: #8a94b0;
-            --text-muted: #5a6480;
-            --card-bg: rgba(20, 25, 50, 0.6);
-            --map-bg: #141a2e;
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            --primary: #a29bfe;
-            --primary-glow: rgba(162, 155, 254, 0.3);
-            --success: #55efc4;
-            --success-glow: rgba(85, 239, 196, 0.3);
-            --danger: #ff7675;
+            --bg: #0a0e14;
+            --card: rgba(20, 28, 40, 0.8);
+            --card-border: rgba(255, 255, 255, 0.06);
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+            --text: #e7ecf3;
+            --text-secondary: #8899a6;
+            --text-muted: #536471;
+            --primary: #1da1f2;
+            --primary-glow: rgba(29, 161, 242, 0.2);
         }
 
         /* ============================================================
@@ -63,27 +54,42 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            transition: background 0.4s ease, color 0.4s ease;
-            backdrop-filter: blur(2px);
+            transition: background var(--transition), color var(--transition);
+            overflow: hidden;
+            position: relative;
         }
 
         /* ============================================================
-           ВЕРХНЯЯ ПАНЕЛЬ — стеклянная
+           ФОН С ГРАДИЕНТОМ (как в Blink)
+           ============================================================ */
+        .bg-gradient {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(29, 161, 242, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 80%, rgba(0, 186, 124, 0.06) 0%, transparent 50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ============================================================
+           ВЕРХНЯЯ ПАНЕЛЬ — как в Blink
            ============================================================ */
         .header {
-            background: var(--glass);
-            backdrop-filter: blur(20px) saturate(1.4);
-            -webkit-backdrop-filter: blur(20px) saturate(1.4);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 16px 24px 14px;
+            position: relative;
+            z-index: 10;
+            padding: 16px 20px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-shrink: 0;
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            transition: background 0.4s ease, border 0.4s ease;
+            background: var(--card);
+            backdrop-filter: blur(20px) saturate(1.4);
+            -webkit-backdrop-filter: blur(20px) saturate(1.4);
+            border-bottom: 1px solid var(--card-border);
+            transition: background var(--transition), border var(--transition);
         }
 
         .header-left {
@@ -92,21 +98,48 @@
             gap: 12px;
         }
 
-        .header-icon {
-            width: 38px;
-            height: 38px;
-            background: var(--primary);
-            border-radius: 12px;
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1da1f2, #0d8bd9);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
             color: #fff;
-            box-shadow: 0 4px 16px var(--primary-glow);
+            font-weight: 600;
+            box-shadow: 0 2px 12px var(--primary-glow);
+            position: relative;
+        }
+
+        .avatar .online-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 12px;
+            height: 12px;
+            background: var(--success);
+            border-radius: 50%;
+            border: 2px solid var(--card);
+            box-shadow: 0 0 16px var(--success-glow);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(0.8);
+                opacity: 0.6;
+            }
         }
 
         .header h1 {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             letter-spacing: -0.4px;
             color: var(--text);
@@ -114,79 +147,58 @@
 
         .header h1 span {
             font-weight: 400;
-            color: var(--text-muted);
             font-size: 14px;
+            color: var(--text-muted);
         }
 
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
-        .badge {
-            font-size: 11px;
-            font-weight: 600;
-            background: var(--primary);
-            color: #fff;
-            padding: 5px 14px;
-            border-radius: 30px;
-            letter-spacing: 0.3px;
-            transition: background 0.3s, color 0.3s;
-            box-shadow: 0 2px 12px var(--primary-glow);
-        }
-
-        .badge.inactive {
-            background: var(--text-muted);
-            box-shadow: none;
-            color: #fff;
-        }
-
-        .badge.error {
-            background: var(--danger);
-            box-shadow: 0 2px 12px rgba(255, 107, 107, 0.3);
-        }
-
-        .theme-toggle {
+        .header-btn {
             width: 38px;
             height: 38px;
-            border-radius: 12px;
-            border: 1px solid var(--glass-border);
-            background: var(--glass);
+            border-radius: 50%;
+            border: none;
+            background: var(--card);
             backdrop-filter: blur(10px);
-            font-size: 17px;
+            font-size: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
             color: var(--text);
+            border: 1px solid var(--card-border);
         }
 
-        .theme-toggle:active {
+        .header-btn:active {
             transform: scale(0.92);
         }
 
-        .theme-toggle:hover {
+        .header-btn:hover {
             background: var(--primary);
             color: #fff;
             border-color: var(--primary);
         }
 
         /* ============================================================
-           КАРТА — с эффектом стекла
+           КАРТА — как в Blink (на весь экран)
            ============================================================ */
         .map-wrapper {
+            position: relative;
+            z-index: 1;
             flex: 1;
-            min-height: 48vh;
-            margin: 16px 20px 0;
+            min-height: 50vh;
+            margin: 12px 16px 0;
             border-radius: var(--radius);
             overflow: hidden;
-            position: relative;
-            background: var(--map-bg);
-            box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.1);
-            transition: background 0.4s ease;
-            border: 1px solid var(--glass-border);
+            background: var(--bg);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--card-border);
+            transition: background var(--transition), border var(--transition);
         }
 
         .map-wrapper iframe {
@@ -205,83 +217,55 @@
             justify-content: center;
             height: 100%;
             color: var(--text-muted);
-            font-size: 15px;
             padding: 30px;
             text-align: center;
         }
 
         .map-placeholder .icon {
-            font-size: 52px;
-            margin-bottom: 14px;
-            opacity: 0.4;
+            font-size: 56px;
+            margin-bottom: 12px;
+            opacity: 0.3;
         }
 
         .map-placeholder .title {
+            font-size: 18px;
             font-weight: 600;
-            font-size: 17px;
             color: var(--text-secondary);
-            margin-bottom: 4px;
         }
 
         /* ============================================================
-           ИНФО-ПАНЕЛЬ — стеклянная карточка
+           ПЛАВАЮЩАЯ ПАНЕЛЬ СТАТУСА (как в Blink)
            ============================================================ */
-        .info-panel {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px) saturate(1.3);
-            -webkit-backdrop-filter: blur(16px) saturate(1.3);
-            border: 1px solid var(--glass-border);
+        .floating-panel {
+            position: relative;
+            z-index: 5;
+            margin: -20px 16px 0;
+            padding: 16px 20px;
+            background: var(--card);
+            backdrop-filter: blur(24px) saturate(1.5);
+            -webkit-backdrop-filter: blur(24px) saturate(1.5);
             border-radius: var(--radius);
-            margin: 14px 20px 0;
-            padding: 16px 20px 14px;
-            flex-shrink: 0;
+            border: 1px solid var(--card-border);
             box-shadow: var(--shadow);
-            transition: background 0.4s ease, border 0.4s ease;
-        }
-
-        .coords-row {
+            transition: background var(--transition), border var(--transition);
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .coords-row .coords {
-            font-weight: 600;
-            font-size: 16px;
-            color: var(--text);
-            font-family: 'SF Mono', 'Menlo', monospace;
-            letter-spacing: 0.2px;
-            background: var(--bg);
-            padding: 4px 12px;
-            border-radius: 8px;
-            transition: background 0.4s ease;
-        }
-
-        .coords-row .time {
-            font-size: 13px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .status-line {
+        .status-info {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            font-weight: 500;
+            gap: 12px;
         }
 
-        .status-line .dot {
+        .status-info .dot {
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            display: inline-block;
             flex-shrink: 0;
-            transition: background 0.3s;
         }
 
         .dot.inactive {
@@ -290,32 +274,47 @@
         .dot.active {
             background: var(--success);
             box-shadow: 0 0 20px var(--success-glow);
-            animation: pulse 1.8s infinite;
+            animation: pulse-dot 2s infinite;
         }
         .dot.error {
             background: var(--danger);
-            box-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(0.8); opacity: 0.6; }
-            100% { transform: scale(1); opacity: 1; }
+        .status-info .label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .status-info .label strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .coords-display {
+            font-family: 'SF Mono', 'Menlo', monospace;
+            font-size: 13px;
+            color: var(--text-muted);
+            background: var(--bg);
+            padding: 4px 12px;
+            border-radius: 30px;
+            transition: background var(--transition);
         }
 
         /* ============================================================
            ССЫЛКА
            ============================================================ */
         .link-box {
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-sm);
+            position: relative;
+            z-index: 5;
+            margin: 10px 16px 0;
             padding: 12px 16px;
-            margin: 10px 20px 0;
+            background: var(--card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-sm);
             display: none;
-            flex-shrink: 0;
-            transition: background 0.4s ease, border 0.4s ease;
+            transition: background var(--transition), border var(--transition);
         }
 
         .link-box.show {
@@ -327,37 +326,38 @@
             font-weight: 600;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 0.5px;
         }
 
         .link-box .url {
             color: var(--primary);
             margin-top: 4px;
             font-family: 'SF Mono', 'Menlo', monospace;
-            font-size: 13px;
+            font-size: 12px;
             word-break: break-all;
-            font-weight: 500;
         }
 
         /* ============================================================
-           КНОПКИ — современный стиль
+           КНОПКИ — как в Blink (круглые, плавающие)
            ============================================================ */
         .actions {
-            padding: 14px 20px 24px;
-            flex-shrink: 0;
+            position: relative;
+            z-index: 5;
+            padding: 12px 16px 24px;
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .btn {
-            padding: 14px 20px;
+            padding: 14px 24px;
             border: none;
-            border-radius: var(--radius-sm);
+            border-radius: 60px;
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -367,22 +367,20 @@
             min-width: 56px;
             letter-spacing: 0.2px;
             position: relative;
-            overflow: hidden;
         }
 
         .btn:active {
-            transform: scale(0.96);
+            transform: scale(0.95);
         }
 
-        /* ——— Primary ——— */
         .btn-primary {
             background: var(--primary);
             color: #fff;
-            box-shadow: 0 4px 20px var(--primary-glow);
+            box-shadow: 0 4px 24px var(--primary-glow);
         }
 
         .btn-primary:active {
-            box-shadow: 0 2px 10px var(--primary-glow);
+            box-shadow: 0 2px 12px var(--primary-glow);
         }
 
         .btn-primary:disabled {
@@ -391,22 +389,20 @@
             box-shadow: none;
         }
 
-        /* ——— Danger ——— */
         .btn-danger {
-            background: rgba(255, 107, 107, 0.12);
+            background: rgba(244, 36, 94, 0.12);
             color: var(--danger);
-            border: 1px solid rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(244, 36, 94, 0.15);
         }
 
         .btn-danger:active {
-            background: rgba(255, 107, 107, 0.2);
+            background: rgba(244, 36, 94, 0.2);
         }
 
-        /* ——— Outline ——— */
         .btn-outline {
-            background: var(--glass);
+            background: var(--card);
             backdrop-filter: blur(8px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--card-border);
             color: var(--text-secondary);
             flex: 0.5;
         }
@@ -417,37 +413,35 @@
             border-color: var(--primary);
         }
 
-        /* ——— Google ——— */
         .btn-google {
             background: #ea4335;
             color: #fff;
-            flex: 0.6;
-            box-shadow: 0 4px 16px rgba(234, 67, 53, 0.25);
+            flex: 0.5;
+            box-shadow: 0 4px 20px rgba(234, 67, 53, 0.2);
         }
 
         .btn-google:active {
             background: #d33426;
-            transform: scale(0.96);
+            transform: scale(0.95);
         }
 
         /* ============================================================
-           TOAST
+           TOAST — как в Blink
            ============================================================ */
         .toast {
             position: fixed;
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%) translateY(20px);
-            background: var(--card-bg);
+            background: var(--card);
             backdrop-filter: blur(24px) saturate(1.5);
-            -webkit-backdrop-filter: blur(24px) saturate(1.5);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--card-border);
             color: var(--text);
             padding: 14px 28px;
-            border-radius: 18px;
+            border-radius: 60px;
             font-size: 14px;
             font-weight: 500;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12);
             opacity: 0;
             pointer-events: none;
             z-index: 999;
@@ -463,62 +457,104 @@
 
         .toast.success {
             border-color: var(--success);
-            box-shadow: 0 12px 48px var(--success-glow);
         }
-
         .toast.error {
             border-color: var(--danger);
-            box-shadow: 0 12px 48px rgba(255, 107, 107, 0.2);
         }
-
         .toast.info {
             border-color: var(--primary);
-            box-shadow: 0 12px 48px var(--primary-glow);
         }
 
         /* ============================================================
            АДАПТИВ
            ============================================================ */
         @media (max-width: 500px) {
-            .header { padding: 12px 16px 10px; }
-            .header h1 { font-size: 16px; }
-            .header h1 span { display: none; }
-            .header-icon { width: 32px; height: 32px; font-size: 15px; }
-            .map-wrapper { margin: 10px 12px 0; min-height: 40vh; border-radius: 18px; }
-            .info-panel { margin: 10px 12px 0; padding: 14px 16px; }
-            .coords-row .coords { font-size: 14px; }
-            .actions { padding: 10px 12px 16px; gap: 8px; }
-            .btn { font-size: 13px; padding: 12px 14px; border-radius: 12px; }
-            .btn-google { flex: 0.4; }
-            .btn-outline { flex: 0.4; }
-            .link-box { margin: 8px 12px 0; }
-            .toast { bottom: 80px; padding: 12px 20px; font-size: 13px; }
+            .header {
+                padding: 12px 16px 10px;
+            }
+            .header h1 {
+                font-size: 17px;
+            }
+            .header h1 span {
+                display: none;
+            }
+            .avatar {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
+            }
+            .avatar .online-dot {
+                width: 10px;
+                height: 10px;
+            }
+            .map-wrapper {
+                margin: 8px 12px 0;
+                min-height: 40vh;
+                border-radius: 20px;
+            }
+            .floating-panel {
+                margin: -14px 12px 0;
+                padding: 12px 16px;
+                border-radius: 20px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            .status-info .label {
+                font-size: 13px;
+            }
+            .coords-display {
+                font-size: 12px;
+                padding: 3px 10px;
+            }
+            .actions {
+                padding: 8px 12px 16px;
+                gap: 8px;
+            }
+            .btn {
+                font-size: 13px;
+                padding: 12px 16px;
+                border-radius: 40px;
+            }
+            .link-box {
+                margin: 8px 12px 0;
+                padding: 10px 14px;
+            }
+            .toast {
+                bottom: 80px;
+                padding: 12px 20px;
+                font-size: 13px;
+                border-radius: 40px;
+            }
         }
 
         @media (min-height: 750px) {
-            .map-wrapper { min-height: 55vh; }
-        }
-
-        @media (max-width: 380px) {
-            .btn { font-size: 11px; padding: 10px 8px; }
-            .btn-google { flex: 0.3; }
-            .btn-outline { flex: 0.3; }
+            .map-wrapper {
+                min-height: 55vh;
+            }
         }
     </style>
 </head>
 <body>
 
     <!-- ============================================================
+    ФОН С ГРАДИЕНТОМ
+    ============================================================ -->
+    <div class="bg-gradient"></div>
+
+    <!-- ============================================================
     ВЕРХНЯЯ ПАНЕЛЬ
     ============================================================ -->
     <div class="header">
         <div class="header-left">
-            <div class="header-icon">📍</div>
-            <h1>Локация <span>• трекер</span></h1>
+            <div class="avatar" id="avatar">
+                👤
+                <span class="online-dot" id="onlineDot"></span>
+            </div>
+            <h1>Blink <span>• 2.0</span></h1>
         </div>
         <div class="header-actions">
-            <span class="badge inactive" id="statusBadge">Ожидание</span>
-            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Сменить тему">
+            <button class="header-btn" id="themeToggle" onclick="toggleTheme()" title="Сменить тему">
                 🌙
             </button>
         </div>
@@ -531,23 +567,20 @@
         <div class="map-placeholder" id="mapPlaceholder">
             <div class="icon">🗺️</div>
             <div class="title">Начните отслеживание</div>
-            <div style="font-size:13px;opacity:0.5;margin-top:4px;">Нажмите «Начать» чтобы показать местоположение</div>
+            <div style="font-size:13px;opacity:0.4;margin-top:4px;">Нажмите «Начать» чтобы показать местоположение</div>
         </div>
         <iframe id="mapFrame" style="display:none;"></iframe>
     </div>
 
     <!-- ============================================================
-    ИНФО-ПАНЕЛЬ
+    ПЛАВАЮЩАЯ ПАНЕЛЬ СТАТУСА
     ============================================================ -->
-    <div class="info-panel">
-        <div class="coords-row">
-            <span class="coords" id="coordsDisplay">—</span>
-            <span class="time" id="timeDisplay">—</span>
-        </div>
-        <div class="status-line">
+    <div class="floating-panel" id="floatingPanel">
+        <div class="status-info">
             <span class="dot inactive" id="statusDot"></span>
-            <span id="statusText">Ожидание запуска</span>
+            <span class="label" id="statusText">Ожидание запуска</span>
         </div>
+        <span class="coords-display" id="coordsDisplay">—</span>
     </div>
 
     <!-- ============================================================
@@ -597,22 +630,8 @@
             html.setAttribute('data-theme', next);
             themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
             localStorage.setItem('theme', next);
-            updateBadgeTheme(next);
         }
 
-        function updateBadgeTheme(theme) {
-            const badge = document.getElementById('statusBadge');
-            if (badge.classList.contains('inactive')) return;
-            if (theme === 'dark') {
-                badge.style.background = '#a29bfe';
-                badge.style.color = '#0b0e1a';
-            } else {
-                badge.style.background = '#6c5ce7';
-                badge.style.color = '#fff';
-            }
-        }
-
-        // Загрузка темы
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
         themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
@@ -629,10 +648,8 @@
         const mapPlaceholder = document.getElementById('mapPlaceholder');
         const mapFrame = document.getElementById('mapFrame');
         const coordsDisplay = document.getElementById('coordsDisplay');
-        const timeDisplay = document.getElementById('timeDisplay');
         const statusText = document.getElementById('statusText');
         const statusDot = document.getElementById('statusDot');
-        const statusBadge = document.getElementById('statusBadge');
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
         const copyBtn = document.getElementById('copyBtn');
@@ -640,6 +657,7 @@
         const linkBox = document.getElementById('linkBox');
         const trackLink = document.getElementById('trackLink');
         const toast = document.getElementById('toast');
+        const onlineDot = document.getElementById('onlineDot');
 
         let toastTimer = null;
 
@@ -655,22 +673,11 @@
         function updateStatus(text, state) {
             statusText.textContent = text;
             statusDot.className = 'dot ' + state;
-            statusBadge.className = 'badge';
 
             if (state === 'active') {
-                statusBadge.textContent = '● Активно';
-                statusBadge.classList.add('active');
-                statusBadge.style.background = 'var(--success)';
-                statusBadge.style.color = '#fff';
-                statusBadge.style.boxShadow = '0 2px 20px var(--success-glow)';
-            } else if (state === 'error') {
-                statusBadge.textContent = '⚠ Ошибка';
-                statusBadge.classList.add('error');
+                onlineDot.style.display = 'block';
             } else {
-                statusBadge.textContent = '○ Ожидание';
-                statusBadge.classList.add('inactive');
-                statusBadge.style.background = '';
-                statusBadge.style.boxShadow = '';
+                onlineDot.style.display = 'none';
             }
         }
 
@@ -683,11 +690,6 @@
 
         function updateCoords(lat, lon) {
             coordsDisplay.textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
-            timeDisplay.textContent = new Date().toLocaleTimeString('ru-RU', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
         }
 
         function generateLink(lat, lon) {
