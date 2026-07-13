@@ -1067,18 +1067,19 @@
             </div>
 
             <!-- ===== ЭТАП 3: Восстановление пароля (ОДНА НАДПИСЬ) ===== -->
+            <!-- ===== ЭТАП 3: Восстановление пароля (ОДНА НАДПИСЬ) ===== -->
             <div id="authStep3" style="display:none;">
-                <h2 style="font-size:24px;">🔐 Восстановление</h2>
-                <div class="sub" style="margin-bottom:12px;">Введите email для восстановления</div>
-                <div class="input-group">
-                    <label for="recoveryEmail">Email</label>
-                    <input type="email" id="recoveryEmail" placeholder="example@mail.ru">
-                </div>
-                <button class="btn-auth" onclick="sendRecoveryCode()">Отправить код</button>
-                <div style="margin-top:10px;font-size:13px;">
-                    <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="backToLogin()">← Назад</button>
-                </div>
-            </div>
+    <h2 style="font-size:24px;">🔐 Восстановление</h2>
+    <div class="sub" style="margin-bottom:12px;">Введите email для восстановления</div>
+    <div class="input-group">
+        <label for="recoveryEmail">Email</label>
+        <input type="email" id="recoveryEmail" placeholder="example@mail.ru">
+    </div>
+    <button class="btn-auth" onclick="sendRecoveryCode()">Отправить код</button>
+    <div style="margin-top:10px;font-size:13px;">
+        <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="backToLogin()">← Назад</button>
+    </div>
+</div>
 
             <!-- ===== ЭТАП 4: Смена пароля ===== -->
             <div id="authStep4" style="display:none;">
