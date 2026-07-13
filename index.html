@@ -1,219 +1,272 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🕵️ GHOST TRACKER v3.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>📍 Местоположение</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        /* ===== ОБНУЛЕНИЕ ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: #0a0a0a;
-            color: #00ff41;
-            font-family: 'Courier New', monospace;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            color: #1a1a2e;
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            position: relative;
+            flex-direction: column;
         }
 
-        /* Матричный фон */
-        #matrixCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            opacity: 0.15;
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .card {
-            background: rgba(10, 10, 10, 0.95);
-            border: 2px solid #00ff41;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 0 40px rgba(0, 255, 65, 0.1), inset 0 0 60px rgba(0, 255, 65, 0.02);
-            backdrop-filter: blur(10px);
-        }
-
+        /* ===== ВЕРХНЯЯ ПАНЕЛЬ ===== */
         .header {
-            text-align: center;
-            border-bottom: 1px solid rgba(0, 255, 65, 0.15);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-
-        .header .ascii {
-            font-size: 8px;
-            line-height: 1.2;
-            opacity: 0.5;
-            white-space: pre;
-            margin-bottom: 8px;
+            background: #ffffff;
+            padding: 16px 20px 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .header h1 {
-            font-size: 22px;
-            letter-spacing: 4px;
-            text-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
-            color: #00ff41;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #1a1a2e;
         }
 
-        .header .sub {
+        .header .badge {
             font-size: 11px;
-            opacity: 0.4;
-            letter-spacing: 2px;
-            margin-top: 4px;
+            background: #e8f0fe;
+            color: #1a73e8;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 500;
         }
 
-        .header .sub .blink {
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Статус */
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            opacity: 0.4;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(0, 255, 65, 0.06);
-            margin-bottom: 15px;
-            letter-spacing: 1px;
-        }
-
-        .status-bar .val {
-            color: #00ff41;
-            opacity: 0.8;
-        }
-
-        /* Кнопки */
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background: transparent;
-            color: #00ff41;
-            border: 2px solid #00ff41;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .btn:hover {
-            background: #00ff41;
-            color: #0a0a0a;
-            box-shadow: 0 0 40px rgba(0, 255, 65, 0.2);
-        }
-
-        .btn:disabled {
-            opacity: 0.3;
-            cursor: not-allowed;
-        }
-
-        .btn-danger {
-            border-color: #ff4444;
-            color: #ff4444;
-        }
-
-        .btn-danger:hover {
-            background: #ff4444;
-            color: #0a0a0a;
-            box-shadow: 0 0 40px rgba(255, 68, 68, 0.2);
-        }
-
-        /* Сообщения */
-        .status-msg {
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            margin-bottom: 12px;
-            display: none;
-            text-align: center;
-            letter-spacing: 1px;
-        }
-
-        .status-msg.ok {
-            display: block;
-            background: rgba(0, 255, 65, 0.08);
-            border: 1px solid #00ff41;
-            color: #00ff41;
-        }
-
-        .status-msg.err {
-            display: block;
-            background: rgba(255, 68, 68, 0.08);
-            border: 1px solid #ff4444;
-            color: #ff4444;
-        }
-
-        .status-msg.info {
-            display: block;
-            background: rgba(0, 200, 255, 0.08);
-            border: 1px solid #00ccff;
-            color: #00ccff;
-        }
-
-        /* Карта */
-        .map-container {
-            margin: 15px 0;
-            border-radius: 12px;
+        /* ===== КАРТА (большая) ===== */
+        .map-wrapper {
+            flex: 1;
+            min-height: 55vh;
+            background: #e8edf4;
+            position: relative;
             overflow: hidden;
-            height: 250px;
-            background: #0a0a0a;
-            border: 1px solid rgba(0, 255, 65, 0.1);
-            display: none;
         }
 
-        .map-container.show {
-            display: block;
-        }
-
-        .map-container iframe {
+        .map-wrapper iframe {
             width: 100%;
             height: 100%;
             border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
-        /* Координаты */
-        .coords-info {
-            font-size: 12px;
-            opacity: 0.6;
+        .map-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #8895aa;
+            font-size: 15px;
+            padding: 30px;
             text-align: center;
-            margin: 8px 0;
-            letter-spacing: 1px;
         }
 
-        /* Ссылка */
+        .map-placeholder .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        /* ===== ИНФО-БЛОК ===== */
+        .info-panel {
+            background: #ffffff;
+            padding: 16px 20px 8px;
+            flex-shrink: 0;
+            border-top: 1px solid #f0f2f5;
+        }
+
+        .coords-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #3d4a5c;
+        }
+
+        .coords-row .coords {
+            font-weight: 500;
+            color: #1a1a2e;
+            font-family: 'SF Mono', 'Menlo', monospace;
+            font-size: 14px;
+            letter-spacing: 0.2px;
+        }
+
+        .coords-row .time {
+            color: #8895aa;
+            font-size: 12px;
+        }
+
+        .status-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+            font-size: 13px;
+            color: #3d4a5c;
+        }
+
+        .status-line .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .dot.inactive {
+            background: #cbd5e1;
+        }
+        .dot.active {
+            background: #22c55e;
+            animation: pulse 1.8s infinite;
+        }
+        .dot.error {
+            background: #ef4444;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* ===== КНОПКИ ===== */
+        .actions {
+            background: #ffffff;
+            padding: 12px 20px 20px;
+            flex-shrink: 0;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #f0f2f5;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: inherit;
+            background: #f1f4f9;
+            color: #1a1a2e;
+        }
+
+        .btn-primary {
+            background: #1a73e8;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.25);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.97);
+            background: #1557b0;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            transform: none;
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-danger:active {
+            transform: scale(0.97);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #e2e8f0;
+            flex: 0.5;
+        }
+
+        .btn-outline:active {
+            background: #f1f4f9;
+        }
+
+        .btn-success {
+            background: #22c55e;
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
+        }
+
+        /* ===== СООБЩЕНИЯ ===== */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a2e;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+            z-index: 999;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.error {
+            background: #dc2626;
+        }
+        .toast.success {
+            background: #16a34a;
+        }
+        .toast.info {
+            background: #1a73e8;
+        }
+
+        /* ===== ССЫЛКА ===== */
         .link-box {
-            background: rgba(0, 255, 65, 0.04);
-            border: 1px solid rgba(0, 255, 65, 0.1);
-            border-radius: 8px;
-            padding: 12px;
-            margin: 12px 0;
+            background: #f8fafc;
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin: 6px 20px 0;
+            font-size: 12px;
+            color: #3d4a5c;
             word-break: break-all;
-            font-size: 11px;
-            opacity: 0.7;
             display: none;
+            border: 1px solid #e2e8f0;
+            flex-shrink: 0;
         }
 
         .link-box.show {
@@ -221,354 +274,234 @@
         }
 
         .link-box .label {
-            opacity: 0.5;
-            font-size: 10px;
-            letter-spacing: 1px;
+            font-weight: 500;
+            font-size: 11px;
+            color: #8895aa;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
         }
 
         .link-box .url {
-            color: #00ff41;
+            color: #1a73e8;
             margin-top: 4px;
-        }
-
-        /* История */
-        .history-toggle {
-            background: transparent;
-            border: none;
-            color: #00ff41;
-            font-family: 'Courier New', monospace;
+            font-family: 'SF Mono', 'Menlo', monospace;
             font-size: 12px;
-            cursor: pointer;
-            opacity: 0.4;
-            padding: 8px;
-            width: 100%;
-            letter-spacing: 1px;
-            transition: 0.3s;
         }
 
-        .history-toggle:hover {
-            opacity: 1;
-        }
-
-        .history-container {
-            margin-top: 12px;
-            border-top: 1px solid rgba(0, 255, 65, 0.06);
-            padding-top: 12px;
-            display: none;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .history-container.show {
-            display: block;
-        }
-
-        .history-container::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .history-container::-webkit-scrollbar-thumb {
-            background: #00ff41;
-            border-radius: 2px;
-        }
-
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            opacity: 0.4;
-            padding: 4px 0;
-            border-bottom: 1px solid rgba(0, 255, 65, 0.04);
-            letter-spacing: 1px;
-        }
-
-        .history-item .time {
-            opacity: 0.6;
-        }
-
-        .history-item .coords {
-            color: #00ff41;
-        }
-
-        /* Футер */
-        .footer {
-            margin-top: 15px;
-            text-align: center;
-            font-size: 9px;
-            opacity: 0.15;
-            letter-spacing: 2px;
-            border-top: 1px solid rgba(0, 255, 65, 0.04);
-            padding-top: 12px;
-        }
-
-        /* Адаптив */
+        /* ===== АДАПТИВ ===== */
         @media (max-width: 500px) {
-            .card { padding: 20px; }
-            .header .ascii { font-size: 5px; }
-            .header h1 { font-size: 18px; }
-            .btn { font-size: 14px; padding: 12px; }
+            .header h1 { font-size: 16px; }
+            .coords-row { font-size: 12px; flex-wrap: wrap; gap: 4px; }
+            .coords-row .coords { font-size: 13px; }
+            .btn { font-size: 14px; padding: 14px 12px; }
+        }
+
+        @media (min-height: 700px) {
+            .map-wrapper {
+                min-height: 65vh;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Матричный фон -->
-    <canvas id="matrixCanvas"></canvas>
+    <!-- ===== ВЕРХНЯЯ ПАНЕЛЬ ===== -->
+    <div class="header">
+        <h1>📍 Локация</h1>
+        <span class="badge" id="statusBadge">Ожидание</span>
+    </div>
 
-    <!-- Основной контейнер -->
-    <div class="container">
-        <div class="card">
+    <!-- ===== КАРТА ===== -->
+    <div class="map-wrapper" id="mapWrapper">
+        <div class="map-placeholder" id="mapPlaceholder">
+            <div class="icon">🗺️</div>
+            <div>Нажми «Начать» чтобы показать местоположение</div>
+            <div style="font-size:13px;margin-top:6px;opacity:0.5;">Геолокация будет видна только тебе</div>
+        </div>
+        <iframe id="mapFrame" style="display:none;"></iframe>
+    </div>
 
-            <!-- Шапка -->
-            <div class="header">
-                <div class="ascii">
-   ██████  ██   ██  ██████  ███████ ████████ 
-  ██       ██   ██ ██    ██ ██         ██    
-  ██   ███ ███████ ██    ██ ███████    ██    
-  ██    ██ ██   ██ ██    ██      ██    ██    
-   ██████  ██   ██  ██████  ███████    ██    
-                </div>
-                <h1>⬡ GHOST TRACKER</h1>
-                <div class="sub"><span class="blink">▌</span> РЕЖИМ НЕВИДИМКИ <span class="blink">▐</span></div>
-            </div>
-
-            <!-- Статус-бар -->
-            <div class="status-bar">
-                <span>🖥️ СТАТУС: <span class="val" id="statusText">ОЖИДАНИЕ</span></span>
-                <span>📡 IP: <span class="val" id="ipDisplay">0.0.0.0</span></span>
-                <span>🔐 ШИФР: <span class="val">AES-256</span></span>
-            </div>
-
-            <!-- Сообщения -->
-            <div class="status-msg" id="statusMsg"></div>
-
-            <!-- Карта -->
-            <div class="map-container" id="mapContainer"></div>
-            <div class="coords-info" id="coordsInfo"></div>
-
-            <!-- Ссылка с координатами -->
-            <div class="link-box" id="linkBox">
-                <div class="label">🔗 ССЫЛКА С КООРДИНАТАМИ (скопируй и отправь):</div>
-                <div class="url" id="trackLink"></div>
-            </div>
-
-            <!-- Кнопки -->
-            <button class="btn" id="startBtn" onclick="startTracking()">▶ НАЧАТЬ ОТСЛЕЖИВАНИЕ</button>
-            <button class="btn btn-danger" id="stopBtn" onclick="stopTracking()" style="display:none;">⏹ ОСТАНОВИТЬ</button>
-            <button class="btn" onclick="copyLink()" id="copyBtn" style="display:none;">📋 СКОПИРОВАТЬ ССЫЛКУ</button>
-
-            <!-- История -->
-            <button class="history-toggle" onclick="toggleHistory()">📜 ПОКАЗАТЬ ИСТОРИЮ</button>
-            <div class="history-container" id="historyContainer"></div>
-
-            <!-- Футер -->
-            <div class="footer">
-                ⚡ АКТИВНАЯ СЕССИЯ · ДАННЫЕ ШИФРУЮТСЯ · v3.0
-            </div>
+    <!-- ===== ИНФО-ПАНЕЛЬ ===== -->
+    <div class="info-panel">
+        <div class="coords-row">
+            <span class="coords" id="coordsDisplay">—</span>
+            <span class="time" id="timeDisplay">—</span>
+        </div>
+        <div class="status-line">
+            <span class="dot inactive" id="statusDot"></span>
+            <span id="statusText">Ожидание запуска</span>
         </div>
     </div>
 
+    <!-- ===== ССЫЛКА ===== -->
+    <div class="link-box" id="linkBox">
+        <div class="label">🔗 Ссылка для передачи</div>
+        <div class="url" id="trackLink"></div>
+    </div>
+
+    <!-- ===== КНОПКИ ===== -->
+    <div class="actions">
+        <button class="btn btn-primary" id="startBtn" onclick="startTracking()">
+            ▶ Начать
+        </button>
+        <button class="btn btn-danger" id="stopBtn" onclick="stopTracking()" style="display:none;">
+            ⏹ Остановить
+        </button>
+        <button class="btn btn-outline" id="copyBtn" onclick="copyLink()" style="display:none;">
+            📋
+        </button>
+    </div>
+
+    <!-- ===== TOAST (всплывашка) ===== -->
+    <div class="toast" id="toast"></div>
+
     <script>
         // ============================================
-        // 1. МАТРИЧНЫЙ ФОН
+        // ОСНОВНАЯ ЛОГИКА
         // ============================================
-        const canvas = document.getElementById('matrixCanvas');
-        const ctx = canvas.getContext('2d');
-        let width, height, columns, drops;
 
-        function resizeCanvas() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            columns = Math.floor(width / 20);
-            drops = Array(columns).fill(0).map(() => Math.random() * -100);
-        }
-
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(10, 10, 10, 0.04)';
-            ctx.fillRect(0, 0, width, height);
-
-            ctx.fillStyle = '#00ff41';
-            ctx.font = '14px monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                const char = String.fromCharCode(0x30A0 + Math.random() * 96);
-                ctx.fillText(char, i * 20, drops[i] * 20);
-
-                if (drops[i] * 20 > height && Math.random() > 0.98) {
-                    drops[i] = 0;
-                }
-                drops[i] += 0.3 + Math.random() * 0.5;
-            }
-        }
-
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-        setInterval(drawMatrix, 50);
-
-        // ============================================
-        // 2. ГЕНЕРАЦИЯ IP
-        // ============================================
-        function randomIP() {
-            return Array(4).fill(0).map(() => Math.floor(Math.random() * 255)).join('.');
-        }
-        document.getElementById('ipDisplay').textContent = randomIP();
-        setInterval(() => {
-            document.getElementById('ipDisplay').textContent = randomIP();
-        }, 10000);
-
-        // ============================================
-        // 3. ОСНОВНАЯ ЛОГИКА ТРЕКЕРА
-        // ============================================
         let watchId = null;
         let isTracking = false;
-        let history = JSON.parse(localStorage.getItem('trackerHistory') || '[]');
         let lastCoords = null;
 
-        function showStatus(msg, type) {
-            const el = document.getElementById('statusMsg');
-            el.textContent = msg;
-            el.className = 'status-msg ' + type;
+        const mapWrapper = document.getElementById('mapWrapper');
+        const mapPlaceholder = document.getElementById('mapPlaceholder');
+        const mapFrame = document.getElementById('mapFrame');
+        const coordsDisplay = document.getElementById('coordsDisplay');
+        const timeDisplay = document.getElementById('timeDisplay');
+        const statusText = document.getElementById('statusText');
+        const statusDot = document.getElementById('statusDot');
+        const statusBadge = document.getElementById('statusBadge');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const linkBox = document.getElementById('linkBox');
+        const trackLink = document.getElementById('trackLink');
+        const toast = document.getElementById('toast');
+
+        let toastTimer = null;
+
+        function showToast(msg, type = 'info') {
+            toast.textContent = msg;
+            toast.className = 'toast ' + type + ' show';
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
         }
 
-        function updateStatusText(text) {
-            document.getElementById('statusText').textContent = text;
-        }
-
-        function addHistory(lat, lon, time) {
-            history.push({ lat, lon, time });
-            if (history.length > 50) history.shift();
-            localStorage.setItem('trackerHistory', JSON.stringify(history));
-            renderHistory();
-        }
-
-        function renderHistory() {
-            const container = document.getElementById('historyContainer');
-            if (history.length === 0) {
-                container.innerHTML = '<div class="history-item" style="opacity:0.2;">История пуста</div>';
-                return;
+        function updateStatus(text, state) {
+            statusText.textContent = text;
+            statusDot.className = 'dot ' + state;
+            if (state === 'active') {
+                statusBadge.textContent = '● Активно';
+                statusBadge.style.background = '#dcfce7';
+                statusBadge.style.color = '#16a34a';
+            } else if (state === 'error') {
+                statusBadge.textContent = '⚠ Ошибка';
+                statusBadge.style.background = '#fee2e2';
+                statusBadge.style.color = '#dc2626';
+            } else {
+                statusBadge.textContent = '○ Ожидание';
+                statusBadge.style.background = '#f1f4f9';
+                statusBadge.style.color = '#3d4a5c';
             }
-            container.innerHTML = history.slice().reverse().map(h => `
-                <div class="history-item">
-                    <span class="time">🕒 ${h.time}</span>
-                    <span class="coords">📍 ${h.lat}, ${h.lon}</span>
-                </div>
-            `).join('');
         }
 
-        function toggleHistory() {
-            const container = document.getElementById('historyContainer');
-            container.classList.toggle('show');
-            renderHistory();
+        function showMap(lat, lon) {
+            mapPlaceholder.style.display = 'none';
+            mapFrame.style.display = 'block';
+            mapFrame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - 0.02},${lat - 0.02},${lon + 0.02},${lat + 0.02}&layer=mapnik&marker=${lat},${lon}`;
+        }
+
+        function updateCoords(lat, lon) {
+            coordsDisplay.textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+            timeDisplay.textContent = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+
+        function generateLink(lat, lon) {
+            const url = window.location.origin + window.location.pathname + `?lat=${lat}&lon=${lon}`;
+            trackLink.textContent = url;
+            linkBox.className = 'link-box show';
+            copyBtn.style.display = 'flex';
+            return url;
         }
 
         function copyLink() {
-            const link = document.getElementById('trackLink').textContent;
+            const text = trackLink.textContent;
             if (navigator.clipboard) {
-                navigator.clipboard.writeText(link).then(() => {
-                    showStatus('✅ Ссылка скопирована!', 'ok');
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('✅ Ссылка скопирована!', 'success');
                 });
             } else {
-                // fallback
-                const textarea = document.createElement('textarea');
-                textarea.value = link;
-                document.body.appendChild(textarea);
-                textarea.select();
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
                 document.execCommand('copy');
-                document.body.removeChild(textarea);
-                showStatus('✅ Ссылка скопирована!', 'ok');
+                document.body.removeChild(ta);
+                showToast('✅ Ссылка скопирована!', 'success');
             }
         }
 
-        function startTracking() {
-            const statusMsg = document.getElementById('statusMsg');
-            const startBtn = document.getElementById('startBtn');
-            const stopBtn = document.getElementById('stopBtn');
-            const copyBtn = document.getElementById('copyBtn');
+        // ============================================
+        // СТАРТ / СТОП
+        // ============================================
 
+        function startTracking() {
             if (!navigator.geolocation) {
-                showStatus('❌ Браузер не поддерживает GPS', 'err');
+                showToast('❌ Браузер не поддерживает геолокацию', 'error');
                 return;
             }
 
             if (isTracking) {
-                showStatus('⏳ Уже отслеживается...', 'info');
+                showToast('⏳ Уже отслеживается', 'info');
                 return;
             }
 
-            showStatus('⏳ Запрос доступа к геолокации...', 'info');
-            updateStatusText('ЗАПРОС ДОСТУПА');
+            showToast('⏳ Запрос доступа...', 'info');
+            updateStatus('Запрос разрешения...', 'info');
 
-            isTracking = true;
             startBtn.disabled = true;
-            startBtn.textContent = '⏳ ЗАПУСК...';
+            startBtn.textContent = '⏳ ...';
 
             watchId = navigator.geolocation.watchPosition(
                 (pos) => {
                     const lat = pos.coords.latitude;
                     const lon = pos.coords.longitude;
-                    const time = new Date().toLocaleString();
-                    lastCoords = { lat, lon, time };
+                    lastCoords = { lat, lon };
 
-                    // Сохраняем историю
-                    addHistory(lat, lon, time);
+                    if (!isTracking) {
+                        isTracking = true;
+                        startBtn.style.display = 'none';
+                        stopBtn.style.display = 'flex';
+                    }
 
-                    // Обновляем карту
-                    const mapContainer = document.getElementById('mapContainer');
-                    mapContainer.className = 'map-container show';
-                    mapContainer.innerHTML = `
-                        <iframe 
-                            src="https://www.openstreetmap.org/export/embed.html?bbox=${lon - 0.01},${lat - 0.01},${lon + 0.01},${lat + 0.01}&layer=mapnik&marker=${lat},${lon}"
-                            allowfullscreen>
-                        </iframe>
-                    `;
+                    showMap(lat, lon);
+                    updateCoords(lat, lon);
+                    generateLink(lat, lon);
+                    updateStatus('Активно', 'active');
+                    showToast('📍 Местоположение обновлено', 'success');
 
-                    // Координаты
-                    document.getElementById('coordsInfo').textContent = `📍 ${lat}, ${lon}  ·  🕒 ${time}`;
-
-                    // Создаём ссылку
-                    const url = window.location.origin + window.location.pathname + 
-                        `?lat=${lat}&lon=${lon}&time=${encodeURIComponent(time)}`;
-                    document.getElementById('trackLink').textContent = url;
-                    document.getElementById('linkBox').className = 'link-box show';
-                    copyBtn.style.display = 'block';
-
-                    // Статус
-                    showStatus(`✅ Отслеживание активно! ❤️`, 'ok');
-                    updateStatusText('АКТИВЕН');
-
-                    // Меняем кнопки
-                    startBtn.style.display = 'none';
-                    stopBtn.style.display = 'block';
-
-                    // Обновляем URL
+                    // обновляем URL (без перезагрузки)
+                    const url = window.location.origin + window.location.pathname + `?lat=${lat}&lon=${lon}`;
                     window.history.replaceState({}, '', url);
-
-                    // Звук (если поддерживается)
-                    try {
-                        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                        const oscillator = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        oscillator.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        oscillator.frequency.value = 800;
-                        gain.gain.value = 0.05;
-                        oscillator.start();
-                        setTimeout(() => oscillator.stop(), 100);
-                    } catch(e) {}
                 },
                 (err) => {
-                    let msg = '❌ Ошибка';
-                    if (err.code === 1) msg = '❌ Доступ запрещён! Разреши геолокацию в браузере.';
-                    else if (err.code === 2) msg = '❌ GPS не доступен';
+                    let msg = 'Ошибка GPS';
+                    if (err.code === 1) msg = '❌ Доступ запрещён! Разреши в браузере.';
+                    else if (err.code === 2) msg = '❌ Сигнал GPS не найден';
                     else if (err.code === 3) msg = '❌ Таймаут';
-                    showStatus(msg, 'err');
-                    updateStatusText('ОШИБКА');
+                    showToast(msg, 'error');
+                    updateStatus('Ошибка', 'error');
                     isTracking = false;
                     startBtn.disabled = false;
-                    startBtn.textContent = '▶ НАЧАТЬ ОТСЛЕЖИВАНИЕ';
+                    startBtn.textContent = '▶ Начать';
+                    startBtn.style.display = 'flex';
+                    stopBtn.style.display = 'none';
                     if (watchId) navigator.geolocation.clearWatch(watchId);
                 },
-                { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
+                { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
             );
         }
 
@@ -578,54 +511,33 @@
                 watchId = null;
             }
             isTracking = false;
-            document.getElementById('startBtn').style.display = 'block';
-            document.getElementById('startBtn').disabled = false;
-            document.getElementById('startBtn').textContent = '▶ НАЧАТЬ ОТСЛЕЖИВАНИЕ';
-            document.getElementById('stopBtn').style.display = 'none';
-            showStatus('⏹ Отслеживание остановлено', 'info');
-            updateStatusText('ОСТАНОВЛЕН');
+            startBtn.style.display = 'flex';
+            startBtn.disabled = false;
+            startBtn.textContent = '▶ Начать';
+            stopBtn.style.display = 'none';
+            updateStatus('Остановлено', 'inactive');
+            showToast('⏹ Отслеживание остановлено', 'info');
         }
 
         // ============================================
-        // 4. ЗАГРУЗКА КООРДИНАТ ИЗ URL
+        // ЗАГРУЗКА КООРДИНАТ ИЗ URL
         // ============================================
+
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
-            const lat = params.get('lat');
-            const lon = params.get('lon');
-            const time = params.get('time');
+            const lat = parseFloat(params.get('lat'));
+            const lon = parseFloat(params.get('lon'));
 
-            if (lat && lon) {
-                const mapContainer = document.getElementById('mapContainer');
-                mapContainer.className = 'map-container show';
-                mapContainer.innerHTML = `
-                    <iframe 
-                        src="https://www.openstreetmap.org/export/embed.html?bbox=${parseFloat(lon) - 0.015},${parseFloat(lat) - 0.015},${parseFloat(lon) + 0.015},${parseFloat(lat) + 0.015}&layer=mapnik&marker=${lat},${lon}"
-                        allowfullscreen>
-                    </iframe>
-                `;
-                document.getElementById('coordsInfo').textContent = `📍 ${lat}, ${lon}  ·  🕒 ${time || 'только что'}`;
-                
-                // Показываем ссылку
-                const url = window.location.origin + window.location.pathname + `?lat=${lat}&lon=${lon}&time=${encodeURIComponent(time || '')}`;
-                document.getElementById('trackLink').textContent = url;
-                document.getElementById('linkBox').className = 'link-box show';
-                document.getElementById('copyBtn').style.display = 'block';
-                document.getElementById('startBtn').textContent = '🔄 ОБНОВИТЬ ТРЕКИНГ';
-                
-                showStatus(`📍 Текущее положение`, 'ok');
-                updateStatusText('ПОЛУЧЕН');
+            if (!isNaN(lat) && !isNaN(lon)) {
+                showMap(lat, lon);
+                updateCoords(lat, lon);
+                generateLink(lat, lon);
+                updateStatus('Просмотр', 'active');
+                showToast('📍 Местоположение загружено', 'success');
+            } else {
+                updateStatus('Ожидание', 'inactive');
             }
-
-            renderHistory();
         };
-
-        // Автосохранение при закрытии
-        window.addEventListener('beforeunload', function() {
-            if (watchId) {
-                navigator.geolocation.clearWatch(watchId);
-            }
-        });
     </script>
 </body>
 </html>
