@@ -2,9 +2,41 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>🌪️ VORTEX</title>
     <style>
+        /* ============================================================
+           БАЗОВАЯ ОПТИМИЗАЦИЯ
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            /* отключаем скролл всей страницы */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s ease, color 0.3s ease;
+            /* ВКЛЮЧАЕМ АППАРАТНОЕ УСКОРЕНИЕ */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+        }
+
         /* ============================================================
            ПЕРЕМЕННЫЕ
            ============================================================ */
@@ -24,7 +56,7 @@
             --danger: #ff6b6b;
             --radius: 28px;
             --radius-sm: 16px;
-            --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         [data-theme="dark"] {
@@ -40,28 +72,7 @@
         }
 
         /* ============================================================
-           БАЗА
-           ============================================================ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            transition: background var(--transition), color var(--transition);
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* ============================================================
-           ФОН С ВОДОВОРОТОМ
+           ВОДОВОРОТ (ОПТИМИЗИРОВАННЫЙ)
            ============================================================ */
         .vortex-bg {
             position: fixed;
@@ -71,6 +82,8 @@
             height: 200%;
             z-index: 0;
             pointer-events: none;
+            will-change: transform;
+            /* подсказка браузеру */
             background:
                 radial-gradient(ellipse at 30% 20%, rgba(108, 92, 231, 0.12) 0%, transparent 50%),
                 radial-gradient(ellipse at 70% 80%, rgba(0, 184, 148, 0.08) 0%, transparent 40%),
@@ -79,12 +92,16 @@
         }
 
         @keyframes vortexBg {
-            0% { transform: rotate(0deg) scale(1); }
-            100% { transform: rotate(360deg) scale(1.1); }
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            100% {
+                transform: rotate(360deg) scale(1.1);
+            }
         }
 
         /* ============================================================
-           ШАПКА
+           ШАПКА (ОПТИМИЗИРОВАННАЯ)
            ============================================================ */
         .header {
             position: relative;
@@ -99,6 +116,8 @@
             -webkit-backdrop-filter: blur(20px) saturate(1.4);
             border-bottom: 1px solid var(--card-border);
             transition: background var(--transition), border var(--transition);
+            will-change: background, border;
+            /* аппаратное ускорение */
         }
 
         .header-left {
@@ -112,6 +131,7 @@
             height: 44px;
             position: relative;
             flex-shrink: 0;
+            will-change: transform;
         }
 
         .vortex-logo svg {
@@ -119,11 +139,16 @@
             height: 100%;
             animation: spinVortex 4s linear infinite;
             filter: drop-shadow(0 0 20px var(--primary-glow));
+            will-change: transform;
         }
 
         @keyframes spinVortex {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .vortex-logo .ring {
@@ -139,21 +164,34 @@
             fill: none;
             opacity: 0.3;
             animation: spinReverse 3s linear infinite;
+            will-change: transform;
         }
 
         @keyframes spinReverse {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(-360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(-360deg);
+            }
         }
 
         .vortex-logo .dot {
             fill: var(--primary);
             animation: pulseDot 1.5s ease-in-out infinite;
+            will-change: transform, opacity;
         }
 
         @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.6); }
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.6);
+            }
         }
 
         .brand-name {
@@ -167,23 +205,17 @@
             animation: shimmer 3s ease-in-out infinite;
             text-shadow: 0 0 40px var(--primary-glow), 0 0 80px rgba(108, 92, 231, 0.15);
             position: relative;
-        }
-
-        .brand-name::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(ellipse at center, rgba(108, 92, 231, 0.15) 0%, transparent 70%);
-            filter: blur(20px);
-            z-index: -1;
+            will-change: background-position;
         }
 
         @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
         }
 
         .brand-tag {
@@ -214,22 +246,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
             color: var(--text);
+            will-change: transform, background;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .header-btn:active {
             transform: scale(0.92);
         }
 
-        .header-btn:hover {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-
         /* ============================================================
-           КАРТА (обновлённая)
+           КАРТА (ОПТИМИЗИРОВАННАЯ)
            ============================================================ */
         .map-wrapper {
             position: relative;
@@ -243,6 +272,10 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--card-border);
             transition: background var(--transition), border var(--transition);
+            /* ВКЛЮЧАЕМ АППАРАТНОЕ УСКОРЕНИЕ ДЛЯ КАРТЫ */
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
         .map-wrapper iframe {
@@ -252,10 +285,15 @@
             position: absolute;
             top: 0;
             left: 0;
-            transition: opacity 0.8s ease;
+            transition: opacity 0.6s ease;
+            /* отключаем анимацию если она тормозит */
+            will-change: opacity;
+            /* подсказка для браузера */
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
 
-        /* ===== ЭФФЕКТЫ КАРТЫ ===== */
+        /* Эффекты карты — оставляем, но делаем легче */
         .map-wrapper::before {
             content: '';
             position: absolute;
@@ -268,9 +306,10 @@
             background:
                 radial-gradient(ellipse at 30% 20%, transparent 60%, var(--bg) 100%),
                 radial-gradient(ellipse at 70% 80%, transparent 60%, var(--bg) 100%);
-            opacity: 0.25;
+            opacity: 0.2;
             transition: opacity var(--transition);
             border-radius: var(--radius);
+            will-change: opacity;
         }
 
         .map-wrapper::after {
@@ -284,16 +323,9 @@
             pointer-events: none;
             border-radius: var(--radius);
             background: linear-gradient(135deg, var(--primary), transparent 50%, var(--primary-light));
-            opacity: 0.06;
+            opacity: 0.04;
             transition: opacity var(--transition);
-        }
-
-        [data-theme="dark"] .map-wrapper::before {
-            opacity: 0.4;
-        }
-
-        [data-theme="dark"] .map-wrapper::after {
-            opacity: 0.12;
+            will-change: opacity;
         }
 
         .map-placeholder {
@@ -339,6 +371,9 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 8px;
+            will-change: background, border;
+            transform: translateZ(0);
+            backface-visibility: hidden;
         }
 
         .status-info {
@@ -352,6 +387,7 @@
             height: 10px;
             border-radius: 50%;
             flex-shrink: 0;
+            will-change: transform, box-shadow;
         }
 
         .dot.inactive {
@@ -380,6 +416,7 @@
             padding: 4px 12px;
             border-radius: 30px;
             transition: background var(--transition);
+            will-change: background;
         }
 
         /* ============================================================
@@ -396,6 +433,7 @@
             border-radius: var(--radius-sm);
             display: none;
             transition: background var(--transition), border var(--transition);
+            will-change: background, border;
         }
 
         .link-box.show {
@@ -419,7 +457,7 @@
         }
 
         /* ============================================================
-           КНОПКИ
+           КНОПКИ (ОПТИМИЗИРОВАННЫЕ)
            ============================================================ */
         .actions {
             position: relative;
@@ -429,6 +467,7 @@
             gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
+            will-change: transform;
         }
 
         .btn {
@@ -438,7 +477,7 @@
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -447,6 +486,10 @@
             flex: 1;
             min-width: 56px;
             letter-spacing: 0.2px;
+            will-change: transform, box-shadow;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            user-select: none;
         }
 
         .btn:active {
@@ -479,22 +522,11 @@
             flex: 0.5;
         }
 
-        .btn-outline:active {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-
         .btn-google {
             background: #ea4335;
             color: #fff;
             flex: 0.5;
             box-shadow: 0 4px 20px rgba(234, 67, 53, 0.2);
-        }
-
-        .btn-google:active {
-            background: #d33426;
-            transform: scale(0.95);
         }
 
         /* ============================================================
@@ -520,6 +552,7 @@
             max-width: 90%;
             text-align: center;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform, opacity;
         }
 
         .toast.show {
@@ -538,7 +571,7 @@
         }
 
         /* ============================================================
-           АДАПТИВ
+           АДАПТИВ (ОПТИМИЗИРОВАННЫЙ)
            ============================================================ */
         @media (max-width: 500px) {
             .header {
@@ -605,7 +638,6 @@
     </style>
 </head>
 <body>
-
     <!-- ============================================================
     ФОН
     ============================================================ -->
@@ -636,7 +668,7 @@
             </div>
         </div>
         <div class="header-actions">
-            <button class="header-btn" id="themeToggle" onclick="toggleTheme()">🌙</button>
+            <button class="header-btn" id="themeToggle" onclick="toggleTheme()" aria-label="Сменить тему">🌙</button>
         </div>
     </div>
 
@@ -649,7 +681,7 @@
             <div class="title">Запустите вихрь</div>
             <div style="font-size:13px;opacity:0.4;margin-top:4px;">Нажмите «Начать» чтобы войти в водоворот событий</div>
         </div>
-        <iframe id="mapFrame" style="display:none;"></iframe>
+        <iframe id="mapFrame" style="display:none;" loading="lazy" allow="geolocation"></iframe>
     </div>
 
     <!-- ============================================================
@@ -677,8 +709,8 @@
     <div class="actions">
         <button class="btn btn-primary" id="startBtn" onclick="startTracking()">🌪️ Начать</button>
         <button class="btn btn-danger" id="stopBtn" onclick="stopTracking()" style="display:none;">⏹ Стоп</button>
-        <button class="btn btn-outline" id="copyBtn" onclick="copyLink()" style="display:none;">📋</button>
-        <button class="btn btn-google" id="googleBtn" onclick="openGoogleMaps()" style="display:none;">🗺️</button>
+        <button class="btn btn-outline" id="copyBtn" onclick="copyLink()" style="display:none;" aria-label="Скопировать ссылку">📋</button>
+        <button class="btn btn-google" id="googleBtn" onclick="openGoogleMaps()" style="display:none;" aria-label="Открыть в Google Maps">🗺️</button>
     </div>
 
     <!-- ============================================================
@@ -687,80 +719,99 @@
     <div class="toast" id="toast"></div>
 
     <!-- ============================================================
-    SCRIPT
+    SCRIPT (ОПТИМИЗИРОВАННЫЙ)
     ============================================================ -->
     <script>
+        'use strict';
+
         // ============================================================
         // 1. ТЁМНАЯ ТЕМА
         // ============================================================
+        const themeToggle = document.getElementById('themeToggle');
+
         function toggleTheme() {
             const html = document.documentElement;
             const current = html.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', next);
             localStorage.setItem('theme', next);
-            document.getElementById('themeToggle').textContent = next === 'dark' ? '☀️' : '🌙';
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
         }
 
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
-        document.getElementById('themeToggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 
         // ============================================================
-        // 2. ОСНОВНАЯ ЛОГИКА
+        // 2. DOM-элементы (кешируем для скорости)
+        // ============================================================
+        const $ = (id) => document.getElementById(id);
+        const mapPlaceholder = $('mapPlaceholder');
+        const mapFrame = $('mapFrame');
+        const coordsDisplay = $('coordsDisplay');
+        const statusText = $('statusText');
+        const statusDot = $('statusDot');
+        const startBtn = $('startBtn');
+        const stopBtn = $('stopBtn');
+        const copyBtn = $('copyBtn');
+        const googleBtn = $('googleBtn');
+        const linkBox = $('linkBox');
+        const trackLink = $('trackLink');
+        const toast = $('toast');
+
+        // ============================================================
+        // 3. ПЕРЕМЕННЫЕ СОСТОЯНИЯ
         // ============================================================
         let watchId = null;
         let isTracking = false;
         let lastCoords = null;
         let lastNotifyCoords = null;
-
-        const mapPlaceholder = document.getElementById('mapPlaceholder');
-        const mapFrame = document.getElementById('mapFrame');
-        const coordsDisplay = document.getElementById('coordsDisplay');
-        const statusText = document.getElementById('statusText');
-        const statusDot = document.getElementById('statusDot');
-        const startBtn = document.getElementById('startBtn');
-        const stopBtn = document.getElementById('stopBtn');
-        const copyBtn = document.getElementById('copyBtn');
-        const googleBtn = document.getElementById('googleBtn');
-        const linkBox = document.getElementById('linkBox');
-        const trackLink = document.getElementById('trackLink');
-        const toast = document.getElementById('toast');
-
         let toastTimer = null;
 
+        // ============================================================
+        // 4. TOAST (оптимизированный)
+        // ============================================================
         function showToast(msg, type = 'info') {
             toast.textContent = msg;
             toast.className = 'toast ' + type + ' show';
             clearTimeout(toastTimer);
             toastTimer = setTimeout(() => {
                 toast.classList.remove('show');
-            }, 3500);
+            }, 3000);
         }
 
+        // ============================================================
+        // 5. СТАТУС
+        // ============================================================
         function updateStatus(text, state) {
             statusText.textContent = text;
             statusDot.className = 'dot ' + state;
         }
 
-        // ===== ОБНОВЛЁННАЯ КАРТА =====
+        // ============================================================
+        // 6. КАРТА (оптимизированная)
+        // ============================================================
         function showMap(lat, lon) {
             mapPlaceholder.style.display = 'none';
             mapFrame.style.display = 'block';
 
-            // Более детальный зум (0.015 вместо 0.025)
             const zoom = 0.015;
             mapFrame.src =
                 `https://www.openstreetmap.org/export/embed.html?bbox=${lon - zoom},${lat - zoom},${lon + zoom},${lat + zoom}&layer=mapnik&marker=${lat},${lon}`;
 
-            // Плавное появление
+            // плавное появление с задержкой на рендеринг
             mapFrame.style.opacity = '0';
-            setTimeout(() => {
-                mapFrame.style.transition = 'opacity 0.8s ease';
-                mapFrame.style.opacity = '1';
-            }, 100);
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    mapFrame.style.transition = 'opacity 0.6s ease';
+                    mapFrame.style.opacity = '1';
+                }, 50);
+            });
         }
 
+        // ============================================================
+        // 7. КООРДИНАТЫ И ССЫЛКА
+        // ============================================================
         function updateCoords(lat, lon) {
             coordsDisplay.textContent = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
         }
@@ -774,50 +825,62 @@
             return url;
         }
 
+        // ============================================================
+        // 8. КОПИРОВАНИЕ И GOOGLE MAPS
+        // ============================================================
         function copyLink() {
             const text = trackLink.textContent;
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(text).then(() => {
                     showToast('✅ Ссылка скопирована!', 'success');
-                });
+                }).catch(() => fallbackCopy(text));
             } else {
-                const ta = document.createElement('textarea');
-                ta.value = text;
-                document.body.appendChild(ta);
-                ta.select();
-                document.execCommand('copy');
-                document.body.removeChild(ta);
-                showToast('✅ Ссылка скопирована!', 'success');
+                fallbackCopy(text);
             }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.opacity = '0';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                showToast('✅ Ссылка скопирована!', 'success');
+            } catch (e) {
+                showToast('❌ Не удалось скопировать', 'error');
+            }
+            document.body.removeChild(ta);
         }
 
         function openGoogleMaps() {
             if (lastCoords) {
-                const url = `https://www.google.com/maps?q=${lastCoords.lat},${lastCoords.lon}`;
-                window.open(url, '_blank');
+                window.open(`https://www.google.com/maps?q=${lastCoords.lat},${lastCoords.lon}`, '_blank');
             } else {
                 showToast('Нет координат', 'error');
             }
         }
 
+        // ============================================================
+        // 9. УВЕДОМЛЕНИЕ О ПЕРЕМЕЩЕНИИ (оптимизированное)
+        // ============================================================
         function notifyIfMoved(lat, lon) {
             if (!lastNotifyCoords) {
                 lastNotifyCoords = { lat, lon };
                 return;
             }
-            const dist = Math.sqrt(
-                Math.pow(lat - lastNotifyCoords.lat, 2) +
-                Math.pow(lon - lastNotifyCoords.lon, 2)
-            );
+            const dist = Math.hypot(lat - lastNotifyCoords.lat, lon - lastNotifyCoords.lon);
             if (dist > 0.0003) {
                 showToast('🌀 Вихрь переместился!', 'info');
-                if (navigator.vibrate) navigator.vibrate(30);
+                if (navigator.vibrate) navigator.vibrate(20);
                 lastNotifyCoords = { lat, lon };
             }
         }
 
         // ============================================================
-        // 3. СТАРТ / СТОП
+        // 10. СТАРТ / СТОП (оптимизированные)
         // ============================================================
         function startTracking() {
             if (!navigator.geolocation) {
@@ -894,9 +957,9 @@
         }
 
         // ============================================================
-        // 4. ЗАГРУЗКА ИЗ URL
+        // 11. ЗАГРУЗКА ИЗ URL
         // ============================================================
-        window.onload = function() {
+        window.addEventListener('load', function() {
             const params = new URLSearchParams(window.location.search);
             const lat = parseFloat(params.get('lat'));
             const lon = parseFloat(params.get('lon'));
@@ -911,7 +974,7 @@
             } else {
                 updateStatus('Ожидание', 'inactive');
             }
-        };
+        }, { passive: true });
     </script>
 </body>
 </html>
