@@ -305,14 +305,6 @@
             filter: drop-shadow(0 0 20px var(--primary-glow));
             will-change: transform;
         }
-        @keyframes spinVortex {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
         .vortex-logo .ring {
             stroke: var(--primary);
             stroke-width: 2;
@@ -327,29 +319,10 @@
             animation: spinReverse 3s linear infinite;
             will-change: transform;
         }
-        @keyframes spinReverse {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(-360deg);
-            }
-        }
         .vortex-logo .dot {
             fill: var(--primary);
             animation: pulseDot 1.5s ease-in-out infinite;
             will-change: transform, opacity;
-        }
-        @keyframes pulseDot {
-            0%,
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.4;
-                transform: scale(0.6);
-            }
         }
 
         .brand-name {
@@ -364,15 +337,6 @@
             text-shadow: 0 0 40px var(--primary-glow), 0 0 80px rgba(108, 92, 231, 0.15);
             position: relative;
             will-change: background-position;
-        }
-        @keyframes shimmer {
-            0%,
-            100% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
         }
         .brand-tag {
             font-size: 11px;
@@ -594,13 +558,47 @@
             text-align: center;
         }
 
+        /* ===== ВОДОВОРОТ НА ЭКРАНЕ АВТОРИЗАЦИИ ===== */
+        .auth-logo {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 8px;
+            display: block;
+        }
+        .auth-logo svg {
+            width: 100%;
+            height: 100%;
+            animation: spinVortex 4s linear infinite;
+            filter: drop-shadow(0 0 30px var(--primary-glow));
+            will-change: transform;
+        }
+        .auth-logo .ring {
+            stroke: var(--primary);
+            stroke-width: 2.5;
+            fill: none;
+            opacity: 0.6;
+        }
+        .auth-logo .ring-inner {
+            stroke: var(--primary-light);
+            stroke-width: 2;
+            fill: none;
+            opacity: 0.3;
+            animation: spinReverse 3s linear infinite;
+            will-change: transform;
+        }
+        .auth-logo .dot {
+            fill: var(--primary);
+            animation: pulseDot 1.5s ease-in-out infinite;
+            will-change: transform, opacity;
+        }
+
         /* ============================================================
-           АНИМИРОВАННЫЙ ЗАМОК
+           АНИМИРОВАННЫЙ ЗАМОК (только для восстановления)
            ============================================================ */
         .auth-lock {
             width: 72px;
             height: 72px;
-            margin: 0 auto 8px;
+            margin: 0 auto 12px;
             display: block;
             position: relative;
         }
@@ -611,12 +609,13 @@
             transition: all 0.5s ease;
         }
 
+        /* Анимация: ключ входит в замок */
         .auth-lock.recovery #lockKey {
             animation: keyInsert 0.8s ease forwards;
         }
 
         .auth-lock.recovery #lockShackle {
-            animation: shackleOpen 0.8s ease 0.3s forwards;
+            animation: shackleOpen 0.8s ease 0.4s forwards;
         }
 
         .auth-lock.recovery #lockKeyInserted {
@@ -632,20 +631,20 @@
         }
 
         .auth-lock.pulse {
-            animation: lockPulse 1s ease 0.5s;
+            animation: lockPulse 0.6s ease 0.3s;
         }
 
         @keyframes keyInsert {
             0% {
-                transform: translate(0, 0);
+                transform: translate(0px, 20px);
                 opacity: 0;
             }
             40% {
-                transform: translate(8px, -2px);
-                opacity: 0.8;
+                transform: translate(8px, 0px);
+                opacity: 1;
             }
-            70% {
-                transform: translate(10px, 0px);
+            60% {
+                transform: translate(10px, -2px);
                 opacity: 1;
             }
             100% {
@@ -658,9 +657,10 @@
             0% {
                 transform: rotate(0deg);
                 transform-origin: 32px 28px;
+                stroke: var(--primary);
             }
             100% {
-                transform: rotate(90deg);
+                transform: rotate(110deg);
                 transform-origin: 32px 28px;
                 stroke: #ffd700;
             }
@@ -1020,6 +1020,10 @@
             .auth-card h2 {
                 font-size: 24px;
             }
+            .auth-logo {
+                width: 60px;
+                height: 60px;
+            }
             .auth-lock {
                 width: 60px;
                 height: 60px;
@@ -1050,7 +1054,6 @@
     ЗАГРУЗОЧНЫЙ ЭКРАН
     ============================================================ -->
     <div class="splash-screen" id="splashScreen">
-        <!-- Водоворот -->
         <svg class="splash-logo" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
             <circle class="ring" cx="40" cy="40" r="34"/>
             <circle class="ring" cx="40" cy="40" r="28" stroke-dasharray="30 40"/>
@@ -1083,28 +1086,19 @@
     <div class="auth-screen" id="authScreen">
         <div class="auth-card" id="authCard">
 
-            <!-- ===== АНИМИРОВАННЫЙ ЗАМОК ===== -->
-            <div class="auth-lock" id="authLock">
-                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" id="lockSvg">
-                    <rect x="25" y="35" width="30" height="30" rx="4" fill="var(--primary)" opacity="0.15"/>
-                    <rect x="25" y="35" width="30" height="30" rx="4" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
-                    <path d="M32 35 V28 A8 8 0 0 1 48 28 V35" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" id="lockShackle"/>
-                    <circle cx="40" cy="48" r="3" fill="var(--primary)" id="lockKeyhole"/>
-                    <rect x="39" y="48" width="2" height="6" fill="var(--primary)" rx="1" id="lockKeyholeSlot"/>
-                    <g id="lockKey">
-                        <rect x="30" y="52" width="20" height="3" rx="1.5" fill="#ffd700"/>
-                        <rect x="28" y="50" width="4" height="7" rx="1" fill="#ffd700"/>
-                        <circle cx="30" cy="53" r="2" fill="#ffd700"/>
-                        <rect x="44" y="52" width="3" height="2" rx="0.5" fill="#ffd700"/>
-                        <rect x="46" y="54" width="2" height="2" rx="0.5" fill="#ffd700"/>
-                    </g>
-                    <g id="lockKeyInserted" style="display:none;">
-                        <rect x="38" y="50" width="16" height="3" rx="1.5" fill="#ffd700"/>
-                        <rect x="36" y="48" width="4" height="7" rx="1" fill="#ffd700"/>
-                        <circle cx="38" cy="51" r="2" fill="#ffd700"/>
-                        <rect x="48" y="50" width="3" height="2" rx="0.5" fill="#ffd700"/>
-                        <rect x="50" y="52" width="2" height="2" rx="0.5" fill="#ffd700"/>
-                    </g>
+            <!-- ===== ВОДОВОРОТ (всегда) ===== -->
+            <div class="auth-logo">
+                <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="ring" cx="36" cy="36" r="30"/>
+                    <circle class="ring" cx="36" cy="36" r="24" stroke-dasharray="30 40"/>
+                    <circle class="ring" cx="36" cy="36" r="18" stroke-dasharray="18 50"/>
+                    <circle class="ring-inner" cx="36" cy="36" r="12"/>
+                    <circle class="ring-inner" cx="36" cy="36" r="6"/>
+                    <circle class="dot" cx="36" cy="36" r="4"/>
+                    <circle class="dot" cx="36" cy="10" r="2" style="animation-delay: 0.2s;"/>
+                    <circle class="dot" cx="36" cy="62" r="2" style="animation-delay: 0.6s;"/>
+                    <circle class="dot" cx="10" cy="36" r="2" style="animation-delay: 0.4s;"/>
+                    <circle class="dot" cx="62" cy="36" r="2" style="animation-delay: 0.8s;"/>
                 </svg>
             </div>
 
@@ -1160,8 +1154,43 @@
                 </div>
             </div>
 
-            <!-- ===== ЭТАП 3: Восстановление пароля ===== -->
+            <!-- ===== ЭТАП 3: Восстановление пароля (С ЗАМКОМ) ===== -->
             <div id="authStep3" style="display:none;">
+                <!-- ===== ЗАМОК (только здесь) ===== -->
+                <div class="auth-lock" id="authLock">
+                    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" id="lockSvg">
+                        <!-- Корпус -->
+                        <rect x="25" y="35" width="30" height="30" rx="4" fill="var(--primary)" opacity="0.12"/>
+                        <rect x="25" y="35" width="30" height="30" rx="4" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+
+                        <!-- Дужка (поднимается при открытии) -->
+                        <path d="M32 35 V28 A8 8 0 0 1 48 28 V35" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" id="lockShackle"/>
+
+                        <!-- Замочная скважина -->
+                        <circle cx="40" cy="48" r="3" fill="var(--primary)" id="lockKeyhole"/>
+                        <rect x="39" y="48" width="2" height="6" fill="var(--primary)" rx="1" id="lockKeyholeSlot"/>
+
+                        <!-- Ключ (появляется и двигается) -->
+                        <g id="lockKey" style="opacity:0; transform:translate(0,0);">
+                            <rect x="30" y="52" width="20" height="3" rx="1.5" fill="#ffd700"/>
+                            <rect x="28" y="50" width="4" height="7" rx="1" fill="#ffd700"/>
+                            <circle cx="30" cy="53" r="2" fill="#ffd700"/>
+                            <rect x="44" y="52" width="3" height="2" rx="0.5" fill="#ffd700"/>
+                            <rect x="46" y="54" width="2" height="2" rx="0.5" fill="#ffd700"/>
+                        </g>
+
+                        <!-- Ключ вставленный (появляется после анимации) -->
+                        <g id="lockKeyInserted" style="display:none;">
+                            <rect x="38" y="50" width="16" height="3" rx="1.5" fill="#ffd700"/>
+                            <rect x="36" y="48" width="4" height="7" rx="1" fill="#ffd700"/>
+                            <circle cx="38" cy="51" r="2" fill="#ffd700"/>
+                            <rect x="48" y="50" width="3" height="2" rx="0.5" fill="#ffd700"/>
+                            <rect x="50" y="52" width="2" height="2" rx="0.5" fill="#ffd700"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <h2 style="font-size:24px;">🔐 Восстановление</h2>
                 <div class="sub" style="margin-bottom:12px;">Введите email для восстановления</div>
                 <div class="input-group">
                     <label for="recoveryEmail">Email</label>
@@ -1175,6 +1204,21 @@
 
             <!-- ===== ЭТАП 4: Смена пароля ===== -->
             <div id="authStep4" style="display:none;">
+                <div class="auth-lock" id="authLock2">
+                    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="25" y="35" width="30" height="30" rx="4" fill="#00b894" opacity="0.15"/>
+                        <rect x="25" y="35" width="30" height="30" rx="4" fill="none" stroke="#00b894" stroke-width="2.5"/>
+                        <path d="M32 35 V28 A8 8 0 0 1 48 28 V35" fill="none" stroke="#00b894" stroke-width="2.5" stroke-linecap="round" style="transform:rotate(90deg);transform-origin:32px 28px;"/>
+                        <circle cx="40" cy="48" r="3" fill="#ffd700"/>
+                        <rect x="39" y="48" width="2" height="6" fill="#ffd700" rx="1"/>
+                        <rect x="38" y="50" width="16" height="3" rx="1.5" fill="#ffd700"/>
+                        <rect x="36" y="48" width="4" height="7" rx="1" fill="#ffd700"/>
+                        <circle cx="38" cy="51" r="2" fill="#ffd700"/>
+                        <rect x="48" y="50" width="3" height="2" rx="0.5" fill="#ffd700"/>
+                        <rect x="50" y="52" width="2" height="2" rx="0.5" fill="#ffd700"/>
+                    </svg>
+                </div>
+                <h2 style="font-size:24px;">🔓 Смена пароля</h2>
                 <div class="sub" style="margin-bottom:12px;">Введите новый пароль</div>
                 <div class="input-group">
                     <label for="newPassword">Новый пароль</label>
@@ -1490,20 +1534,32 @@
 
         function resetLock() {
             const lock = document.querySelector('.auth-lock');
-            lock.classList.remove('recovery', 'pulse');
+            if (lock) {
+                lock.classList.remove('recovery', 'pulse');
+            }
             const svg = document.getElementById('lockSvg');
-            svg.style.animation = 'none';
-            setTimeout(() => { svg.style.animation = ''; }, 10);
-            document.getElementById('lockKeyInserted').style.display = 'none';
-            document.getElementById('lockKey').style.display = '';
-            document.getElementById('lockKeyhole').setAttribute('fill', 'var(--primary)');
-            document.getElementById('lockKeyholeSlot').setAttribute('fill', 'var(--primary)');
-            document.getElementById('lockShackle').style.transform = '';
-            document.getElementById('lockShackle').setAttribute('stroke', 'var(--primary)');
+            if (svg) {
+                svg.style.animation = 'none';
+                setTimeout(() => { if (svg) svg.style.animation = ''; }, 10);
+            }
+            const keyInserted = document.getElementById('lockKeyInserted');
+            if (keyInserted) keyInserted.style.display = 'none';
             const key = document.getElementById('lockKey');
-            key.style.animation = 'none';
-            key.style.transform = 'translate(0,0)';
-            key.style.opacity = '1';
+            if (key) {
+                key.style.display = '';
+                key.style.animation = 'none';
+                key.style.transform = 'translate(0,0)';
+                key.style.opacity = '1';
+            }
+            const keyhole = document.getElementById('lockKeyhole');
+            if (keyhole) keyhole.setAttribute('fill', 'var(--primary)');
+            const keyholeSlot = document.getElementById('lockKeyholeSlot');
+            if (keyholeSlot) keyholeSlot.setAttribute('fill', 'var(--primary)');
+            const shackle = document.getElementById('lockShackle');
+            if (shackle) {
+                shackle.style.transform = '';
+                shackle.setAttribute('stroke', 'var(--primary)');
+            }
         }
 
         function toggleAuthMode() {
@@ -1648,7 +1704,6 @@
                 currentUser = pendingLogin.login;
                 setSession(pendingLogin.login);
                 pendingLogin = null;
-                // Показываем загрузочный экран перед входом
                 showAppWithSplash();
                 showToast('✅ Добро пожаловать, ' + currentUser + '!', 'success');
             }
@@ -1681,8 +1736,10 @@
         // ============================================================
         function showRecovery() {
             const lock = document.querySelector('.auth-lock');
-            lock.classList.add('recovery');
-            lock.classList.add('pulse');
+            if (lock) {
+                lock.classList.add('recovery');
+                lock.classList.add('pulse');
+            }
 
             showStep(step3);
             authSub.textContent = 'Введите email для восстановления';
@@ -1811,17 +1868,12 @@
         // ПОКАЗ ПРИЛОЖЕНИЯ (С ЗАГРУЗОЧНЫМ ЭКРАНОМ)
         // ============================================================
         function showAppWithSplash() {
-            // Показываем загрузочный экран
             splashScreen.style.display = 'flex';
             splashScreen.classList.remove('hidden');
-
-            // Прячем авторизацию
             authScreen.classList.add('hidden');
 
-            // Через 3 секунды показываем приложение
             setTimeout(() => {
                 hideSplash();
-                // Показываем основной интерфейс
                 document.querySelector('.header').style.display = 'flex';
                 document.querySelector('.map-wrapper').style.display = 'block';
                 document.querySelector('.floating-panel').style.display = 'flex';
@@ -1832,7 +1884,6 @@
         }
 
         function showApp() {
-            // Прячем загрузочный экран если он виден
             splashScreen.classList.add('hidden');
             setTimeout(() => {
                 splashScreen.style.display = 'none';
@@ -2120,15 +2171,12 @@
         // ЗАПУСК
         // ============================================================
         window.addEventListener('load', function() {
-            // Показываем загрузочный экран минимум на 2.5 секунды
             setTimeout(() => {
                 const session = getSession();
                 if (session && getUsers()[session]) {
                     currentUser = session;
-                    // Автоматический вход с загрузочным экраном
                     showAppWithSplash();
                 } else {
-                    // Скрываем загрузочный экран, показываем авторизацию
                     hideSplash();
                     authScreen.classList.remove('hidden');
                     authLogin.focus();
@@ -2143,7 +2191,6 @@
                 }
             }, 2500);
 
-            // Логин hint
             authLogin.addEventListener('input', function() {
                 const result = validateLogin(this.value);
                 if (this.value.length === 0) {
@@ -2165,7 +2212,6 @@
                 }
             });
 
-            // Пароль strength
             authPassword.addEventListener('input', function() {
                 updateStrength(this, strengthBar, passwordHint);
                 if (this.value.length > 0) {
@@ -2182,7 +2228,6 @@
                 }
             });
 
-            // Пароль для восстановления
             document.addEventListener('input', function(e) {
                 if (e.target.id === 'newPassword') {
                     const bar = document.getElementById('strengthBar2');
@@ -2190,7 +2235,6 @@
                 }
             });
 
-            // Обработка Enter
             authLogin.addEventListener('keydown', (e) => { if (e.key === 'Enter') authPassword.focus(); });
             authPassword.addEventListener('keydown', (e) => { if (e.key === 'Enter') authEmail.focus(); });
             authEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
