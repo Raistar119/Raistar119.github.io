@@ -86,8 +86,12 @@
             animation: vortexBg 20s linear infinite;
         }
         @keyframes vortexBg {
-            0% { transform: rotate(0deg) scale(1); }
-            100% { transform: rotate(360deg) scale(1.1); }
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            100% {
+                transform: rotate(360deg) scale(1.1);
+            }
         }
 
         /* ============================================================
@@ -128,8 +132,12 @@
             will-change: transform;
         }
         @keyframes spinVortex {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
         .vortex-logo .ring {
             stroke: var(--primary);
@@ -146,8 +154,12 @@
             will-change: transform;
         }
         @keyframes spinReverse {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(-360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(-360deg);
+            }
         }
         .vortex-logo .dot {
             fill: var(--primary);
@@ -156,8 +168,14 @@
         }
         @keyframes pulseDot {
             0%,
-            100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.6); }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.6);
+            }
         }
 
         .brand-name {
@@ -175,8 +193,12 @@
         }
         @keyframes shimmer {
             0%,
-            100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
         }
         .brand-tag {
             font-size: 11px;
@@ -335,13 +357,17 @@
             flex-shrink: 0;
             will-change: transform, box-shadow;
         }
-        .dot.inactive { background: var(--text-muted); }
+        .dot.inactive {
+            background: var(--text-muted);
+        }
         .dot.active {
             background: var(--success);
             box-shadow: 0 0 20px var(--success-glow);
             animation: pulseDot 2s infinite;
         }
-        .dot.error { background: var(--danger); }
+        .dot.error {
+            background: var(--danger);
+        }
 
         .status-info .label {
             font-size: 14px;
@@ -394,37 +420,88 @@
             text-align: center;
         }
 
-        .auth-logo {
+        /* ============================================================
+           АНИМИРОВАННЫЙ ЗАМОК
+           ============================================================ */
+        .auth-lock {
             width: 72px;
             height: 72px;
-            margin: 0 auto 12px;
+            margin: 0 auto 8px;
             display: block;
+            position: relative;
         }
-        .auth-logo svg {
+
+        #lockSvg {
             width: 100%;
             height: 100%;
-            animation: spinVortex 4s linear infinite;
-            filter: drop-shadow(0 0 30px var(--primary-glow));
-            will-change: transform;
+            transition: all 0.5s ease;
         }
-        .auth-logo .ring {
-            stroke: var(--primary);
-            stroke-width: 2.5;
-            fill: none;
-            opacity: 0.6;
+
+        /* Анимация ключа для восстановления */
+        .auth-lock.recovery #lockKey {
+            animation: keyInsert 0.8s ease forwards;
         }
-        .auth-logo .ring-inner {
-            stroke: var(--primary-light);
-            stroke-width: 2;
-            fill: none;
-            opacity: 0.3;
-            animation: spinReverse 3s linear infinite;
-            will-change: transform;
+
+        .auth-lock.recovery #lockShackle {
+            animation: shackleOpen 0.8s ease 0.3s forwards;
         }
-        .auth-logo .dot {
-            fill: var(--primary);
-            animation: pulseDot 1.5s ease-in-out infinite;
-            will-change: transform, opacity;
+
+        .auth-lock.recovery #lockKeyInserted {
+            display: block !important;
+        }
+
+        .auth-lock.recovery #lockKeyhole {
+            fill: #ffd700;
+        }
+
+        .auth-lock.recovery #lockKeyholeSlot {
+            fill: #ffd700;
+        }
+
+        /* Пульсация замка при загрузке */
+        .auth-lock.pulse {
+            animation: lockPulse 1s ease 0.5s;
+        }
+
+        @keyframes keyInsert {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            40% {
+                transform: translate(8px, -2px);
+                opacity: 0.8;
+            }
+            70% {
+                transform: translate(10px, 0px);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(8px, 0px);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shackleOpen {
+            0% {
+                transform: rotate(0deg);
+                transform-origin: 32px 28px;
+            }
+            100% {
+                transform: rotate(90deg);
+                transform-origin: 32px 28px;
+                stroke: #ffd700;
+            }
+        }
+
+        @keyframes lockPulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.92);
+            }
         }
 
         .auth-card h2 {
@@ -520,18 +597,13 @@
             margin-top: 6px;
             box-shadow: 0 4px 20px var(--primary-glow);
         }
-        .auth-card .btn-auth:active { transform: scale(0.97); }
+        .auth-card .btn-auth:active {
+            transform: scale(0.97);
+        }
         .auth-card .btn-auth:disabled {
             opacity: 0.5;
             transform: none;
             box-shadow: none;
-        }
-        .auth-card .btn-auth-small {
-            width: auto;
-            padding: 10px 20px;
-            font-size: 13px;
-            margin-top: 0;
-            display: inline-block;
         }
 
         .auth-card .toggle-mode {
@@ -549,7 +621,9 @@
             font-family: inherit;
             -webkit-text-fill-color: var(--primary);
         }
-        .auth-card .toggle-mode button:active { transform: scale(0.95); }
+        .auth-card .toggle-mode button:active {
+            transform: scale(0.95);
+        }
 
         .auth-card .error-msg {
             color: var(--danger);
@@ -580,7 +654,9 @@
             transition: background var(--transition), border var(--transition);
             will-change: background, border;
         }
-        .link-box.show { display: block; }
+        .link-box.show {
+            display: block;
+        }
         .link-box .label {
             font-size: 11px;
             font-weight: 600;
@@ -630,7 +706,9 @@
             touch-action: manipulation;
             user-select: none;
         }
-        .btn:active { transform: scale(0.95); }
+        .btn:active {
+            transform: scale(0.95);
+        }
 
         .btn-primary {
             background: var(--primary);
@@ -697,33 +775,94 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
-        .toast.success { border-color: var(--success); }
-        .toast.error { border-color: var(--danger); }
-        .toast.info { border-color: var(--primary); }
+        .toast.success {
+            border-color: var(--success);
+        }
+        .toast.error {
+            border-color: var(--danger);
+        }
+        .toast.info {
+            border-color: var(--primary);
+        }
 
         /* ============================================================
            АДАПТИВ
            ============================================================ */
         @media (max-width: 500px) {
-            .header { padding: 12px 16px 10px; }
-            .brand-name { font-size: 20px; letter-spacing: 1px; }
-            .brand-tag { font-size: 9px; letter-spacing: 2px; }
-            .vortex-logo { width: 36px; height: 36px; }
-            .map-wrapper { margin: 8px 12px 0; min-height: 40vh; border-radius: 20px; }
-            .floating-panel { margin: -14px 12px 0; padding: 12px 16px; border-radius: 20px; flex-direction: column; align-items: stretch; gap: 6px; }
-            .status-info .label { font-size: 13px; }
-            .coords-display { font-size: 12px; padding: 3px 10px; }
-            .actions { padding: 8px 12px 16px; gap: 8px; }
-            .btn { font-size: 13px; padding: 12px 16px; border-radius: 40px; }
-            .link-box { margin: 8px 12px 0; padding: 10px 14px; }
-            .toast { bottom: 80px; padding: 12px 20px; font-size: 13px; border-radius: 40px; }
-            .auth-card { padding: 32px 20px 24px; }
-            .auth-card h2 { font-size: 24px; }
-            .auth-logo { width: 60px; height: 60px; }
-            .btn-logout { flex: 0.3; font-size: 11px; padding: 12px 12px; }
+            .header {
+                padding: 12px 16px 10px;
+            }
+            .brand-name {
+                font-size: 20px;
+                letter-spacing: 1px;
+            }
+            .brand-tag {
+                font-size: 9px;
+                letter-spacing: 2px;
+            }
+            .vortex-logo {
+                width: 36px;
+                height: 36px;
+            }
+            .map-wrapper {
+                margin: 8px 12px 0;
+                min-height: 40vh;
+                border-radius: 20px;
+            }
+            .floating-panel {
+                margin: -14px 12px 0;
+                padding: 12px 16px;
+                border-radius: 20px;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            .status-info .label {
+                font-size: 13px;
+            }
+            .coords-display {
+                font-size: 12px;
+                padding: 3px 10px;
+            }
+            .actions {
+                padding: 8px 12px 16px;
+                gap: 8px;
+            }
+            .btn {
+                font-size: 13px;
+                padding: 12px 16px;
+                border-radius: 40px;
+            }
+            .link-box {
+                margin: 8px 12px 0;
+                padding: 10px 14px;
+            }
+            .toast {
+                bottom: 80px;
+                padding: 12px 20px;
+                font-size: 13px;
+                border-radius: 40px;
+            }
+            .auth-card {
+                padding: 32px 20px 24px;
+            }
+            .auth-card h2 {
+                font-size: 24px;
+            }
+            .auth-lock {
+                width: 60px;
+                height: 60px;
+            }
+            .btn-logout {
+                flex: 0.3;
+                font-size: 11px;
+                padding: 12px 12px;
+            }
         }
         @media (min-height: 750px) {
-            .map-wrapper { min-height: 55vh; }
+            .map-wrapper {
+                min-height: 55vh;
+            }
         }
     </style>
 </head>
@@ -735,28 +874,47 @@
     <div class="vortex-bg"></div>
 
     <!-- ============================================================
-    ЭКРАН АВТОРИЗАЦИИ
+    ЭКРАН АВТОРИЗАЦИИ (обновлённый)
     ============================================================ -->
     <div class="auth-screen" id="authScreen">
         <div class="auth-card" id="authCard">
 
-            <div class="auth-logo">
-                <svg viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
-                    <circle class="ring" cx="36" cy="36" r="30"/>
-                    <circle class="ring" cx="36" cy="36" r="24" stroke-dasharray="30 40"/>
-                    <circle class="ring" cx="36" cy="36" r="18" stroke-dasharray="18 50"/>
-                    <circle class="ring-inner" cx="36" cy="36" r="12"/>
-                    <circle class="ring-inner" cx="36" cy="36" r="6"/>
-                    <circle class="dot" cx="36" cy="36" r="4"/>
-                    <circle class="dot" cx="36" cy="10" r="2" style="animation-delay: 0.2s;"/>
-                    <circle class="dot" cx="36" cy="62" r="2" style="animation-delay: 0.6s;"/>
-                    <circle class="dot" cx="10" cy="36" r="2" style="animation-delay: 0.4s;"/>
-                    <circle class="dot" cx="62" cy="36" r="2" style="animation-delay: 0.8s;"/>
+            <!-- ===== АНИМИРОВАННЫЙ ЗАМОК ===== -->
+            <div class="auth-lock" id="authLock">
+                <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" id="lockSvg">
+                    <!-- Корпус замка -->
+                    <rect x="25" y="35" width="30" height="30" rx="4" fill="var(--primary)" opacity="0.15"/>
+                    <rect x="25" y="35" width="30" height="30" rx="4" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+                    
+                    <!-- Дужка замка -->
+                    <path d="M32 35 V28 A8 8 0 0 1 48 28 V35" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" id="lockShackle"/>
+                    
+                    <!-- Замочная скважина -->
+                    <circle cx="40" cy="48" r="3" fill="var(--primary)" id="lockKeyhole"/>
+                    <rect x="39" y="48" width="2" height="6" fill="var(--primary)" rx="1" id="lockKeyholeSlot"/>
+                    
+                    <!-- Ключ (анимированный) -->
+                    <g id="lockKey">
+                        <rect x="30" y="52" width="20" height="3" rx="1.5" fill="#ffd700"/>
+                        <rect x="28" y="50" width="4" height="7" rx="1" fill="#ffd700"/>
+                        <circle cx="30" cy="53" r="2" fill="#ffd700"/>
+                        <rect x="44" y="52" width="3" height="2" rx="0.5" fill="#ffd700"/>
+                        <rect x="46" y="54" width="2" height="2" rx="0.5" fill="#ffd700"/>
+                    </g>
+
+                    <!-- Ключ вставлен в замок -->
+                    <g id="lockKeyInserted" style="display:none;">
+                        <rect x="38" y="50" width="16" height="3" rx="1.5" fill="#ffd700"/>
+                        <rect x="36" y="48" width="4" height="7" rx="1" fill="#ffd700"/>
+                        <circle cx="38" cy="51" r="2" fill="#ffd700"/>
+                        <rect x="48" y="50" width="3" height="2" rx="0.5" fill="#ffd700"/>
+                        <rect x="50" y="52" width="2" height="2" rx="0.5" fill="#ffd700"/>
+                    </g>
                 </svg>
             </div>
 
-            <h2 id="authTitle">VORTEX</h2>
-            <div class="sub" id="authSub">Войдите, чтобы продолжить</div>
+            <h2 id="authTitle">Регистрация</h2>
+            <div class="sub" id="authSub">Создайте аккаунт, чтобы начать</div>
 
             <!-- ===== ЭТАП 1: Логин + Пароль + Email ===== -->
             <div id="authStep1">
@@ -778,11 +936,11 @@
                     <input type="email" id="authEmail" placeholder="example@mail.ru">
                 </div>
 
-                <button class="btn-auth" id="authBtn" onclick="handleAuth()">Войти</button>
+                <button class="btn-auth" id="authBtn" onclick="handleAuth()">Зарегистрироваться</button>
 
                 <div class="toggle-mode">
-                    <span id="toggleText">Нет аккаунта?</span>
-                    <button id="toggleBtn" onclick="toggleAuthMode()">Зарегистрироваться</button>
+                    <span id="toggleText">Уже есть аккаунт?</span>
+                    <button id="toggleBtn" onclick="toggleAuthMode()">Войти</button>
                 </div>
                 <div class="toggle-mode" style="margin-top:6px;">
                     <button onclick="showRecovery()" style="font-size:13px;color:var(--text-muted);-webkit-text-fill-color:var(--text-muted);">Забыли пароль?</button>
@@ -816,7 +974,7 @@
                 </div>
                 <button class="btn-auth" onclick="sendRecoveryCode()">Отправить код</button>
                 <div style="margin-top:10px;font-size:13px;">
-                    <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="backToLogin()">← Назад к входу</button>
+                    <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="backToLogin()">← Назад</button>
                 </div>
             </div>
 
@@ -834,7 +992,7 @@
                 </div>
                 <button class="btn-auth" onclick="resetPassword()">Сменить пароль</button>
                 <div style="margin-top:10px;font-size:13px;">
-                    <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="backToLogin()">← Назад к входу</button>
+                    <button style="background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="backToLogin()">← Назад</button>
                 </div>
             </div>
 
@@ -931,12 +1089,11 @@
         // ============================================================
         // ⚠️ НАСТРОЙКИ EMAILJS — ЗАМЕНИ НА СВОИ!
         // ============================================================
-        const EMAILJS_PUBLIC_KEY = 'user_ваш_ключ'; // из Account → API Keys
-        const EMAILJS_SERVICE_ID = 'service_ваш_сервис'; // из Email Services
-        const EMAILJS_TEMPLATE_ID = 'template_ваш_шаблон'; // из Email Templates
+        const EMAILJS_PUBLIC_KEY = 'user_ваш_ключ';
+        const EMAILJS_SERVICE_ID = 'service_ваш_сервис';
+        const EMAILJS_TEMPLATE_ID = 'template_ваш_шаблон';
         // ============================================================
 
-        // Инициализация EmailJS
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
         // ============================================================
@@ -965,9 +1122,9 @@
         const SESSION_KEY = 'vortex_session';
 
         let currentUser = null;
-        let isLoginMode = true;
-        let pendingLogin = null; // { login, password, email }
-        let pendingRecovery = null; // { login, email }
+        let isLoginMode = false; // false = регистрация, true = вход
+        let pendingLogin = null;
+        let pendingRecovery = null;
         let generatedCode = '';
         let codeTimer = null;
 
@@ -996,7 +1153,7 @@
         const step4 = document.getElementById('authStep4');
 
         // ============================================================
-        // ЗАПРЕЩЁННЫЕ СЛОВА ДЛЯ ЛОГИНА
+        // ЗАПРЕЩЁННЫЕ СЛОВА
         // ============================================================
         const BANNED_WORDS = [
             'admin', 'root', 'system', 'moderator', 'support',
@@ -1013,7 +1170,7 @@
         }
 
         // ============================================================
-        // ВАЛИДАЦИЯ ЛОГИНА
+        // ВАЛИДАЦИЯ
         // ============================================================
         function validateLogin(login) {
             if (login.length < 3 || login.length > 20) {
@@ -1028,9 +1185,6 @@
             return { valid: true, msg: '' };
         }
 
-        // ============================================================
-        // ВАЛИДАЦИЯ ПАРОЛЯ
-        // ============================================================
         function validatePassword(password) {
             if (password.length < 8) {
                 return { valid: false, msg: 'Минимум 8 символов', strength: 0 };
@@ -1127,21 +1281,50 @@
             authSuccess.textContent = '';
         }
 
+        function resetLock() {
+            const lock = document.querySelector('.auth-lock');
+            lock.classList.remove('recovery', 'pulse');
+            // Сброс анимаций через перезапуск SVG
+            const svg = document.getElementById('lockSvg');
+            svg.style.animation = 'none';
+            setTimeout(() => { svg.style.animation = ''; }, 10);
+            // Скрываем вставленный ключ
+            document.getElementById('lockKeyInserted').style.display = 'none';
+            // Показываем обычный ключ
+            document.getElementById('lockKey').style.display = '';
+            // Возвращаем цвет замка
+            document.getElementById('lockKeyhole').setAttribute('fill', 'var(--primary)');
+            document.getElementById('lockKeyholeSlot').setAttribute('fill', 'var(--primary)');
+            // Возвращаем дужку
+            document.getElementById('lockShackle').style.transform = '';
+            document.getElementById('lockShackle').setAttribute('stroke', 'var(--primary)');
+            // Сбрасываем ключ
+            const key = document.getElementById('lockKey');
+            key.style.animation = 'none';
+            key.style.transform = 'translate(0,0)';
+            key.style.opacity = '1';
+        }
+
         function toggleAuthMode() {
             isLoginMode = !isLoginMode;
             authBtn.textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться';
-            authSub.textContent = isLoginMode ? 'Войдите, чтобы продолжить' : 'Создайте аккаунт';
+            authSub.textContent = isLoginMode ? 'Войдите, чтобы продолжить' : 'Создайте аккаунт, чтобы начать';
             toggleText.textContent = isLoginMode ? 'Нет аккаунта?' : 'Уже есть аккаунт?';
             toggleBtn.textContent = isLoginMode ? 'Зарегистрироваться' : 'Войти';
             authError.textContent = '';
             authSuccess.textContent = '';
+            authTitle.textContent = isLoginMode ? 'Вход' : 'Регистрация';
+            resetLock();
             showStep(step1);
         }
 
         function backToLogin() {
-            showStep(step1);
             authError.textContent = '';
             authSuccess.textContent = '';
+            authTitle.textContent = isLoginMode ? 'Вход' : 'Регистрация';
+            authSub.textContent = isLoginMode ? 'Войдите, чтобы продолжить' : 'Создайте аккаунт, чтобы начать';
+            resetLock();
+            showStep(step1);
             if (codeTimer) { clearTimeout(codeTimer);
                 codeTimer = null; }
         }
@@ -1157,7 +1340,6 @@
             authError.textContent = '';
             authSuccess.textContent = '';
 
-            // === Проверка логина ===
             const loginCheck = validateLogin(login);
             if (!loginCheck.valid) {
                 authError.textContent = '❌ Логин: ' + loginCheck.msg;
@@ -1166,7 +1348,6 @@
             }
             authLogin.classList.remove('error');
 
-            // === Проверка пароля ===
             const passCheck = validatePassword(password);
             if (!passCheck.valid) {
                 authError.textContent = '❌ Пароль: ' + passCheck.msg;
@@ -1175,7 +1356,6 @@
             }
             authPassword.classList.remove('error');
 
-            // === Проверка email ===
             if (!email || !email.includes('@') || !email.includes('.')) {
                 authError.textContent = '❌ Введите корректный email';
                 authEmail.classList.add('error');
@@ -1200,7 +1380,6 @@
                     return;
                 }
 
-                // Отправляем код
                 const code = generateCode();
                 generatedCode = code;
                 pendingLogin = { login, password, email };
@@ -1224,18 +1403,15 @@
                     return;
                 }
 
-                // Сохраняем
                 users[login] = { password, email };
                 saveUsers(users);
 
-                // Отправляем код
                 const code = generateCode();
                 generatedCode = code;
                 pendingLogin = { login, password, email };
 
                 const sent = await sendCode(email, code);
                 if (!sent) {
-                    // Откатываем регистрацию
                     delete users[login];
                     saveUsers(users);
                     authError.textContent = '❌ Не удалось отправить код. Проверь настройки EmailJS.';
@@ -1266,7 +1442,6 @@
                 return;
             }
 
-            // Код верный!
             authError.textContent = '';
             authSuccess.textContent = '✅ Вход выполнен!';
 
@@ -1302,11 +1477,16 @@
         }
 
         // ============================================================
-        // ВОССТАНОВЛЕНИЕ ПАРОЛЯ
+        // ВОССТАНОВЛЕНИЕ ПАРОЛЯ (с анимацией замка)
         // ============================================================
         function showRecovery() {
+            // Активируем анимацию замка
+            const lock = document.querySelector('.auth-lock');
+            lock.classList.add('recovery');
+            lock.classList.add('pulse');
+
             showStep(step3);
-            authSub.textContent = 'Восстановление пароля';
+            authSub.textContent = 'Введите email для восстановления';
             authTitle.textContent = '🔐 Восстановление';
             document.getElementById('recoveryEmail').value = '';
             authError.textContent = '';
@@ -1345,7 +1525,6 @@
                 return;
             }
 
-            // Переходим к смене пароля
             showStep(step4);
             authSub.textContent = 'Введите новый пароль';
             authTitle.textContent = '🔐 Смена пароля';
@@ -1355,25 +1534,21 @@
             document.getElementById('newPasswordConfirm').value = '';
             strengthBar2.style.width = '0%';
 
-            // Сохраняем код для проверки (используем тот же generatedCode)
-            // Но нам нужно проверить код при смене пароля
             // Добавляем поле для кода в step4
             const step4Container = document.getElementById('authStep4');
-            const codeInput = document.createElement('div');
-            codeInput.className = 'input-group';
-            codeInput.innerHTML = `
-                    <label for="recoveryCode">Код подтверждения</label>
-                    <input type="text" id="recoveryCode" placeholder="Введите 6-значный код" maxlength="6" inputmode="numeric">
-                `;
-            // Вставляем перед полем нового пароля
-            const firstInput = step4Container.querySelector('.input-group');
-            if (firstInput) {
-                step4Container.insertBefore(codeInput, firstInput);
+            let codeField = document.getElementById('recoveryCode');
+            if (!codeField) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'input-group';
+                wrapper.innerHTML = `
+                        <label for="recoveryCode">Код подтверждения</label>
+                        <input type="text" id="recoveryCode" placeholder="Введите 6-значный код" maxlength="6" inputmode="numeric">
+                    `;
+                const firstInput = step4Container.querySelector('.input-group');
+                if (firstInput) {
+                    step4Container.insertBefore(wrapper, firstInput);
+                }
             }
-
-            // Обновляем функцию resetPassword
-            window._recoveryCode = code;
-            window._recoveryLogin = foundLogin;
         }
 
         // ============================================================
@@ -1414,24 +1589,24 @@
                 return;
             }
 
-            // Меняем пароль
             users[pendingRecovery.login].password = newPassword;
             saveUsers(users);
 
             authSuccess.textContent = '✅ Пароль успешно изменён!';
             authError.textContent = '';
 
-            // Возвращаемся к входу
+            // Убираем поле с кодом
+            const codeField = document.getElementById('recoveryCode')?.closest('.input-group');
+            if (codeField) codeField.remove();
+
             setTimeout(() => {
                 pendingRecovery = null;
                 generatedCode = '';
+                resetLock();
                 showStep(step1);
-                authSub.textContent = 'Войдите, чтобы продолжить';
-                authTitle.textContent = 'VORTEX';
+                authSub.textContent = isLoginMode ? 'Войдите, чтобы продолжить' : 'Создайте аккаунт, чтобы начать';
+                authTitle.textContent = isLoginMode ? 'Вход' : 'Регистрация';
                 authSuccess.textContent = 'Пароль изменён! Войдите с новым паролем.';
-                // Удаляем добавленное поле с кодом
-                const codeField = document.getElementById('recoveryCode')?.closest('.input-group');
-                if (codeField) codeField.remove();
             }, 1500);
         }
 
@@ -1471,10 +1646,15 @@
             copyBtn.style.display = 'none';
             googleBtn.style.display = 'none';
             showToast('👋 Вы вышли', 'info');
-            // Сбрасываем авторизацию
+            // Сброс авторизации
+            isLoginMode = false;
+            authTitle.textContent = 'Регистрация';
+            authSub.textContent = 'Создайте аккаунт, чтобы начать';
+            authBtn.textContent = 'Зарегистрироваться';
+            toggleText.textContent = 'Уже есть аккаунт?';
+            toggleBtn.textContent = 'Войти';
+            resetLock();
             showStep(step1);
-            authSub.textContent = 'Войдите, чтобы продолжить';
-            authTitle.textContent = 'VORTEX';
             authLogin.value = '';
             authPassword.value = '';
             authEmail.value = '';
@@ -1714,7 +1894,6 @@
         // ЗАПУСК
         // ============================================================
         window.addEventListener('load', function() {
-            // Проверяем сессию
             const session = getSession();
             if (session && getUsers()[session]) {
                 currentUser = session;
@@ -1722,6 +1901,15 @@
             } else {
                 authScreen.classList.remove('hidden');
                 authLogin.focus();
+                // По умолчанию — РЕГИСТРАЦИЯ
+                isLoginMode = false;
+                authTitle.textContent = 'Регистрация';
+                authSub.textContent = 'Создайте аккаунт, чтобы начать';
+                authBtn.textContent = 'Зарегистрироваться';
+                toggleText.textContent = 'Уже есть аккаунт?';
+                toggleBtn.textContent = 'Войти';
+                resetLock();
+                showStep(step1);
             }
 
             // Логин hint
@@ -1772,10 +1960,8 @@
             });
 
             // Обработка Enter
-            authLogin.addEventListener('keydown', (e) => { if (e.key === 'Enter') authPassword
-                    .focus(); });
-            authPassword.addEventListener('keydown', (e) => { if (e.key === 'Enter') authEmail
-                    .focus(); });
+            authLogin.addEventListener('keydown', (e) => { if (e.key === 'Enter') authPassword.focus(); });
+            authPassword.addEventListener('keydown', (e) => { if (e.key === 'Enter') authEmail.focus(); });
             authEmail.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleAuth(); });
             authCode.addEventListener('keydown', (e) => { if (e.key === 'Enter') verifyCode(); });
         }, { passive: true });
