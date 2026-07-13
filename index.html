@@ -95,6 +95,180 @@
         }
 
         /* ============================================================
+           ЗАГРУЗОЧНЫЙ ЭКРАН (SPLASH)
+           ============================================================ */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9999;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            will-change: opacity, transform;
+        }
+
+        .splash-screen.hidden {
+            opacity: 0;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+
+        .splash-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 24px;
+            animation: spinVortex 4s linear infinite;
+            filter: drop-shadow(0 0 40px var(--primary-glow));
+            will-change: transform;
+        }
+
+        .splash-logo .ring {
+            stroke: var(--primary);
+            stroke-width: 3;
+            fill: none;
+            opacity: 0.6;
+        }
+        .splash-logo .ring-inner {
+            stroke: var(--primary-light);
+            stroke-width: 2;
+            fill: none;
+            opacity: 0.3;
+            animation: spinReverse 3s linear infinite;
+            will-change: transform;
+        }
+        .splash-logo .dot {
+            fill: var(--primary);
+            animation: pulseDot 1.5s ease-in-out infinite;
+            will-change: transform, opacity;
+        }
+
+        @keyframes spinVortex {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes spinReverse {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(-360deg);
+            }
+        }
+        @keyframes pulseDot {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.4;
+                transform: scale(0.6);
+            }
+        }
+
+        .splash-title {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe, #6c5ce7);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 2s ease-in-out infinite, fadeInOut 3s ease-in-out forwards;
+            text-shadow: 0 0 60px var(--primary-glow), 0 0 120px rgba(108, 92, 231, 0.15);
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        @keyframes shimmer {
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            20% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+
+        .splash-sub {
+            font-size: 14px;
+            color: var(--text-muted);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-top: 12px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease 0.8s forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 0.4;
+                transform: translateY(0);
+            }
+        }
+
+        .splash-loader {
+            margin-top: 30px;
+            width: 40px;
+            height: 4px;
+            background: var(--card-border);
+            border-radius: 2px;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 0.6s ease 1.2s forwards;
+        }
+
+        .splash-loader .bar {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            border-radius: 2px;
+            animation: loadBar 2.5s ease-in-out forwards;
+        }
+
+        @keyframes loadBar {
+            0% {
+                width: 0%;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+
+        /* ============================================================
            ШАПКА
            ============================================================ */
         .header {
@@ -437,7 +611,6 @@
             transition: all 0.5s ease;
         }
 
-        /* Анимация ключа для восстановления */
         .auth-lock.recovery #lockKey {
             animation: keyInsert 0.8s ease forwards;
         }
@@ -458,7 +631,6 @@
             fill: #ffd700;
         }
 
-        /* Пульсация замка при загрузке */
         .auth-lock.pulse {
             animation: lockPulse 1s ease 0.5s;
         }
@@ -567,7 +739,6 @@
             color: var(--success);
         }
 
-        /* Индикатор сложности пароля */
         .password-strength {
             margin-top: 6px;
             height: 4px;
@@ -858,6 +1029,13 @@
                 font-size: 11px;
                 padding: 12px 12px;
             }
+            .splash-title {
+                font-size: 32px;
+            }
+            .splash-logo {
+                width: 80px;
+                height: 80px;
+            }
         }
         @media (min-height: 750px) {
             .map-wrapper {
@@ -869,12 +1047,38 @@
 <body>
 
     <!-- ============================================================
+    ЗАГРУЗОЧНЫЙ ЭКРАН
+    ============================================================ -->
+    <div class="splash-screen" id="splashScreen">
+        <!-- Водоворот -->
+        <svg class="splash-logo" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+            <circle class="ring" cx="40" cy="40" r="34"/>
+            <circle class="ring" cx="40" cy="40" r="28" stroke-dasharray="30 40"/>
+            <circle class="ring" cx="40" cy="40" r="22" stroke-dasharray="18 50"/>
+            <circle class="ring-inner" cx="40" cy="40" r="14"/>
+            <circle class="ring-inner" cx="40" cy="40" r="8"/>
+            <circle class="dot" cx="40" cy="40" r="5"/>
+            <circle class="dot" cx="40" cy="10" r="2.5" style="animation-delay: 0.2s;"/>
+            <circle class="dot" cx="40" cy="70" r="2.5" style="animation-delay: 0.6s;"/>
+            <circle class="dot" cx="10" cy="40" r="2.5" style="animation-delay: 0.4s;"/>
+            <circle class="dot" cx="70" cy="40" r="2.5" style="animation-delay: 0.8s;"/>
+        </svg>
+
+        <div class="splash-title">VORTEX</div>
+        <div class="splash-sub">Твой трекер</div>
+
+        <div class="splash-loader">
+            <div class="bar"></div>
+        </div>
+    </div>
+
+    <!-- ============================================================
     ФОН
     ============================================================ -->
     <div class="vortex-bg"></div>
 
     <!-- ============================================================
-    ЭКРАН АВТОРИЗАЦИИ (обновлённый)
+    ЭКРАН АВТОРИЗАЦИИ
     ============================================================ -->
     <div class="auth-screen" id="authScreen">
         <div class="auth-card" id="authCard">
@@ -882,18 +1086,11 @@
             <!-- ===== АНИМИРОВАННЫЙ ЗАМОК ===== -->
             <div class="auth-lock" id="authLock">
                 <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" id="lockSvg">
-                    <!-- Корпус замка -->
                     <rect x="25" y="35" width="30" height="30" rx="4" fill="var(--primary)" opacity="0.15"/>
                     <rect x="25" y="35" width="30" height="30" rx="4" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
-                    
-                    <!-- Дужка замка -->
                     <path d="M32 35 V28 A8 8 0 0 1 48 28 V35" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" id="lockShackle"/>
-                    
-                    <!-- Замочная скважина -->
                     <circle cx="40" cy="48" r="3" fill="var(--primary)" id="lockKeyhole"/>
                     <rect x="39" y="48" width="2" height="6" fill="var(--primary)" rx="1" id="lockKeyholeSlot"/>
-                    
-                    <!-- Ключ (анимированный) -->
                     <g id="lockKey">
                         <rect x="30" y="52" width="20" height="3" rx="1.5" fill="#ffd700"/>
                         <rect x="28" y="50" width="4" height="7" rx="1" fill="#ffd700"/>
@@ -901,8 +1098,6 @@
                         <rect x="44" y="52" width="3" height="2" rx="0.5" fill="#ffd700"/>
                         <rect x="46" y="54" width="2" height="2" rx="0.5" fill="#ffd700"/>
                     </g>
-
-                    <!-- Ключ вставлен в замок -->
                     <g id="lockKeyInserted" style="display:none;">
                         <rect x="38" y="50" width="16" height="3" rx="1.5" fill="#ffd700"/>
                         <rect x="36" y="48" width="4" height="7" rx="1" fill="#ffd700"/>
@@ -1115,14 +1310,26 @@
         themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 
         // ============================================================
-        // 2. АВТОРИЗАЦИЯ
+        // 2. ЗАГРУЗОЧНЫЙ ЭКРАН
+        // ============================================================
+        const splashScreen = document.getElementById('splashScreen');
+
+        function hideSplash() {
+            splashScreen.classList.add('hidden');
+            setTimeout(() => {
+                splashScreen.style.display = 'none';
+            }, 800);
+        }
+
+        // ============================================================
+        // 3. АВТОРИЗАЦИЯ
         // ============================================================
 
         const USERS_KEY = 'vortex_users';
         const SESSION_KEY = 'vortex_session';
 
         let currentUser = null;
-        let isLoginMode = false; // false = регистрация, true = вход
+        let isLoginMode = false;
         let pendingLogin = null;
         let pendingRecovery = null;
         let generatedCode = '';
@@ -1284,21 +1491,15 @@
         function resetLock() {
             const lock = document.querySelector('.auth-lock');
             lock.classList.remove('recovery', 'pulse');
-            // Сброс анимаций через перезапуск SVG
             const svg = document.getElementById('lockSvg');
             svg.style.animation = 'none';
             setTimeout(() => { svg.style.animation = ''; }, 10);
-            // Скрываем вставленный ключ
             document.getElementById('lockKeyInserted').style.display = 'none';
-            // Показываем обычный ключ
             document.getElementById('lockKey').style.display = '';
-            // Возвращаем цвет замка
             document.getElementById('lockKeyhole').setAttribute('fill', 'var(--primary)');
             document.getElementById('lockKeyholeSlot').setAttribute('fill', 'var(--primary)');
-            // Возвращаем дужку
             document.getElementById('lockShackle').style.transform = '';
             document.getElementById('lockShackle').setAttribute('stroke', 'var(--primary)');
-            // Сбрасываем ключ
             const key = document.getElementById('lockKey');
             key.style.animation = 'none';
             key.style.transform = 'translate(0,0)';
@@ -1366,7 +1567,6 @@
             const users = getUsers();
 
             if (isLoginMode) {
-                // === ВХОД ===
                 if (!users[login]) {
                     authError.textContent = '❌ Пользователь не найден';
                     return;
@@ -1397,7 +1597,6 @@
                 authCode.focus();
 
             } else {
-                // === РЕГИСТРАЦИЯ ===
                 if (users[login]) {
                     authError.textContent = '❌ Пользователь уже существует';
                     return;
@@ -1449,7 +1648,8 @@
                 currentUser = pendingLogin.login;
                 setSession(pendingLogin.login);
                 pendingLogin = null;
-                showApp();
+                // Показываем загрузочный экран перед входом
+                showAppWithSplash();
                 showToast('✅ Добро пожаловать, ' + currentUser + '!', 'success');
             }
         }
@@ -1477,10 +1677,9 @@
         }
 
         // ============================================================
-        // ВОССТАНОВЛЕНИЕ ПАРОЛЯ (с анимацией замка)
+        // ВОССТАНОВЛЕНИЕ ПАРОЛЯ
         // ============================================================
         function showRecovery() {
-            // Активируем анимацию замка
             const lock = document.querySelector('.auth-lock');
             lock.classList.add('recovery');
             lock.classList.add('pulse');
@@ -1534,7 +1733,6 @@
             document.getElementById('newPasswordConfirm').value = '';
             strengthBar2.style.width = '0%';
 
-            // Добавляем поле для кода в step4
             const step4Container = document.getElementById('authStep4');
             let codeField = document.getElementById('recoveryCode');
             if (!codeField) {
@@ -1595,7 +1793,6 @@
             authSuccess.textContent = '✅ Пароль успешно изменён!';
             authError.textContent = '';
 
-            // Убираем поле с кодом
             const codeField = document.getElementById('recoveryCode')?.closest('.input-group');
             if (codeField) codeField.remove();
 
@@ -1611,9 +1808,36 @@
         }
 
         // ============================================================
-        // ПОКАЗ ПРИЛОЖЕНИЯ
+        // ПОКАЗ ПРИЛОЖЕНИЯ (С ЗАГРУЗОЧНЫМ ЭКРАНОМ)
         // ============================================================
+        function showAppWithSplash() {
+            // Показываем загрузочный экран
+            splashScreen.style.display = 'flex';
+            splashScreen.classList.remove('hidden');
+
+            // Прячем авторизацию
+            authScreen.classList.add('hidden');
+
+            // Через 3 секунды показываем приложение
+            setTimeout(() => {
+                hideSplash();
+                // Показываем основной интерфейс
+                document.querySelector('.header').style.display = 'flex';
+                document.querySelector('.map-wrapper').style.display = 'block';
+                document.querySelector('.floating-panel').style.display = 'flex';
+                document.querySelector('.actions').style.display = 'flex';
+                document.querySelector('.link-box').style.display = 'none';
+                loadFromURL();
+            }, 3000);
+        }
+
         function showApp() {
+            // Прячем загрузочный экран если он виден
+            splashScreen.classList.add('hidden');
+            setTimeout(() => {
+                splashScreen.style.display = 'none';
+            }, 800);
+
             authScreen.classList.add('hidden');
             document.querySelector('.header').style.display = 'flex';
             document.querySelector('.map-wrapper').style.display = 'block';
@@ -1623,6 +1847,9 @@
             loadFromURL();
         }
 
+        // ============================================================
+        // ВЫХОД
+        // ============================================================
         function logout() {
             clearSession();
             currentUser = null;
@@ -1646,7 +1873,6 @@
             copyBtn.style.display = 'none';
             googleBtn.style.display = 'none';
             showToast('👋 Вы вышли', 'info');
-            // Сброс авторизации
             isLoginMode = false;
             authTitle.textContent = 'Регистрация';
             authSub.textContent = 'Создайте аккаунт, чтобы начать';
@@ -1894,23 +2120,28 @@
         // ЗАПУСК
         // ============================================================
         window.addEventListener('load', function() {
-            const session = getSession();
-            if (session && getUsers()[session]) {
-                currentUser = session;
-                showApp();
-            } else {
-                authScreen.classList.remove('hidden');
-                authLogin.focus();
-                // По умолчанию — РЕГИСТРАЦИЯ
-                isLoginMode = false;
-                authTitle.textContent = 'Регистрация';
-                authSub.textContent = 'Создайте аккаунт, чтобы начать';
-                authBtn.textContent = 'Зарегистрироваться';
-                toggleText.textContent = 'Уже есть аккаунт?';
-                toggleBtn.textContent = 'Войти';
-                resetLock();
-                showStep(step1);
-            }
+            // Показываем загрузочный экран минимум на 2.5 секунды
+            setTimeout(() => {
+                const session = getSession();
+                if (session && getUsers()[session]) {
+                    currentUser = session;
+                    // Автоматический вход с загрузочным экраном
+                    showAppWithSplash();
+                } else {
+                    // Скрываем загрузочный экран, показываем авторизацию
+                    hideSplash();
+                    authScreen.classList.remove('hidden');
+                    authLogin.focus();
+                    isLoginMode = false;
+                    authTitle.textContent = 'Регистрация';
+                    authSub.textContent = 'Создайте аккаунт, чтобы начать';
+                    authBtn.textContent = 'Зарегистрироваться';
+                    toggleText.textContent = 'Уже есть аккаунт?';
+                    toggleBtn.textContent = 'Войти';
+                    resetLock();
+                    showStep(step1);
+                }
+            }, 2500);
 
             // Логин hint
             authLogin.addEventListener('input', function() {
