@@ -5,6 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>📍 Местоположение</title>
     <style>
+        /* ===== ПЕРЕМЕННЫЕ ===== */
+        :root {
+            --bg: #f5f7fa;
+            --bg-card: #ffffff;
+            --bg-input: #f1f4f9;
+            --text: #1a1a2e;
+            --text-secondary: #3d4a5c;
+            --text-muted: #8895aa;
+            --border: #e2e8f0;
+            --shadow: rgba(0,0,0,0.06);
+            --primary: #1a73e8;
+            --primary-hover: #1557b0;
+            --success: #22c55e;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --toast-bg: #1a1a2e;
+            --map-bg: #e8edf4;
+            --badge-bg: #e8f0fe;
+            --badge-color: #1a73e8;
+            --transition: 0.3s;
+        }
+
+        [data-theme="dark"] {
+            --bg: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --bg-input: #2a2a44;
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border: #2a2a44;
+            --shadow: rgba(0,0,0,0.3);
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --map-bg: #1a1a2e;
+            --badge-bg: #2a2a44;
+            --badge-color: #60a5fa;
+            --toast-bg: #2a2a44;
+            --danger-bg: #3a1a1a;
+        }
+
         /* ===== ОБНУЛЕНИЕ ===== */
         * {
             margin: 0;
@@ -14,18 +54,19 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f7fa;
-            color: #1a1a2e;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: background var(--transition), color var(--transition);
         }
 
         /* ===== ВЕРХНЯЯ ПАНЕЛЬ ===== */
         .header {
-            background: #ffffff;
-            padding: 16px 20px 12px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            background: var(--bg-card);
+            padding: 14px 20px 12px;
+            box-shadow: 0 1px 4px var(--shadow);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -33,31 +74,59 @@
             position: sticky;
             top: 0;
             z-index: 10;
+            transition: background var(--transition);
         }
 
         .header h1 {
             font-size: 18px;
             font-weight: 600;
             letter-spacing: -0.3px;
-            color: #1a1a2e;
+            color: var(--text);
         }
 
-        .header .badge {
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge {
             font-size: 11px;
-            background: #e8f0fe;
-            color: #1a73e8;
+            background: var(--badge-bg);
+            color: var(--badge-color);
             padding: 4px 12px;
             border-radius: 20px;
             font-weight: 500;
+            transition: background var(--transition), color var(--transition);
         }
 
-        /* ===== КАРТА (большая) ===== */
+        .theme-toggle {
+            background: var(--bg-input);
+            border: none;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background var(--transition);
+            color: var(--text);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.92);
+        }
+
+        /* ===== КАРТА ===== */
         .map-wrapper {
             flex: 1;
-            min-height: 55vh;
-            background: #e8edf4;
+            min-height: 50vh;
+            background: var(--map-bg);
             position: relative;
             overflow: hidden;
+            transition: background var(--transition);
         }
 
         .map-wrapper iframe {
@@ -75,7 +144,7 @@
             align-items: center;
             justify-content: center;
             height: 100%;
-            color: #8895aa;
+            color: var(--text-muted);
             font-size: 15px;
             padding: 30px;
             text-align: center;
@@ -87,12 +156,13 @@
             opacity: 0.5;
         }
 
-        /* ===== ИНФО-БЛОК ===== */
+        /* ===== ИНФО-ПАНЕЛЬ ===== */
         .info-panel {
-            background: #ffffff;
-            padding: 16px 20px 8px;
+            background: var(--bg-card);
+            padding: 14px 20px 8px;
             flex-shrink: 0;
-            border-top: 1px solid #f0f2f5;
+            border-top: 1px solid var(--border);
+            transition: background var(--transition), border var(--transition);
         }
 
         .coords-row {
@@ -100,19 +170,21 @@
             align-items: center;
             justify-content: space-between;
             font-size: 13px;
-            color: #3d4a5c;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+            gap: 4px;
         }
 
         .coords-row .coords {
             font-weight: 500;
-            color: #1a1a2e;
+            color: var(--text);
             font-family: 'SF Mono', 'Menlo', monospace;
             font-size: 14px;
             letter-spacing: 0.2px;
         }
 
         .coords-row .time {
-            color: #8895aa;
+            color: var(--text-muted);
             font-size: 12px;
         }
 
@@ -122,7 +194,7 @@
             gap: 8px;
             margin-top: 6px;
             font-size: 13px;
-            color: #3d4a5c;
+            color: var(--text-secondary);
         }
 
         .status-line .dot {
@@ -133,16 +205,12 @@
             flex-shrink: 0;
         }
 
-        .dot.inactive {
-            background: #cbd5e1;
-        }
+        .dot.inactive { background: #cbd5e1; }
         .dot.active {
-            background: #22c55e;
+            background: var(--success);
             animation: pulse 1.8s infinite;
         }
-        .dot.error {
-            background: #ef4444;
-        }
+        .dot.error { background: var(--danger); }
 
         @keyframes pulse {
             0% { opacity: 1; transform: scale(1); }
@@ -150,14 +218,48 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
+        /* ===== ССЫЛКА ===== */
+        .link-box {
+            background: var(--bg-input);
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin: 6px 20px 0;
+            font-size: 12px;
+            color: var(--text-secondary);
+            word-break: break-all;
+            display: none;
+            border: 1px solid var(--border);
+            flex-shrink: 0;
+            transition: background var(--transition), border var(--transition);
+        }
+
+        .link-box.show { display: block; }
+
+        .link-box .label {
+            font-weight: 500;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .link-box .url {
+            color: var(--primary);
+            margin-top: 4px;
+            font-family: 'SF Mono', 'Menlo', monospace;
+            font-size: 12px;
+        }
+
         /* ===== КНОПКИ ===== */
         .actions {
-            background: #ffffff;
+            background: var(--bg-card);
             padding: 12px 20px 20px;
             flex-shrink: 0;
             display: flex;
             gap: 10px;
-            border-top: 1px solid #f0f2f5;
+            border-top: 1px solid var(--border);
+            transition: background var(--transition), border var(--transition);
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -174,19 +276,15 @@
             justify-content: center;
             gap: 8px;
             font-family: inherit;
-            background: #f1f4f9;
-            color: #1a1a2e;
+            min-width: 60px;
         }
+
+        .btn:active { transform: scale(0.97); }
 
         .btn-primary {
-            background: #1a73e8;
+            background: var(--primary);
             color: #ffffff;
             box-shadow: 0 2px 8px rgba(26, 115, 232, 0.25);
-        }
-
-        .btn-primary:active {
-            transform: scale(0.97);
-            background: #1557b0;
         }
 
         .btn-primary:disabled {
@@ -195,43 +293,55 @@
         }
 
         .btn-danger {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        .btn-danger:active {
-            transform: scale(0.97);
+            background: var(--danger-bg);
+            color: var(--danger);
         }
 
         .btn-outline {
             background: transparent;
-            border: 1.5px solid #e2e8f0;
+            border: 1.5px solid var(--border);
+            color: var(--text-secondary);
             flex: 0.5;
         }
 
-        .btn-outline:active {
-            background: #f1f4f9;
+        .btn-outline:hover {
+            background: var(--bg-input);
         }
 
         .btn-success {
-            background: #22c55e;
+            background: var(--success);
             color: #fff;
             box-shadow: 0 2px 8px rgba(34, 197, 94, 0.25);
         }
 
-        /* ===== СООБЩЕНИЯ ===== */
+        .btn-google {
+            background: #ea4335;
+            color: #fff;
+            flex: 0.6;
+        }
+
+        .btn-google:hover {
+            background: #d33426;
+        }
+
+        .btn-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
-            background: #1a1a2e;
+            background: var(--toast-bg);
             color: #fff;
             padding: 12px 24px;
             border-radius: 16px;
             font-size: 14px;
             font-weight: 500;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
             opacity: 0;
             transition: opacity 0.3s, transform 0.3s;
             pointer-events: none;
@@ -245,61 +355,28 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        .toast.error {
-            background: #dc2626;
-        }
-        .toast.success {
-            background: #16a34a;
-        }
-        .toast.info {
-            background: #1a73e8;
-        }
-
-        /* ===== ССЫЛКА ===== */
-        .link-box {
-            background: #f8fafc;
-            padding: 10px 14px;
-            border-radius: 12px;
-            margin: 6px 20px 0;
-            font-size: 12px;
-            color: #3d4a5c;
-            word-break: break-all;
-            display: none;
-            border: 1px solid #e2e8f0;
-            flex-shrink: 0;
-        }
-
-        .link-box.show {
-            display: block;
-        }
-
-        .link-box .label {
-            font-weight: 500;
-            font-size: 11px;
-            color: #8895aa;
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
-        }
-
-        .link-box .url {
-            color: #1a73e8;
-            margin-top: 4px;
-            font-family: 'SF Mono', 'Menlo', monospace;
-            font-size: 12px;
-        }
+        .toast.error { background: var(--danger); }
+        .toast.success { background: var(--success); }
+        .toast.info { background: var(--primary); }
 
         /* ===== АДАПТИВ ===== */
         @media (max-width: 500px) {
             .header h1 { font-size: 16px; }
-            .coords-row { font-size: 12px; flex-wrap: wrap; gap: 4px; }
+            .coords-row { font-size: 12px; }
             .coords-row .coords { font-size: 13px; }
             .btn { font-size: 14px; padding: 14px 12px; }
+            .btn-google { flex: 0.5; }
+            .btn-outline { flex: 0.4; }
         }
 
         @media (min-height: 700px) {
-            .map-wrapper {
-                min-height: 65vh;
-            }
+            .map-wrapper { min-height: 60vh; }
+        }
+
+        @media (max-width: 400px) {
+            .actions { gap: 6px; padding: 10px 12px 16px; }
+            .btn { font-size: 12px; padding: 10px 8px; border-radius: 10px; }
+            .btn-google { flex: 0.4; }
         }
     </style>
 </head>
@@ -308,7 +385,12 @@
     <!-- ===== ВЕРХНЯЯ ПАНЕЛЬ ===== -->
     <div class="header">
         <h1>📍 Локация</h1>
-        <span class="badge" id="statusBadge">Ожидание</span>
+        <div class="header-actions">
+            <span class="badge" id="statusBadge">Ожидание</span>
+            <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Сменить тему">
+                🌙
+            </button>
+        </div>
     </div>
 
     <!-- ===== КАРТА ===== -->
@@ -345,24 +427,47 @@
             ▶ Начать
         </button>
         <button class="btn btn-danger" id="stopBtn" onclick="stopTracking()" style="display:none;">
-            ⏹ Остановить
+            ⏹ Стоп
         </button>
-        <button class="btn btn-outline" id="copyBtn" onclick="copyLink()" style="display:none;">
+        <button class="btn btn-outline" id="copyBtn" onclick="copyLink()" style="display:none;" title="Скопировать ссылку">
             📋
+        </button>
+        <button class="btn btn-google" id="googleBtn" onclick="openGoogleMaps()" style="display:none;" title="Открыть в Google Maps">
+            🗺️
         </button>
     </div>
 
-    <!-- ===== TOAST (всплывашка) ===== -->
+    <!-- ===== TOAST ===== -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // ============================================
-        // ОСНОВНАЯ ЛОГИКА
-        // ============================================
+        // ============================================================
+        // 1. ТЁМНАЯ ТЕМА
+        // ============================================================
+        const themeToggle = document.getElementById('themeToggle');
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', next);
+            themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('theme', next);
+        }
+
+        // Загружаем тему
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+        // ============================================================
+        // 2. ОСНОВНАЯ ЛОГИКА
+        // ============================================================
 
         let watchId = null;
         let isTracking = false;
         let lastCoords = null;
+        let lastNotifyCoords = null;
 
         const mapWrapper = document.getElementById('mapWrapper');
         const mapPlaceholder = document.getElementById('mapPlaceholder');
@@ -375,11 +480,13 @@
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
         const copyBtn = document.getElementById('copyBtn');
+        const googleBtn = document.getElementById('googleBtn');
         const linkBox = document.getElementById('linkBox');
         const trackLink = document.getElementById('trackLink');
         const toast = document.getElementById('toast');
 
         let toastTimer = null;
+        let notifyTimer = null;
 
         function showToast(msg, type = 'info') {
             toast.textContent = msg;
@@ -403,15 +510,16 @@
                 statusBadge.style.color = '#dc2626';
             } else {
                 statusBadge.textContent = '○ Ожидание';
-                statusBadge.style.background = '#f1f4f9';
-                statusBadge.style.color = '#3d4a5c';
+                statusBadge.style.background = 'var(--badge-bg)';
+                statusBadge.style.color = 'var(--badge-color)';
             }
         }
 
         function showMap(lat, lon) {
             mapPlaceholder.style.display = 'none';
             mapFrame.style.display = 'block';
-            mapFrame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - 0.02},${lat - 0.02},${lon + 0.02},${lat + 0.02}&layer=mapnik&marker=${lat},${lon}`;
+            // добавляем маркер через параметр marker
+            mapFrame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - 0.025},${lat - 0.025},${lon + 0.025},${lat + 0.025}&layer=mapnik&marker=${lat},${lon}`;
         }
 
         function updateCoords(lat, lon) {
@@ -424,6 +532,7 @@
             trackLink.textContent = url;
             linkBox.className = 'link-box show';
             copyBtn.style.display = 'flex';
+            googleBtn.style.display = 'flex';
             return url;
         }
 
@@ -444,9 +553,40 @@
             }
         }
 
-        // ============================================
-        // СТАРТ / СТОП
-        // ============================================
+        function openGoogleMaps() {
+            if (lastCoords) {
+                const url = `https://www.google.com/maps?q=${lastCoords.lat},${lastCoords.lon}`;
+                window.open(url, '_blank');
+            } else {
+                showToast('Нет координат', 'error');
+            }
+        }
+
+        // ============================================================
+        // 3. УВЕДОМЛЕНИЯ ПРИ СМЕНЕ КООРДИНАТ
+        // ============================================================
+
+        function notifyIfMoved(lat, lon) {
+            if (!lastNotifyCoords) {
+                lastNotifyCoords = { lat, lon };
+                return;
+            }
+            const dist = Math.sqrt(
+                Math.pow(lat - lastNotifyCoords.lat, 2) +
+                Math.pow(lon - lastNotifyCoords.lon, 2)
+            );
+            // если смещение больше 0.0003 (~30 метров) — уведомляем
+            if (dist > 0.0003) {
+                showToast('📍 Местоположение изменилось!', 'info');
+                // вибрация если есть
+                if (navigator.vibrate) navigator.vibrate(30);
+                lastNotifyCoords = { lat, lon };
+            }
+        }
+
+        // ============================================================
+        // 4. СТАРТ / СТОП
+        // ============================================================
 
         function startTracking() {
             if (!navigator.geolocation) {
@@ -481,9 +621,11 @@
                     updateCoords(lat, lon);
                     generateLink(lat, lon);
                     updateStatus('Активно', 'active');
-                    showToast('📍 Местоположение обновлено', 'success');
 
-                    // обновляем URL (без перезагрузки)
+                    // уведомление о смене
+                    notifyIfMoved(lat, lon);
+
+                    // обновляем URL без перезагрузки
                     const url = window.location.origin + window.location.pathname + `?lat=${lat}&lon=${lon}`;
                     window.history.replaceState({}, '', url);
                 },
@@ -501,7 +643,7 @@
                     stopBtn.style.display = 'none';
                     if (watchId) navigator.geolocation.clearWatch(watchId);
                 },
-                { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 }
+                { enableHighAccuracy: true, maximumAge: 3000, timeout: 15000 }
             );
         }
 
@@ -511,6 +653,7 @@
                 watchId = null;
             }
             isTracking = false;
+            lastNotifyCoords = null;
             startBtn.style.display = 'flex';
             startBtn.disabled = false;
             startBtn.textContent = '▶ Начать';
@@ -519,9 +662,9 @@
             showToast('⏹ Отслеживание остановлено', 'info');
         }
 
-        // ============================================
-        // ЗАГРУЗКА КООРДИНАТ ИЗ URL
-        // ============================================
+        // ============================================================
+        // 5. ЗАГРУЗКА ИЗ URL
+        // ============================================================
 
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
@@ -529,6 +672,7 @@
             const lon = parseFloat(params.get('lon'));
 
             if (!isNaN(lat) && !isNaN(lon)) {
+                lastCoords = { lat, lon };
                 showMap(lat, lon);
                 updateCoords(lat, lon);
                 generateLink(lat, lon);
